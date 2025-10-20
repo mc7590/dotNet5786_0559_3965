@@ -7,7 +7,6 @@ partial class Program
         Welcome3965();
         Welcome0559();
         Console.ReadKey();
-        string s;
 
     }
 
