@@ -1,7 +1,6 @@
 ﻿using System;
 
 
-namespace
 partial class Program
 {
 	static partial void Wellcome0559()
