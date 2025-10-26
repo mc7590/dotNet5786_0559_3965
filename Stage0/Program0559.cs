@@ -1,11 +1,12 @@
 ﻿using System;
 
-
-partial class Program
+namespace Targil0
 {
-	static partial void Wellcome0559()
-	{
-		cvonsole.WriteLine("Hello, I'm also here");	
+    partial class Program
+    {
+        static partial void Welcome0559()
+        {
+            Console.WriteLine("Hello, I'm also here");
+        }
     }
-
 }
