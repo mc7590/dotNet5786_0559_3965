@@ -1,6 +1,6 @@
 ﻿/// Module Courier.cs
 
-namespace DO; 
+namespace DO;
 /// <summary>
 /// Courier Entity represents a courier with all its props
 /// </summary>
@@ -10,7 +10,7 @@ namespace DO;
 /// <param name="Email">The email address of the courier</param>
 /// <param name="Password">The private password of the courier</param>
 /// <param name="Active">whether the courier is active (default true)</param>
-/// <param name="CourierType">Delivery type: car, motorcycle, bicycle, or on foot</param>
+/// <param name="DeliveryMethod">Delivery method: car, motorcycle, bicycle, or on foot</param>
 /// <param name="StartedWorking">The time when the courier started to work</param>
 /// <param name="MaxPersonalDistance">Max aerial distance from company to order address the courier agrees to deliver</param>
 public record Courier
@@ -21,7 +21,7 @@ public record Courier
     string Email,
     string Password,
     bool Active,
-    EnumCourierType CourierType,
+    EnumDeliveryMethod DeliveryMethod,
     DateTime StartedWorking,
     double? MaxPersonalDistance = 0
 )
@@ -29,6 +29,6 @@ public record Courier
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Courier() : this(0, "", "", "", "", true, EnumCourierType.Car, DateTime.Now) {}
+    public Courier() : this(0, "", "", "", "", true, EnumDeliveryMethod.Car, DateTime.Now) {}
 }
 
