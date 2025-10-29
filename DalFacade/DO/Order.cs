@@ -36,5 +36,4 @@ public record Order
     /// </summary>
     public Order() : this(0, EnumOrderType.Regular, null, "", 0, 0, "", "", DateTime.Now) { }
 }
-public enum EnumOrderType { Regular, Express, Overnight };
 

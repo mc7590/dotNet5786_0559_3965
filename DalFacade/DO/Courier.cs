@@ -21,7 +21,7 @@ public record Courier
     string Email,
     string Password,
     bool Active,
-    CourierType CourierType,
+    EnumCourierType CourierType,
     DateTime StartedWorking,
     double? MaxPersonalDistance = 0
 )
@@ -29,7 +29,6 @@ public record Courier
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    public Courier() : this(0, "", "", "", "", true, CourierType.Car, DateTime.Now) {}
+    public Courier() : this(0, "", "", "", "", true, EnumCourierType.Car, DateTime.Now) {}
 }
 
-public enum CourierType { Car, Motorcycle, Bicycle, Foot};
