@@ -27,9 +27,9 @@ internal static class Config
     internal static double AveBicycleSpeedKmH { get; set; } = 15;
     internal static double AveWalkingSpeedKmH { get; set; } = 15;
 
-    internal static TimeSpan GetMaxDeliveryTime;
-    internal static TimeSpan RiskRange;
-    internal static TimeSpan InactivityThreshold;
+    internal static TimeSpan GetMaxDeliveryTime = TimeSpan.FromHours(2);
+    internal static TimeSpan RiskRange = TimeSpan.FromHours(1.5);
+    internal static TimeSpan InactivityThreshold  = TimeSpan.FromDays(30);
     
     internal static void Reset()
     {
@@ -46,5 +46,9 @@ internal static class Config
         AveMotorcycleSpeedKmH = 60;
         AveBicycleSpeedKmH = 15;
         AveWalkingSpeedKmH = 15;
-}
+        GetMaxDeliveryTime = TimeSpan.FromHours(2);    
+        RiskRange = TimeSpan.FromHours(1.5);
+        InactivityThreshold = TimeSpan.FromDays(30);
+    }
+
 }
