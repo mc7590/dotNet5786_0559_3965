@@ -1,26 +1,50 @@
-﻿namespace Dal;
+﻿///
+namespace Dal;
+/// <summary>
+/// 
+/// </summary>
 
-static internal class Config
+internal static class Config
 {
-    internal static int NextOrderId = 1000;
-    internal static int NextDeliveryId = 1000;
+    internal const int startOrderId = 1000;
+    private static int nextOrderId = startOrderId;
+    internal static int NextOrderId { get => nextOrderId++; }
+
+    internal const int startDeliveryId = 1000;
+    private static int nextDeliveryId = startDeliveryId;
+    internal static int NextDeliveryId { get => nextDeliveryId++; }
     internal static DateTime Clock { get; set; } = DateTime.Now;
-    internal static int ManagerId;
-    internal static string ManagerPassword = "BDI846924?/";
-    internal const string? CompanyAddress = null;
-    internal static double? Latitude = null;
-    internal static double? Longitude = null;
-    internal static double? MaxDeliveryDistance = null;
-    internal static double AveCarSpeedKmH;
-    internal static double AveMotorcycleSpeedKmH;
-    internal static double AveBicycleSpeedKmH;
-    internal static double AveWalkingSpeedKmH;
+    internal static int ManagerId { get; set; } = 0;
+    internal static string ManagerPassword { get; set; } = "BDI846924?/";
+
+    internal static string? CompanyAddress { get; set; } = null;
+    internal static double? Latitude { get; set; } = null;
+    internal static double? Longitude {  get; set; } = null;
+    internal static double? MaxDeliveryDistance {  get; set; } = null;  
+
+    internal static double AveCarSpeedKmH { get; set; } = 60;
+    internal static double AveMotorcycleSpeedKmH { get; set; } = 60;
+    internal static double AveBicycleSpeedKmH { get; set; } = 15;
+    internal static double AveWalkingSpeedKmH { get; set; } = 15;
+
     internal static TimeSpan GetMaxDeliveryTime;
     internal static TimeSpan RiskRange;
     internal static TimeSpan InactivityThreshold;
-
+    
     internal static void Reset()
     {
+        nextOrderId = 1000;
+        nextDeliveryId = 1000;
         Clock = DateTime.Now;
-    }
+        ManagerId = 0;
+        ManagerPassword = "BDI846924?/";
+        CompanyAddress = null;
+        Latitude = null;
+        Longitude = null;
+        MaxDeliveryDistance = null;
+        AveCarSpeedKmH = 60;
+        AveMotorcycleSpeedKmH = 60;
+        AveBicycleSpeedKmH = 15;
+        AveWalkingSpeedKmH = 15;
+}
 }
