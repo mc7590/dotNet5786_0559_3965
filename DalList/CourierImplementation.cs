@@ -1,8 +1,11 @@
-﻿namespace Dal;
+﻿///CourierImplementation.cs
+namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
-
+/// <summary>
+/// CourierImplementation class implements ICourier interface for managing Courier entities in the data source  
+/// </summary>
 public class CourierImplementation : ICourier
 {
     
