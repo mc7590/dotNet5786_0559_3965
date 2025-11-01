@@ -1,8 +1,6 @@
-﻿///
+﻿///Config.cs
 namespace Dal;
-/// <summary>
-/// 
-/// </summary>
+
 
 internal static class Config
 {
@@ -24,8 +22,8 @@ internal static class Config
 
     internal static double AveCarSpeedKmH { get; set; } = 60;
     internal static double AveMotorcycleSpeedKmH { get; set; } = 60;
-    internal static double AveBicycleSpeedKmH { get; set; } = 15;
-    internal static double AveWalkingSpeedKmH { get; set; } = 15;
+    internal static double AveBicycleSpeedKmH { get; set; } = 10;
+    internal static double AveWalkingSpeedKmH { get; set; } = 10;
 
     internal static TimeSpan GetMaxDeliveryTime = TimeSpan.FromHours(2);
     internal static TimeSpan RiskRange = TimeSpan.FromHours(1.5);
