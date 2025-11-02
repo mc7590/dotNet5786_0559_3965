@@ -15,6 +15,9 @@ public static class Initialization
     /// </summary>
     private static readonly Random s_rand = new();
 
+    /// <summary>
+    /// Creates initial data for couriers in the DAL
+    /// </summary>
     private static void createCouriers()
     {
         string[] courierNames =
@@ -51,6 +54,9 @@ public static class Initialization
         }
     }
 
+    /// <summary>
+    /// Creates initial data for orders in the DAL
+    /// </summary>
     private static void createOrders()
     {
         string[] customerNames = {
@@ -163,25 +169,52 @@ public static class Initialization
 
     }
 
+    /// <summary>
+    /// Creates initial data for deliveries in the DAL
+    /// </summary>
     private static void createDeliveries()
     {
         var allCouriers = s_dalCourier!.ReadAll().ToList();
         var availableOrders = s_dalOrder!.ReadAll().ToList();
+
         int NumOfDeliveries = 50;
         for (int i = 0; i < NumOfDeliveries && availableOrders.Count > 0; i++)
         {
+
             var orderIndex = s_rand.Next(availableOrders.Count);
             var order = availableOrders[orderIndex];
             availableOrders.RemoveAt(orderIndex);
             var courier = allCouriers[s_rand.Next(allCouriers.Count)];
 
+            //var DeliveryStartTime = GenerateDeliveryStart(***);
+            //double? distanceInKm = 
 
-
-            EnumEndDeliveryStatus endStatus = (EnumEndDeliveryStatus)s_rand.Next(0, 3);
+            EnumEndDeliveryStatus endStatus = (EnumEndDeliveryStatus)s_rand.Next(0, 3);//maybe not random bc depens on starting date?
             DateTime endDeliveryTime = s_dalConfig!.Clock.AddMinutes(s_rand.Next(30, 180));
-            s_dalDelivery!.Create(new(0, order.Id, courier.Id, courier.DeliveryMethod, , , endStatus, endDeliveryTime));
+            s_dalDelivery!.Create(new(0, order.Id, courier.Id, courier.DeliveryMethod, DeliveryStartTime, , endStatus, endDeliveryTime));
         }
     }
+
+
+    ///// <summary>
+    ///// generate non-overlapping delivery start time
+    ///// </summary>
+    //private static DateTime GenerateDeliveryStart(ICourier courier, Order order, int estimatedMinutes)
+    //{
+    //    DateTime earliestStart = order.OrderCreationTime.AddMinutes(5);
+    //    DateTime latestStart = s_dalConfig!.Clock;
+    //    DateTime start;
+
+    //    do
+    //    {
+    //        start = earliestStart.AddMinutes(s_rand.Next((int)(latestStart - earliestStart).TotalMinutes));
+
+    //    } while (s_dalDelivery!.ReadAll()
+    //                .Where(d => d.CourierId == courier.Id)
+    //                .Any(d => start < d.DeliveryEndTime && start.AddMinutes(estimatedMinutes) > d.DeliveryStartTime));
+
+    //    return start;
+    //}
 
 }
 
