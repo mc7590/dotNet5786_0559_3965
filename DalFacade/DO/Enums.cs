@@ -26,3 +26,17 @@ public enum EnumEndDeliveryStatus
 {
     Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
 }
+
+/// <summary>
+/// Enum for main menu  
+/// </summary>
+public enum MainMenuOption
+{
+    Exit = 0,
+    ManageCouriers = 1,
+    ManageOrders = 2,
+    ManageDeliveries = 3,
+    ManageConfig = 4,
+    InitializeData = 5,
+    ResetAll = 6
+}
