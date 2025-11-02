@@ -26,5 +26,5 @@ public record Delivery
     /// <summary>
     /// Default constructor for stage 3
     /// </summary>
-    Delivery() : this(0, 0, 0, EnumDeliveryMethod.Car, DateTime.Now) { }
+    public Delivery() : this(0, 0, 0, EnumDeliveryMethod.Car, DateTime.Now) { }
 }
