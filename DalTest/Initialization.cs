@@ -37,7 +37,11 @@ public static class Initialization
             bool isActive = s_rand.NextDouble() < 0.8;
             EnumDeliveryMethod method = (EnumDeliveryMethod)s_rand.Next(0, 4);
 
-            DateTime start = new DateTime(2018, 1, 1);
+            int yearsBack = s_rand.Next(1, 6);
+            DateTime randomYear = s_dalConfig!.Clock.AddYears(-yearsBack);
+            int dayOfYear = s_rand.Next(1, 366);
+            DateTime start = randomYear.AddDays(dayOfYear);
+
             int range = (s_dalConfig!.Clock - start).Days;
             DateTime startedworking = start.AddDays(s_rand.Next(range));
 
@@ -161,11 +165,53 @@ public static class Initialization
                 orderCreation = now.AddDays(-s_rand.Next(1, 60)); //order made in the past 2 months
 
             double? weight = Math.Round(s_rand.NextDouble() * 5 + 0.5, 2); //order weight 0.5-5.5 kg.(Round 2 digits after decimal point)
-            bool? fragile = s_rand.Next(100) < 15 ? true : false; //15% chance to be fragile
+            bool? fragile = s_rand.NextDouble() < 0.10; //10% chance to be fragile
 
 
             s_dalOrder!.Create(new(0, type, description, address, latitude, longitude, name, phone, orderCreation, weight, fragile));
         }
+
+    }
+
+
+    /// <summary>
+    /// Helper method: calculates the aerial distance between two points (in kilometers)
+    /// </summary>
+    private static double CalculateDistanceKm(double lat1, double lon1, double lat2, double lon2)
+    {
+        double R = 6371; // Earth radius in km
+        double dLat = (lat2 - lat1) * Math.PI / 180;
+        double dLon = (lon2 - lon1) * Math.PI / 180;
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lat2 * Math.PI / 180) *
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return R * c;
+    }
+
+    /// <summary>
+    /// Helper method: generates a start time that doesn't overlap existing deliveries for the courier
+    /// </summary>
+    private static DateTime GenerateDeliveryStart(Courier courier, Order order, int estimatedMinutes)
+    {
+        var existing = s_dalDelivery!.ReadAll().Where(d => d.CourierId == courier.Id).ToList();
+        DateTime earliest = order.OrderCreationTime.AddMinutes(5);
+        DateTime latest = s_dalConfig!.Clock.AddMinutes(-30);
+
+        DateTime start;
+        bool valid;
+        do
+        {
+            int totalMinutes = (int)(latest - earliest).TotalMinutes;
+            if (totalMinutes <= 0) totalMinutes = 60;
+            start = earliest.AddMinutes(s_rand.Next(totalMinutes));
+            DateTime end = start.AddMinutes(estimatedMinutes);
+
+            valid = !existing.Any(d =>
+                start < d.EndDeliveryTime && end > d.DeliveryStartTime); // overlap check
+        } while (!valid);
+
+        return start;
 
     }
 
@@ -175,46 +221,56 @@ public static class Initialization
     private static void createDeliveries()
     {
         var allCouriers = s_dalCourier!.ReadAll().ToList();
-        var availableOrders = s_dalOrder!.ReadAll().ToList();
+        var allOrders = s_dalOrder!.ReadAll().ToList();
+        var remainingOrders = new List<Order>(allOrders);
 
-        int NumOfDeliveries = 50;
-        for (int i = 0; i < NumOfDeliveries && availableOrders.Count > 0; i++)
+        double companyLat = 32.072059916717016; // Ramat Gan center
+        double companyLon = 34.82851580681851;
+
+        foreach (var order in allOrders)
         {
+            // find couriers that can reach this order
+            var possibleCouriers = allCouriers
+                .Where(c =>
+                {
+                    double distance = CalculateDistanceKm(companyLat, companyLon, order.Latitude, order.Longitude);
+                    return distance <= c.MaxPersonalDistance && c.Active;
+                })
+                .ToList();
 
-            var orderIndex = s_rand.Next(availableOrders.Count);
-            var order = availableOrders[orderIndex];
-            availableOrders.RemoveAt(orderIndex);
-            var courier = allCouriers[s_rand.Next(allCouriers.Count)];
+            if (possibleCouriers.Count == 0)
+                continue; // skip if no courier can handle it
 
-            //var DeliveryStartTime = GenerateDeliveryStart(***);
-            //double? distanceInKm = 
+            var courier = possibleCouriers[s_rand.Next(possibleCouriers.Count)];
 
-            EnumEndDeliveryStatus endStatus = (EnumEndDeliveryStatus)s_rand.Next(0, 3);//maybe not random bc depens on starting date?
-            DateTime endDeliveryTime = s_dalConfig!.Clock.AddMinutes(s_rand.Next(30, 180));
-            s_dalDelivery!.Create(new(0, order.Id, courier.Id, courier.DeliveryMethod, DeliveryStartTime, , endStatus, endDeliveryTime));
+            int estimatedMinutes = s_rand.Next(20, 90);
+            DateTime startTime = GenerateDeliveryStart(courier, order, estimatedMinutes);
+
+            bool isClosed = s_rand.NextDouble() < 0.7; // 70% deliveries finished
+            DateTime? endTime = null;
+            EnumEndDeliveryStatus? endStatus = null;
+
+            if (isClosed)
+            {
+                endTime = startTime.AddMinutes(estimatedMinutes);
+                endStatus = (EnumEndDeliveryStatus)s_rand.Next(0,5);
+                remainingOrders.Remove(order); // remove to prevent reuse
+            }
+
+            s_dalDelivery!.Create(new(
+                0,
+                order.Id,
+                courier.Id,
+                courier.DeliveryMethod,
+                startTime,
+                courier.MaxPersonalDistance,//not sure where to take the real distance from, so using the max distance of the courier
+                endStatus,
+                endTime
+
+            ));
         }
     }
 
-
-    ///// <summary>
-    ///// generate non-overlapping delivery start time
-    ///// </summary>
-    //private static DateTime GenerateDeliveryStart(ICourier courier, Order order, int estimatedMinutes)
-    //{
-    //    DateTime earliestStart = order.OrderCreationTime.AddMinutes(5);
-    //    DateTime latestStart = s_dalConfig!.Clock;
-    //    DateTime start;
-
-    //    do
-    //    {
-    //        start = earliestStart.AddMinutes(s_rand.Next((int)(latestStart - earliestStart).TotalMinutes));
-
-    //    } while (s_dalDelivery!.ReadAll()
-    //                .Where(d => d.CourierId == courier.Id)
-    //                .Any(d => start < d.DeliveryEndTime && start.AddMinutes(estimatedMinutes) > d.DeliveryStartTime));
-
-    //    return start;
-    //}
 
 }
 

@@ -28,7 +28,7 @@ internal static class Config
     internal static TimeSpan GetMaxDeliveryTime = TimeSpan.FromHours(2);
     internal static TimeSpan RiskRange = TimeSpan.FromHours(1.5);
     internal static TimeSpan InactivityThreshold  = TimeSpan.FromDays(30);
-    
+
     internal static void Reset()
     {
         nextOrderId = 1000;
