@@ -271,6 +271,36 @@ public static class Initialization
         }
     }
 
+    public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
+    {
+        /// Initialize DAL references
+        Console.WriteLine("Initializing DAL references...");
+        s_dalCourier = dalCourier ?? throw new NullReferenceException("Courier DAL can not be null!");
+        s_dalOrder = dalOrder ?? throw new NullReferenceException("Order DAL can not be null!");
+        s_dalDelivery = dalDelivery ?? throw new NullReferenceException("Delivery DAL can not be null!");
+        s_dalConfig = dalConfig ?? throw new NullReferenceException("Config DAL can not be null!");
+
+        /// Reset and clear all data
+        Console.WriteLine("Resetting configuration and clearing all data...");
+        s_dalConfig.Reset(); //stage 1
+        s_dalCourier.DeleteAll(); //stage 1
+        s_dalOrder.DeleteAll(); //stage 1
+        s_dalDelivery.DeleteAll(); //stage 1
+
+        /// Create initial data
+        Console.WriteLine("Creating Couriers...");
+        createCouriers();
+
+        Console.WriteLine("Creating Orders...");
+        createOrders();
+
+        Console.WriteLine("Creating Deliveries...");
+        createDeliveries();
+
+        /// Finalization
+        Console.WriteLine("Initialization completed successfully");
+
+    }
 
 }
 
