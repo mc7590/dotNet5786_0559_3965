@@ -123,19 +123,128 @@ internal class Program
             switch (choice)
             {
                 case CourierMenuOption.AddCourier:
-                    // Add Courier logic here
+                    {                    
+                     // Add Courier logic here
+                        Console.Write("Enter ID: ");
+                        int idC = int.Parse(Console.ReadLine()!);
+                        Console.Write("Enter Name: ");
+                        string name = Console.ReadLine()!;
+                        Console.Write("Enter Phone: ");
+                        string phone = Console.ReadLine()!;
+                        Console.Write("Enter Email: ");
+                        string email = Console.ReadLine()!;
+                        Console.Write("Enter Password: ");
+                        string password = Console.ReadLine()!;
+                        Console.Write("Delivery method (Car, Motorcycle, Bicycle, Foot): ");
+                        Enum.TryParse(Console.ReadLine(), true, out EnumDeliveryMethod method);
+                        Console.Write("Enter Max Personal Distance (optional): ");
+                        string? input = Console.ReadLine();
+                        double? maxDist = null;
+                        if (double.TryParse(input, out double d))
+                            maxDist = d;
+                        Courier newCourier = new Courier(    
+                            Id: idC,   
+                            Name: name,   
+                            CourierPhone: phone,    
+                            Email: email,
+                            Password: password,   
+                            Active: true,                   // Default value 
+                            DeliveryMethod: method,    
+                            StartedWorking: DateTime.Now,   // Default value   
+                            MaxPersonalDistance: maxDist
+                        );
+                        s_dalCourier.Create(newCourier);
+                        Console.WriteLine("Courier added successfully!");
+                    }
                     break;
                 case CourierMenuOption.GetCourier:
-                    // Get Courier by ID logic here
+                    {
+                        // Get Courier by ID logic here
+                        Console.Write("Enter ID: ");
+                        int id = int.Parse(Console.ReadLine()!);
+                        s_dalCourier.Read(id);
+                    }
                     break;
                 case CourierMenuOption.GetAllCouriers:
-                    // Get All Couriers logic here
+                    {
+                        // Get All Couriers logic here
+                        var couriers = s_dalCourier.ReadAll();
+                        foreach (var courier in couriers)
+                        {
+                            Console.WriteLine(courier);
+                        }
+                    }
                     break;
                 case CourierMenuOption.UpdateCourier:
-                    // Update Courier logic here
-                    break;
+                    {
+                        // Update Courier logic here
+                        Console.Write("Enter ID of courier to update: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            Console.WriteLine("Invalid ID format.");
+                            break;
+                        }
+                        Courier? existing = s_dalCourier.Read(id);
+                        if (existing == null)
+                        {
+                            Console.WriteLine("Courier with this ID does not exist.");
+                            break;
+                        }
+
+                        Console.WriteLine("Enter new values (leave empty to keep current value):");
+
+                        Console.Write($"Name ({existing.Name}): ");
+                        string? name = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(name)) name = existing.Name;
+
+                        Console.Write($"Phone ({existing.CourierPhone}): ");
+                        string? phone = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(phone)) phone = existing.CourierPhone;
+
+                        Console.Write($"Email ({existing.Email}): ");
+                        string? email = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(email)) email = existing.Email;
+
+                        Console.Write($"Password ({existing.Password}): ");
+                        string? password = Console.ReadLine();
+                        if (string.IsNullOrWhiteSpace(password)) password = existing.Password;
+
+                        Console.Write($"Delivery method ({existing.DeliveryMethod}): ");
+                        string? methodInput = Console.ReadLine();
+                        EnumDeliveryMethod method = existing.DeliveryMethod;
+                        if (!string.IsNullOrWhiteSpace(methodInput))
+                            Enum.TryParse(methodInput, true, out method);
+
+                        Console.Write($"Max Personal Distance ({existing.MaxPersonalDistance}): ");
+                        string? maxDistInput = Console.ReadLine();
+                        double? maxDist = existing.MaxPersonalDistance;
+                        if (!string.IsNullOrWhiteSpace(maxDistInput) && double.TryParse(maxDistInput, out double d))
+                            maxDist = d;
+
+                        // יצירת אובייקט חדש עם הערכים המעודכנים
+                        Courier updatedCourier = new Courier(
+                            Id: existing.Id,
+                            Name: name,
+                            CourierPhone: phone,
+                            Email: email,
+                            Password: password,
+                            Active: existing.Active,               // נשאר כמו שהיה
+                            DeliveryMethod: method,
+                            StartedWorking: existing.StartedWorking, // נשאר כמו שהיה
+                            MaxPersonalDistance: maxDist
+                        );
+
+                        s_dalCourier.Update(updatedCourier);
+                        Console.WriteLine("Courier updated successfully!");
+                    }
+                        break;
                 case CourierMenuOption.DeleteCourier:
-                    // Delete Courier logic here
+                    {
+                        // Delete Courier logic here
+                        Console.Write("Enter ID: ");
+                        int delId = int.Parse(Console.ReadLine()!);
+                        s_dalCourier.Delete(delId);
+                    }
                     break;
                 case CourierMenuOption.Exit:
                     back = true;
