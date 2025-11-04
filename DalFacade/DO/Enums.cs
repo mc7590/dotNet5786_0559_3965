@@ -89,10 +89,12 @@ public enum ConfigMenuOption
     Add1MinToClock=1,
     Add1HourToClock=2,
     Add1DayToClock=3,
-    ShowCurrentClock= 4,
-    SetConfigParameters=5,
-    GetConfigParameters=6,
-    ResetConfigToDefault= 7
+    Add1WeekToClock= 4,
+    Add1MonthToClock= 5,
+    ShowCurrentClock = 6,
+    SetConfigParameters=7,
+    GetConfigParameters=8,
+    ResetConfigToDefault= 9
 }
 
 /// <summary>
