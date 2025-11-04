@@ -48,10 +48,12 @@ public enum CourierMenuOption
 {
     Exit = 0,
     AddCourier = 1,
-    UpdateCourier = 2,
-    DeleteCourier = 3,
-    GetCourier = 4,
-    GetAllCouriers = 5
+    GetCourier = 2,
+    GetAllCouriers = 3,
+    UpdateCourier = 4,
+    DeleteCourier = 5,
+    DeleteAllCouriers = 6,
+
 }
 
 /// <summary>

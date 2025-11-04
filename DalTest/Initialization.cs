@@ -200,16 +200,30 @@ public static class Initialization
 
         DateTime start;
         bool valid;
+        int attempts = 0;
+        const int maxAttempts = 500;
+
         do
         {
             int totalMinutes = (int)(latest - earliest).TotalMinutes;
             if (totalMinutes <= 0) totalMinutes = 60;
+
             start = earliest.AddMinutes(s_rand.Next(totalMinutes));
             DateTime end = start.AddMinutes(estimatedMinutes);
 
             valid = !existing.Any(d =>
-                start < d.EndDeliveryTime && end > d.DeliveryStartTime); // overlap check
+                start < d.EndDeliveryTime && end > d.DeliveryStartTime);
+
+            attempts++;
+            if (attempts > maxAttempts)
+            {
+                // fallback: just schedule after the last delivery
+                DateTime fallback = existing.MaxBy(d => d.EndDeliveryTime)?.EndDeliveryTime ?? earliest;
+                return fallback.AddMinutes(10);
+            }
+
         } while (!valid);
+        ;
 
         return start;
 
