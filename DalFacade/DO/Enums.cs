@@ -63,10 +63,11 @@ public enum OrderMenuOption
 {
     Exit = 0,
     AddOrder = 1,
-    UpdateOrder = 2,
-    DeleteOrder = 3,
-    GetOrder = 4,
-    GetAllOrders = 5
+    GetOrder = 2,
+    GetAllOrders = 3,
+    UpdateOrder = 4,
+    DeleteOrder = 5,
+    DeleteAllOrders = 6
 }
 
 /// <summary>
@@ -76,10 +77,11 @@ public enum DeliveryMenuOption
 {
     Exit = 0,
     AddDelivery = 1,
-    UpdateDelivery = 2,
-    DeleteDelivery = 3,
-    GetDelivery = 4,
-    GetAllDeliveries = 5
+    GetDelivery = 2,
+    GetAllDeliveries = 3,
+    UpdateDelivery = 4,
+    DeleteDelivery = 5,
+    DeleteAllDeliveries = 6
 }
 
 /// <summary>
@@ -87,16 +89,16 @@ public enum DeliveryMenuOption
 /// </summary>
 public enum ConfigMenuOption
 {
-    Exit=0,
-    Add1MinToClock=1,
-    Add1HourToClock=2,
-    Add1DayToClock=3,
-    Add1WeekToClock= 4,
-    Add1MonthToClock= 5,
+    Exit = 0,
+    Add1MinToClock = 1,
+    Add1HourToClock = 2,
+    Add1DayToClock = 3,
+    Add1WeekToClock = 4,
+    Add1MonthToClock = 5,
     ShowCurrentClock = 6,
-    SetConfigParameters=7,
-    GetConfigParameters=8,
-    ResetConfigToDefault= 9
+    SetConfigParameters = 7,
+    GetConfigParameters = 8,
+    ResetConfigToDefault = 9
 }
 
 /// <summary>
@@ -105,11 +107,11 @@ public enum ConfigMenuOption
 public enum SetConfigParametersOption
 {
     Back = 0,
-    SetClock=1,
-    SetCompanyAddress=2,
-    SetLatitude=3,
-    SetLongitude=4,
-    SetMaxDeliveryDistance=5,
+    SetClock = 1,
+    SetCompanyAddress = 2,
+    SetLatitude = 3,
+    SetLongitude = 4,
+    SetMaxDeliveryDistance = 5,
 }
 
 /// <summary>

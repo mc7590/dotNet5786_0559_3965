@@ -23,7 +23,7 @@ public record Courier
     bool Active,
     EnumDeliveryMethod DeliveryMethod,
     DateTime StartedWorking,
-    double? MaxPersonalDistance = 0
+    double? MaxPersonalDistance = null
 )
 {
     /// <summary>

@@ -39,8 +39,7 @@ public class CourierImplementation : ICourier
                 return;
             }
         }
-
-        throw new NotImplementedException("An object of type Courier with such ID isnt exists.");
+        throw new Exception("An object of type Courier with such ID doesn't exist");
     }
     public void DeleteAll()
     {
