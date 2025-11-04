@@ -263,7 +263,7 @@ public static class Initialization
                 courier.Id,
                 courier.DeliveryMethod,
                 startTime,
-                courier.MaxPersonalDistance,//not sure where to take the real distance from, so using the max distance of the courier
+                1, //default distance of delivery in km
                 endStatus,
                 endTime
 
