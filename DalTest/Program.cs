@@ -3,6 +3,7 @@ using DalApi;
 namespace DalTest;
 using DO;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Diagnostics.Metrics;
 using System.Linq.Expressions;
 
 internal class Program
@@ -128,17 +129,25 @@ internal class Program
                         Console.Write("Enter ID: ");
                         int idC = int.Parse(Console.ReadLine()!);
                         Console.Write("Enter Name: ");
-                        string name = Console.ReadLine()!;
+                        string? name = Console.ReadLine() ?? throw new Exception("Worng input");
                         Console.Write("Enter Phone: ");
-                        string phone = Console.ReadLine()!;
+                        string? phone = Console.ReadLine() ?? throw new Exception("Worng input");
                         Console.Write("Enter Email: ");
-                        string email = Console.ReadLine()!;
+                        string? email = Console.ReadLine() ?? throw new Exception("Worng input");
                         Console.Write("Enter Password: ");
-                        string password = Console.ReadLine()!;
+                        string? password = Console.ReadLine() ?? throw new Exception("Worng input");
+                        Console.WriteLine("Enter true/false if the courier is active");
+                        if (!bool.TryParse(Console.ReadLine(), out bool active))
+                        {
+                            throw new Exception("Worng input");
+                        }
                         Console.Write("Delivery method (Car, Motorcycle, Bicycle, Foot): ");
-                        Enum.TryParse(Console.ReadLine(), true, out EnumDeliveryMethod method);
+                        if (!Enum.TryParse(Console.ReadLine(), true, out EnumDeliveryMethod method))
+                        {
+                            throw new Exception("Worng input");
+                        }
                         Console.Write("Enter Max Personal Distance (optional): ");
-                        string? input = Console.ReadLine();
+                        string? input = Console.ReadLine() ?? throw new Exception("Worng input");
                         double? maxDist = null;
                         if (double.TryParse(input, out double d))
                             maxDist = d;
@@ -148,7 +157,7 @@ internal class Program
                             CourierPhone: phone,    
                             Email: email,
                             Password: password,   
-                            Active: true,                   // Default value 
+                            Active: active,                    
                             DeliveryMethod: method,    
                             StartedWorking: DateTime.Now,   // Default value   
                             MaxPersonalDistance: maxDist
@@ -162,7 +171,7 @@ internal class Program
                         // Get Courier by ID logic here
                         Console.Write("Enter ID: ");
                         int id = int.Parse(Console.ReadLine()!);
-                        s_dalCourier.Read(id);
+                        Console.WriteLine(s_dalCourier.Read(id));
                     }
                     break;
                 case CourierMenuOption.GetAllCouriers:
