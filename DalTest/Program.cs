@@ -570,7 +570,6 @@ internal class Program
 
     /// <summary>
     /// MainMenu -> DeliveryMenu
-    /// unfinished!!!
     /// </summary>
     private static void DeliveryMenu()
     {
@@ -648,15 +647,108 @@ internal class Program
 
                 case DeliveryMenuOption.GetDelivery:
                     // Get Delivery by ID logic here
+                    {
+                        Console.Write("Enter ID: ");
+
+                        if (!int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            throw new Exception("Invalid ID format");
+                        }
+                        Delivery? existingID = s_dalDelivery!.Read(id);
+                        if (existingID == null)
+                        {
+                            throw new Exception("Delivery with this ID does not exist.");
+                        }
+                        Console.WriteLine(existingID);
+                    }
                     break;
                 case DeliveryMenuOption.GetAllDeliveries:
                     // Get All Deliveries logic here
+                    {
+                        var deliveries = s_dalDelivery!.ReadAll();
+                        foreach (var delivery in deliveries)
+                        {
+                            Console.WriteLine(delivery);
+                        }
+                    }
                     break;
                 case DeliveryMenuOption.UpdateDelivery:
                     // Update Delivery logic here
+                    {
+                        Console.Write("Enter ID of Delivery to update: ");
+                        if (!int.TryParse(Console.ReadLine(), out int id))
+                        {
+                            throw new Exception("Invalid ID format.");
+                        }
+                        Delivery? existing = s_dalDelivery!.Read(id);
+                        if (existing == null)
+                        {
+                            throw new Exception("Delivery with this ID does not exist.");
+                        }
+                        Console.WriteLine("Enter new values for the delivery (leave blank to keep current value):");
+                        
+                        Console.Write($"Order ID ({existing.OrderId}): ");
+                        string? orderId = Console.ReadLine();
+                        int newOrderId;
+                        if (string.IsNullOrWhiteSpace(orderId))
+                        {
+                            newOrderId = existing.OrderId;
+                        }
+                        else
+                        {
+                            if (!int.TryParse(orderId, out newOrderId))
+                            {
+                                throw new Exception("Invalid ID format");
+                            }
+                            Order? existingOrder = s_dalOrder!.Read(newOrderId) ?? throw new Exception("Order with this ID does not exist.");
+                        }
+;
+                        Console.Write($"Courier ID ({existing.CourierId}): ");
+                        string? courierId = Console.ReadLine();
+                        int newCourierId;
+                        if (string.IsNullOrWhiteSpace(courierId))
+                        {
+                            newCourierId = existing.CourierId;
+                        }
+                        else
+                        {
+                            if (!int.TryParse(courierId, out newCourierId))
+                            {
+                                throw new Exception("Invalid ID format");
+                            }
+                            Courier? existingCourier = s_dalCourier!.Read(newCourierId) ?? throw new Exception("Courier with this ID does not exist.");
+                        }
+
+                        Console.Write($"Distance in Km ({existing.DistanceInKm}): ");
+                        string? distanceInput = Console.ReadLine();
+                        double? newDistance = existing.DistanceInKm;
+                        if (!string.IsNullOrWhiteSpace(distanceInput) && double.TryParse(distanceInput, out double distanceVal))
+                            newDistance = distanceVal;
+ 
+                        Delivery newDelivery = new(
+                                Id: existing.Id,
+                                OrderId: newOrderId,
+                                CourierId: newCourierId,
+                                DeliveryMethod: existing.DeliveryMethod,
+                                DeliveryStartTime: existing.DeliveryStartTime,
+                                DistanceInKm: newDistance,
+                                EndDeliveryStatus: existing.EndDeliveryStatus,
+                                EndDeliveryTime: existing.EndDeliveryTime
+                            );
+                        s_dalDelivery!.Update(newDelivery);
+                        Console.WriteLine("Delivery updated successfully!");
+                    }
                     break;
                 case DeliveryMenuOption.DeleteDelivery:
                     // Delete Delivery logic here
+                    {
+                        Console.Write("Enter ID: ");
+                        if (!int.TryParse(Console.ReadLine(), out int delID))
+                        {
+                            throw new Exception("Invalid ID format");
+                        }
+                        s_dalDelivery!.Delete(delID);
+                    }
                     break;
                 case DeliveryMenuOption.Exit:
                     back = true;
