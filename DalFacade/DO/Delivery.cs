@@ -19,7 +19,7 @@ public record Delivery
     EnumDeliveryMethod DeliveryMethod,
     DateTime DeliveryStartTime,
     double? DistanceInKm=null,
-    EnumEndDeliveryStatus? EndDeliveryStatus=null,
+    EnumEndDeliveryStatus? EndDeliveryStatus = null,
     DateTime? EndDeliveryTime= null
 )
 {
