@@ -6,7 +6,7 @@ using System.Collections.Generic;
 /// <summary>
 /// CourierImplementation class implements ICourier interface for managing Courier entities in the data source  
 /// </summary>
-public class CourierImplementation : ICourier
+internal class CourierImplementation : ICourier
 {
     
     public void Create(Courier item)

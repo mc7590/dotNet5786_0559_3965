@@ -6,7 +6,7 @@ namespace Dal;
 /// <summary>
 /// Configuration implementation class.
 /// </summary>
-public class ConfigImplementation : IConfig
+internal class ConfigImplementation : IConfig
 {
     /// <summary>
     /// Get/set the current clock time used for configuration.

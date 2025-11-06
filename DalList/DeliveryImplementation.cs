@@ -7,7 +7,7 @@ using System.Collections.Generic;
 /// <summary>
 /// DeliveryImplementation class implements IDelivery interface for managing Delivery entities in the data source  
 /// </summary>
-public class DeliveryImplementation : IDelivery
+internal class DeliveryImplementation : IDelivery
 {
     /// <summary>
     /// Adds a new delivery to the data source with a unique identifier.
