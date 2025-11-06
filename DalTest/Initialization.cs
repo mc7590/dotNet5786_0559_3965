@@ -192,21 +192,21 @@ public static class Initialization
     /// <summary>
     /// Helper method: generates a start time that doesn't overlap existing deliveries for the courier
     /// </summary>
-    private static DateTime GenerateDeliveryStart(Courier courier, Order order, int estimatedMinutes)
+    private static DateTime GenerateDeliveryStart(/*Courier courier*/List<Courier> possibleCouriers, Order order, int estimatedMinutes)
     {
-        var existing = s_dalDelivery!.ReadAll().Where(d => d.CourierId == courier.Id).ToList();
+        //var existing = s_dalDelivery!.ReadAll().Where(d => d.CourierId == courier.Id).ToList();
         DateTime earliest = order.OrderCreationTime.AddMinutes(5);
-        DateTime latest = s_dalConfig!.Clock.AddMinutes(-30);
+        DateTime latest = s_dalConfig!.Clock.AddMinutes(-30);//why -30?
 
         DateTime start;
         bool valid;
         int attempts = 0;
-        const int maxAttempts = 500;
+        //const int maxAttempts = 500;
 
         do
         {
             int totalMinutes = (int)(latest - earliest).TotalMinutes;
-            if (totalMinutes <= 0) totalMinutes = 60;
+            if (totalMinutes <= 0) totalMinutes = 60;//?
 
             start = earliest.AddMinutes(s_rand.Next(totalMinutes));
             DateTime end = start.AddMinutes(estimatedMinutes);
@@ -229,6 +229,8 @@ public static class Initialization
 
     }
 
+    
+
     /// <summary>
     /// Creates initial data for deliveries in the DAL
     /// </summary>
@@ -245,6 +247,7 @@ public static class Initialization
         {
             // find couriers that can reach this order
             var possibleCouriers = allCouriers
+                //makes a list of couriers that can deliver the order based on their max distance and active status
                 .Where(c =>
                 {
                     double distance = CalculateDistanceKm(companyLat, companyLon, order.Latitude, order.Longitude);
@@ -255,10 +258,11 @@ public static class Initialization
             if (possibleCouriers.Count == 0)
                 continue; // skip if no courier can handle it
 
-            var courier = possibleCouriers[s_rand.Next(possibleCouriers.Count)];
+            List<Courier> posCouriers = possibleCouriers;//not nullable(?)
+            //var courier = possibleCouriers[s_rand.Next(possibleCouriers.Count)];
 
             int estimatedMinutes = s_rand.Next(20, 90);
-            DateTime startTime = GenerateDeliveryStart(courier, order, estimatedMinutes);
+            DateTime startTime = GenerateDeliveryStart(posCouriers, order, estimatedMinutes);
 
             bool isClosed = s_rand.NextDouble() < 0.7; // 70% deliveries finished
             DateTime? endTime = null;
