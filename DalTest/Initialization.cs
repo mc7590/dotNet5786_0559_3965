@@ -47,11 +47,11 @@ public static class Initialization
 
             double maxDistance = method switch
             {
-                EnumDeliveryMethod.Foot => s_rand.Next(1, 2),
-                EnumDeliveryMethod.Bicycle => s_rand.Next(2, 5),
-                EnumDeliveryMethod.Motorcycle => s_rand.Next(3, 10),
-                EnumDeliveryMethod.Car => s_rand.Next(5, 25),
-                _ => s_rand.Next(2, 10)
+                EnumDeliveryMethod.Foot => (int)s_rand.Next(1, 2),
+                EnumDeliveryMethod.Bicycle => (int)s_rand.Next(2, 5),
+                EnumDeliveryMethod.Motorcycle => (int)s_rand.Next(3, 10),
+                EnumDeliveryMethod.Car => (int)s_rand.Next(5, 25),
+                _ => (int)s_rand.Next(2, 10)
             };
 
             s_dalCourier!.Create(new(id, name, phone, email, password, isActive, method, startedworking, maxDistance));
@@ -189,105 +189,90 @@ public static class Initialization
         return R * c;
     }
 
-    /// <summary>
-    /// Helper method: generates a start time that doesn't overlap existing deliveries for the courier
-    /// </summary>
-    private static DateTime GenerateDeliveryStart(/*Courier courier*/List<Courier> possibleCouriers, Order order, int estimatedMinutes)
-    {
-        //var existing = s_dalDelivery!.ReadAll().Where(d => d.CourierId == courier.Id).ToList();
-        DateTime earliest = order.OrderCreationTime.AddMinutes(5);
-        DateTime latest = s_dalConfig!.Clock.AddMinutes(-30);//why -30?
-
-        DateTime start;
-        bool valid;
-        int attempts = 0;
-        //const int maxAttempts = 500;
-
-        do
-        {
-            int totalMinutes = (int)(latest - earliest).TotalMinutes;
-            if (totalMinutes <= 0) totalMinutes = 60;//?
-
-            start = earliest.AddMinutes(s_rand.Next(totalMinutes));
-            DateTime end = start.AddMinutes(estimatedMinutes);
-
-            valid = !existing.Any(d =>
-                start < d.EndDeliveryTime && end > d.DeliveryStartTime);
-
-            attempts++;
-            if (attempts > maxAttempts)
-            {
-                // fallback: just schedule after the last delivery
-                DateTime fallback = existing.MaxBy(d => d.EndDeliveryTime)?.EndDeliveryTime ?? earliest;
-                return fallback.AddMinutes(10);
-            }
-
-        } while (!valid);
-        ;
-
-        return start;
-
-    }
-
-    
 
     /// <summary>
     /// Creates initial data for deliveries in the DAL
     /// </summary>
     private static void createDeliveries()
     {
+        // const- better to define at config
+        const double COMPANY_LAT = 32.072059916717016;
+        const double COMPANY_LON = 34.82851580681851;
+
+        // read data
         var allCouriers = s_dalCourier!.ReadAll().ToList();
         var allOrders = s_dalOrder!.ReadAll().ToList();
-        var remainingOrders = new List<Order>(allOrders);
 
-        double companyLat = 32.072059916717016; // Ramat Gan center
-        double companyLon = 34.82851580681851;
+        // will be empty bc it's initioalization
+        var initialDeliveries = s_dalDelivery!.ReadAll().ToList();
+
+        // list of new deliveries created in this function
+        var newDeliveries = new List<Delivery>();
 
         foreach (var order in allOrders)
         {
-            // find couriers that can reach this order
-            var possibleCouriers = allCouriers
-                //makes a list of couriers that can deliver the order based on their max distance and active status
+            //union of existing and new deliveries
+            var allCurrentDeliveries = initialDeliveries.Concat(newDeliveries);
+
+            // createpotential delivery time window
+            DateTime startTime = order.OrderCreationTime.AddMinutes(s_rand.Next(0, 30));
+            DateTime endTimeCandidate = startTime.AddMinutes(s_rand.Next(35, 90));
+
+            //filter available couriers
+            var availableCouriers = allCouriers
                 .Where(c =>
                 {
-                    double distance = CalculateDistanceKm(companyLat, companyLon, order.Latitude, order.Longitude);
-                    return distance <= c.MaxPersonalDistance && c.Active;
+                    //check availability by two conditions: distance and active status
+                    double distance = CalculateDistanceKm(COMPANY_LAT, COMPANY_LON, order.Latitude, order.Longitude);
+                    if (!(distance <= c.MaxPersonalDistance && c.Active)) return false;
+
+                    //check time overlap with existing deliveries
+                    var courierDeliveries = allCurrentDeliveries.Where(d => d.CourierId == c.Id);
+
+                    foreach (var d in courierDeliveries)
+                    {
+                        //manage null end time as ongoing delivery
+                        DateTime existingEndTime = d.EndDeliveryTime ?? DateTime.MaxValue;
+
+                        //check overlap [Start_d < End_new] AND [End_d > Start_new]
+                        if (d.DeliveryStartTime < endTimeCandidate && existingEndTime > startTime)
+                            return false; //overlap found, courier not available
+                    }
+                    return true;
                 })
                 .ToList();
 
-            if (possibleCouriers.Count == 0)
-                continue; // skip if no courier can handle it
+            if (availableCouriers.Count == 0)
+                continue; //no couriers available for this order
 
-            List<Courier> posCouriers = possibleCouriers;//not nullable(?)
-            //var courier = possibleCouriers[s_rand.Next(possibleCouriers.Count)];
-
-            int estimatedMinutes = s_rand.Next(20, 90);
-            DateTime startTime = GenerateDeliveryStart(posCouriers, order, estimatedMinutes);
-
-            bool isClosed = s_rand.NextDouble() < 0.7; // 70% deliveries finished
+            // create delivery
+            var courier = availableCouriers[s_rand.Next(availableCouriers.Count)];
+            bool isClosed = s_rand.NextDouble() < 0.7;
             DateTime? endTime = null;
             EnumEndDeliveryStatus? endStatus = null;
 
             if (isClosed)
             {
-                endTime = startTime.AddMinutes(estimatedMinutes);
-                endStatus = (EnumEndDeliveryStatus)s_rand.Next(0,5);
-                remainingOrders.Remove(order); // remove to prevent reuse
+                endTime = endTimeCandidate;
+                endStatus = (EnumEndDeliveryStatus)s_rand.Next(0, 5);
             }
 
-            s_dalDelivery!.Create(new(
-                0,
-                order.Id,
-                courier.Id,
-                courier.DeliveryMethod,
-                startTime,
-                1, //default distance of delivery in km
-                endStatus,
-                endTime
+            Delivery newDelivery = new (
+                Id: 0,
+                OrderId: order.Id,
+                CourierId: courier.Id,
+                DeliveryMethod: courier.DeliveryMethod,
+                DeliveryStartTime: startTime,
+                DistanceInKm: CalculateDistanceKm(COMPANY_LAT, COMPANY_LON, order.Latitude, order.Longitude),
+                EndDeliveryStatus: endStatus,
+                EndDeliveryTime: endTime
+                );
 
-            ));
+            newDeliveries.Add(newDelivery);//update created deliveries list
+            s_dalDelivery!.Create(newDelivery);
         }
     }
+    
 
     public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
     {
