@@ -47,11 +47,11 @@ public static class Initialization
 
             double maxDistance = method switch
             {
-                EnumDeliveryMethod.Foot => (int)s_rand.Next(1, 2),
-                EnumDeliveryMethod.Bicycle => (int)s_rand.Next(2, 5),
-                EnumDeliveryMethod.Motorcycle => (int)s_rand.Next(3, 10),
-                EnumDeliveryMethod.Car => (int)s_rand.Next(5, 25),
-                _ => (int)s_rand.Next(2, 10)
+                EnumDeliveryMethod.Foot => s_rand.Next(1, 2),
+                EnumDeliveryMethod.Bicycle => s_rand.Next(2, 5),
+                EnumDeliveryMethod.Motorcycle => s_rand.Next(3, 10),
+                EnumDeliveryMethod.Car => s_rand.Next(5, 25),
+                _ => s_rand.Next(2, 10)
             };
 
             s_dalCourier!.Create(new(id, name, phone, email, password, isActive, method, startedworking, maxDistance));
