@@ -31,7 +31,7 @@ public static class Initialization
                 id = s_rand.Next(200000000, 400000000);
             while (s_dalCourier!.Read(id) != null);
 
-            string phone = $"+9725{s_rand.Next(10000000, 99999999)}";
+            string phone = $"05{s_rand.Next(10000000, 99999999)}";
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com";
             string password = $"password{id % 10000}";
             bool isActive = s_rand.NextDouble() < 0.8;
