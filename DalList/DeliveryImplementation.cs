@@ -26,21 +26,37 @@ internal class DeliveryImplementation : IDelivery
     /// <param name="id">The unique identifier of the delivery to retrieve.</param>
     public Delivery? Read(int id)
     {
-        foreach (var delivery in DataSource.Deliverys)
-        {
-            if (delivery.Id == id)
-                return delivery;
-        }
-        return null;
+        //return DataSource.Deliverys.Find(item => item.Id == id); //stage 1
+        return DataSource.Deliverys.FirstOrDefault(item => item.Id == id); //stage 2
     }
 
     /// <summary>
-    /// Retrieves all deliveries from the data source.
+    /// Retrieves a delivery by a specified filter.
     /// </summary>
-    /// <returns>A list of objects representing all deliverys currently stored in the data source.</returns>
-    public List<Delivery> ReadAll()
+    public Delivery? Read(Func<Delivery, bool> filter) // stage 2
     {
-        return new List<DO.Delivery>(DataSource.Deliverys);
+        return DataSource.Deliverys.FirstOrDefault(item => filter(item));
+    }
+
+    ///// <summary>
+    ///// Retrieves all deliveries from the data source.
+    ///// </summary>
+    //public List<Delivery> ReadAll()
+    //{
+    //    return new List<DO.Delivery>(DataSource.Deliverys);
+    //}
+
+    /// <summary>
+    /// Retrieves filtered deliveries from the data source.
+    /// </summary>
+    public IEnumerable<Delivery> ReadAll(Func<Delivery, bool>? filter = null) //stage 2
+    {
+        return filter != null
+            ? from item in DataSource.Deliverys
+              where filter(item)
+              select item
+            : from item in DataSource.Deliverys
+              select item;
     }
 
     /// <summary>

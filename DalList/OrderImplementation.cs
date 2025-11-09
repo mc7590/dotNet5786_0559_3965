@@ -25,21 +25,37 @@ internal class OrderImplementation : IOrder
     /// <param name="id">The unique identifier of the order to retrieve.</param>
     public Order? Read(int id)
     {
-        foreach (var order in DataSource.Orders)
-        {
-            if (order.Id == id)
-                return order;
-        }
-        return null;
+        //return DataSource.Orders.Find(item => item.Id == id); //stage 1
+        return DataSource.Orders.FirstOrDefault(item => item.Id == id); //stage 2
     }
 
     /// <summary>
-    /// Retrieves all orders from the data source.
+    /// Retrieves an order by a specified filter.
     /// </summary>
-    /// <returns>A list of objects representing all orders currently stored in the data source.</returns>
-    public List<Order> ReadAll()
+    public Order? Read(Func<Order, bool> filter) // stage 2
     {
-        return new List<DO.Order>(DataSource.Orders);
+        return DataSource.Orders.FirstOrDefault(item => filter(item));
+    }
+
+    ///// <summary>
+    ///// Retrieves all Orders from the data source.
+    ///// </summary>
+    //public List<Order> ReadAll()
+    //{
+    //    return new List<DO.Order>(DataSource.Orders);
+    //}
+
+    /// <summary>
+    /// Retrieves filtered orders from the data source.
+    /// </summary>
+    public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null) //stage 2
+    {
+        return filter != null
+            ? from item in DataSource.Orders
+              where filter(item)
+              select item
+            : from item in DataSource.Orders
+              select item;
     }
 
     /// <summary>

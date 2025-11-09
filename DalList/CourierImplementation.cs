@@ -8,7 +8,7 @@ using System.Collections.Generic;
 /// </summary>
 internal class CourierImplementation : ICourier
 {
-    
+
     public void Create(Courier item)
     {
         if (Read(item.Id) != null)
@@ -18,16 +18,40 @@ internal class CourierImplementation : ICourier
     }
     public Courier? Read(int id)
     {
-        foreach (var courier in DataSource.Couriers) {
-            if (courier.Id == id) 
-                return courier;
-        }
-        return null;
-    } 
-    public List<Courier> ReadAll()
-    {
-        return new List<DO.Courier>(DataSource.Couriers);
+        //return DataSource.Couriers.Find(item => item.Id == id); //stage 1
+        return DataSource.Couriers.FirstOrDefault(item => item.Id == id); //stage 2
+
     }
+
+    /// <summary>
+    /// Retrieves a courier by a specified filter.
+    /// </summary>
+    public Courier? Read(Func<Courier, bool> filter) // stage 2
+    {
+        return DataSource.Couriers.FirstOrDefault(item => filter(item));
+    }
+
+    ///// <summary>
+    ///// Retrieves all Couriers from the data source.
+    ///// </summary>
+    //public List<Courier> ReadAll()
+    //{
+    //    return new List<DO.Courier>(DataSource.Couriers);
+    //}
+
+    /// <summary>
+    /// Retrieves filtered couriers from the data source.
+    /// </summary>
+    public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null) //stage 2
+    {
+        return filter != null
+            ? from item in DataSource.Couriers
+              where filter(item)
+              select item
+            : from item in DataSource.Couriers
+              select item;
+    }
+
 
     public void Delete(int id)
     {
