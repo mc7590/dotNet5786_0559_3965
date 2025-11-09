@@ -63,7 +63,7 @@ internal class OrderImplementation : IOrder
     /// </summary>
     /// <param name="item">The order containing updated details. The order must have a valid ID that matches an existing order in the data
     /// source.</param>
-    /// <exception cref="NotImplementedException">Thrown if an order with the specified ID does not exist in the data source.</exception>
+    /// <exception cref="DalDoesNotExistException">In case Order with the specified ID doesn't exist.</exception>
     public void Update(Order item)
     {
         foreach (var order in DataSource.Orders)
@@ -75,14 +75,14 @@ internal class OrderImplementation : IOrder
                 return;
             }
         }
-        throw new NotImplementedException("An object of type Order with such ID does not exist.");
+        throw new DalDoesNotExistException($"Order with ID={item.Id} doesn't exist");
     }
 
     /// <summary>
     /// Deletes an order with the specified identifier from the data source.
     /// </summary>
     /// <param name="id">The unique identifier of the order to be deleted.</param>
-    /// <exception cref="NotImplementedException">Thrown if no order with the specified <paramref name="id"/> exists in the data source.</exception>
+    /// <exception cref="DalDoesNotExistException">In case Order with the specified ID doesn't exist.</exception>
     public void Delete(int id)
     {
         foreach (var order in DataSource.Orders)
@@ -93,7 +93,7 @@ internal class OrderImplementation : IOrder
                 return;
             }
         }
-        throw new NotImplementedException("An object of type Order with such ID does not exist.");
+        throw new DalDoesNotExistException($"Courier with ID={id} doesn't exist");
     }
 
     /// <summary>
@@ -104,6 +104,5 @@ internal class OrderImplementation : IOrder
     {
         DataSource.Orders.Clear();
     }
-
 
 }

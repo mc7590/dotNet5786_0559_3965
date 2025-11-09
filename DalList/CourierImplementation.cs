@@ -8,19 +8,26 @@ using System.Collections.Generic;
 /// </summary>
 internal class CourierImplementation : ICourier
 {
-
+    /// <summary>
+    /// Adds a new courier to the data source with a unique identifier.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <exception cref="DalAlreadyExistsException">In case a courier with the same ID already exists.</exception>
     public void Create(Courier item)
     {
         if (Read(item.Id) != null)
-            throw new NotImplementedException("An object of type Courier with such ID already exists.");
+            throw new DalAlreadyExistsException($"Courier with ID={item.Id} already exists");
 
         DataSource.Couriers.Add(item);
     }
+
+    /// <summary>
+    /// Retrieves a courier by its unique identifier.
+    /// </summary>
     public Courier? Read(int id)
     {
         //return DataSource.Couriers.Find(item => item.Id == id); //stage 1
         return DataSource.Couriers.FirstOrDefault(item => item.Id == id); //stage 2
-
     }
 
     /// <summary>
@@ -52,7 +59,11 @@ internal class CourierImplementation : ICourier
               select item;
     }
 
-
+    /// <summary>
+    /// Deletes a courier by its unique identifier.
+    /// </summary>
+    /// <param name="id"></param>
+    /// <exception cref="DalDoesNotExistException">In case a courier with the specified ID doesn't exist.</exception>
     public void Delete(int id)
     {
         foreach (var courier in DataSource.Couriers)
@@ -63,14 +74,22 @@ internal class CourierImplementation : ICourier
                 return;
             }
         }
-        throw new Exception("An object of type Courier with such ID doesn't exist");
+        throw new DalDoesNotExistException($"Courier with ID={id} doesn't exist");
     }
+
+    /// <summary>
+    /// Deletes all couriers from the data source.
+    /// </summary>
     public void DeleteAll()
     {
         DataSource.Couriers.Clear();
     }
 
-    
+    /// <summary>
+    /// Updates an existing courier in the data source with the specified courier details.
+    /// </summary>
+    /// <param name="item"></param>
+    /// <exception cref="DalDoesNotExistException">In case courier with the specified ID doesn't exist.</exception>
     public void Update(Courier item)
     {
         foreach (var courier in DataSource.Couriers)
@@ -82,8 +101,7 @@ internal class CourierImplementation : ICourier
                 return;
             }
         }
-
-        throw new NotImplementedException("An object of type Courier with such ID isnt exists.");
+        throw new DalDoesNotExistException($"Courier with ID={item.Id} doesn't exist");
     }
 
 }

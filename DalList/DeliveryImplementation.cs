@@ -63,7 +63,7 @@ internal class DeliveryImplementation : IDelivery
     /// Updates an existing delivery in the data source with the specified delivery details.
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to be deleted.</param>
-    /// <exception cref="NotImplementedException">Thrown if no delivery with the specified <paramref name="id"/> exists in the data source.</exception>
+    /// <exception cref="DalDoesNotExistException">In case Delivery with the specified ID doesn't exist.</exception>
     public void Update(Delivery item)
     {
         foreach (var delivery in DataSource.Deliverys)
@@ -75,14 +75,14 @@ internal class DeliveryImplementation : IDelivery
                 return;
             }
         }
-        throw new NotImplementedException("An object of type Delivery with such ID does not exist.");
+        throw new DalDoesNotExistException($"Delivery with ID={item.Id} doesn't exist");
     }
 
     /// <summary>
     /// Deletes a delivery from the data source by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to be deleted.</param>
-    /// <exception cref="NotImplementedException">Thrown if no delivery with the specified <paramref name="id"/> exists in the data source.</exception>
+    /// <exception cref="DalDoesNotExistException">In case Delivery with the specified ID doesn't exist.</exception>
     public void Delete(int id)
     {
         foreach (var delivery in DataSource.Deliverys)
@@ -93,7 +93,7 @@ internal class DeliveryImplementation : IDelivery
                 return;
             }
         }
-        throw new NotImplementedException("An object of type Delivery with such ID does not exist.");
+        throw new DalDoesNotExistException($"Delivery with ID={id} doesn't exist");
     }
 
     /// <summary>
@@ -103,7 +103,5 @@ internal class DeliveryImplementation : IDelivery
     {
         DataSource.Deliverys.Clear();
     }
-
-
 
 }
