@@ -5,10 +5,11 @@ using DO;
 
 public static class Initialization
 {
-    private static ICourier? s_dalCourier; //stage 1
-    private static IOrder? s_dalOrder; //stage 1
-    private static IDelivery? s_dalDelivery; //stage 1
-    private static IConfig? s_dalConfig; //stage 1
+    //private static ICourier? s_dalCourier; //stage 1
+    //private static IOrder? s_dalOrder; //stage 1
+    //private static IDelivery? s_dalDelivery; //stage 1
+    //private static IConfig? s_dalConfig; //stage 1
+    private static IDal? s_dal; //stage 2
 
     /// <summary>
     /// Random number generator to initialize test data
@@ -29,7 +30,7 @@ public static class Initialization
             int id;
             do
                 id = s_rand.Next(200000000, 400000000);
-            while (s_dalCourier!.Read(id) != null);
+            while (s_dal!.Courier.Read(id) != null);
 
             string phone = $"05{s_rand.Next(10000000, 99999999)}";
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com";
@@ -38,11 +39,11 @@ public static class Initialization
             EnumDeliveryMethod method = (EnumDeliveryMethod)s_rand.Next(0, 4);
 
             int yearsBack = s_rand.Next(1, 6);
-            DateTime randomYear = s_dalConfig!.Clock.AddYears(-yearsBack);
+            DateTime randomYear = s_dal!.Config.Clock.AddYears(-yearsBack);
             int dayOfYear = s_rand.Next(1, 366);
             DateTime start = randomYear.AddDays(dayOfYear);
 
-            int range = (s_dalConfig!.Clock - start).Days;
+            int range = (s_dal!.Config.Clock - start).Days;
             DateTime startedworking = start.AddDays(s_rand.Next(range));
 
             double maxDistance = method switch
@@ -54,7 +55,7 @@ public static class Initialization
                 _ => s_rand.Next(2, 10)
             };
 
-            s_dalCourier!.Create(new(id, name, phone, email, password, isActive, method, startedworking, maxDistance));
+            s_dal!.Courier.Create(new(id, name, phone, email, password, isActive, method, startedworking, maxDistance));
         }
     }
 
@@ -154,7 +155,7 @@ public static class Initialization
             EnumOrderType type = (EnumOrderType)s_rand.Next(0, 3); //random 0,1,2
 
             //order times according to wanted statuses
-            DateTime now = s_dalConfig!.Clock;
+            DateTime now = s_dal!.Config.Clock;
             DateTime orderCreation;
             int chance = s_rand.Next(100);
             if (chance < 40) //40% opened orders
@@ -168,7 +169,7 @@ public static class Initialization
             bool? fragile = s_rand.NextDouble() < 0.10; //10% chance to be fragile
 
 
-            s_dalOrder!.Create(new(0, type, description, address, latitude, longitude, name, phone, orderCreation, weight, fragile));
+            s_dal!.Order.Create(new(0, type, description, address, latitude, longitude, name, phone, orderCreation, weight, fragile));
         }
 
     }
@@ -200,11 +201,11 @@ public static class Initialization
         const double COMPANY_LON = 34.82851580681851;
 
         // read data
-        var allCouriers = s_dalCourier!.ReadAll().ToList();
-        var allOrders = s_dalOrder!.ReadAll().ToList();
+        var allCouriers = s_dal!.Courier.ReadAll().ToList();
+        var allOrders = s_dal!.Order.ReadAll().ToList();
 
         // will be empty bc it's initioalization
-        var initialDeliveries = s_dalDelivery!.ReadAll().ToList();
+        var initialDeliveries = s_dal!.Delivery.ReadAll().ToList();
 
         // list of new deliveries created in this function
         var newDeliveries = new List<Delivery>();
@@ -269,26 +270,29 @@ public static class Initialization
                 );
 
             newDeliveries.Add(newDelivery);//update created deliveries list
-            s_dalDelivery!.Create(newDelivery);
+            s_dal!.Delivery.Create(newDelivery);
         }
     }
-    
 
-    public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
+
+    //public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
+    public static void Do(IDal dal) //stage 2
     {
         /// Initialize DAL references
         Console.WriteLine("Initializing DAL references...");
-        s_dalCourier = dalCourier ?? throw new NullReferenceException("Courier DAL can not be null!");
-        s_dalOrder = dalOrder ?? throw new NullReferenceException("Order DAL can not be null!");
-        s_dalDelivery = dalDelivery ?? throw new NullReferenceException("Delivery DAL can not be null!");
-        s_dalConfig = dalConfig ?? throw new NullReferenceException("Config DAL can not be null!");
+        //s_dalCourier = dalCourier ?? throw new NullReferenceException("Courier DAL can not be null!"); //Stage 1 
+        //s_dalOrder = dalOrder ?? throw new NullReferenceException("Order DAL can not be null!"); //Stage 1 
+        //s_dalDelivery = dalDelivery ?? throw new NullReferenceException("Delivery DAL can not be null!"); //Stage 1 
+        //s_dalConfig = dalConfig ?? throw new NullReferenceException("Config DAL can not be null!"); //Stage 1 
+        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
 
         /// Reset and clear all data
         Console.WriteLine("Resetting configuration and clearing all data...");
-        s_dalConfig.Reset(); //stage 1
-        s_dalCourier.DeleteAll(); //stage 1
-        s_dalOrder.DeleteAll(); //stage 1
-        s_dalDelivery.DeleteAll(); //stage 1
+        //s_dalConfig.Reset(); //stage 1
+        //s_dalCourier.DeleteAll(); //stage 1
+        //s_dalOrder.DeleteAll(); //stage 1
+        //s_dalDelivery.DeleteAll(); //stage 1
+        s_dal.ResetDB();//stage 2
 
         /// Create initial data
         Console.WriteLine("Creating Couriers...");

@@ -16,8 +16,8 @@ internal static class Config
     internal static string ManagerPassword { get; set; } = "BDI846924?/";
 
     internal static string? CompanyAddress { get; set; } = null;
-    internal static double? Latitude { get; set; } = null;
-    internal static double? Longitude {  get; set; } = null;
+    internal static double? Latitude { get; set; } = 32.072059916717016;
+    internal static double? Longitude {  get; set; } = 34.82851580681851;
     internal static double? MaxDeliveryDistance {  get; set; } = null;  
 
     internal static double AveCarSpeedKmH { get; set; } = 60;

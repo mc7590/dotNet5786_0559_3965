@@ -9,10 +9,11 @@ using System.Xml.Linq;
 
 internal class Program
 {
-    private static ICourier s_dalCourier = new CourierImplementation(); //stage 1
-    private static IOrder? s_dalOrder = new OrderImplementation(); //stage 1
-    private static IDelivery? s_dalDelivery = new DeliveryImplementation(); //stage 1
-    private static IConfig? s_dalConfig = new ConfigImplementation(); //stage 1
+    //private static ICourier s_dalCourier = new CourierImplementation(); //stage 1
+    //private static IOrder? s_dalOrder = new OrderImplementation(); //stage 1
+    //private static IDelivery? s_dalDelivery = new DeliveryImplementation(); //stage 1
+    //private static IConfig? s_dalConfig = new ConfigImplementation(); //stage 1
+    static readonly IDal s_dal = new DalList(); //stage 2
 
     static void Main(string[] args)
     {
@@ -70,7 +71,8 @@ internal class Program
                         break;
 
                     case MainMenuOption.InitializeData:
-                        Initialization.Do(s_dalCourier, s_dalOrder, s_dalDelivery, s_dalConfig);
+                        //Initialization.Do(s_dalCourier, s_dalOrder, s_dalDelivery, s_dalConfig);
+                        Initialization.Do(s_dal); //stage 2
                         Console.WriteLine("Data initialized successfully!");
                         break;
 
@@ -127,7 +129,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        Courier? existingID = s_dalCourier.Read(id);
+                        Courier? existingID = s_dal!.Courier.Read(id);
                         if (existingID != null)
                         {
                             throw new Exception("Courier with this ID already exist.");
@@ -176,10 +178,10 @@ internal class Program
                             Password: password,
                             Active: active,
                             DeliveryMethod: method,
-                            StartedWorking: s_dalConfig!.Clock,   // Default value
+                            StartedWorking: s_dal!.Config.Clock,   // Default value
                             MaxPersonalDistance: maxDist
                         );
-                        s_dalCourier.Create(newCourier);
+                        s_dal.Courier.Create(newCourier);
                         Console.WriteLine("Courier added successfully!");
                     }
                     break;
@@ -193,7 +195,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        Courier? existingID = s_dalCourier.Read(id) ?? throw new Exception("Courier with this ID does not exist.");
+                        Courier? existingID = s_dal.Courier.Read(id) ?? throw new Exception("Courier with this ID does not exist.");
                         Console.WriteLine(existingID);
                     }
                     break;
@@ -201,7 +203,7 @@ internal class Program
                 case CourierMenuOption.GetAllCouriers:
                     {
                         // Get All Couriers logic here
-                        var couriers = s_dalCourier.ReadAll();
+                        var couriers = s_dal.Courier.ReadAll();
                         foreach (var courier in couriers)
                         {
                             Console.WriteLine(courier);
@@ -217,7 +219,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format.");
                         }
-                        Courier? existing = s_dalCourier.Read(id) ?? throw new Exception("Courier with this ID does not exist.");
+                        Courier? existing = s_dal.Courier.Read(id) ?? throw new Exception("Courier with this ID does not exist.");
                         Console.WriteLine("Enter new values (leave empty to keep current value):");
 
                         Console.Write($"Name ({existing.Name}): ");
@@ -268,7 +270,7 @@ internal class Program
                             MaxPersonalDistance: maxDist
                         );
 
-                        s_dalCourier.Update(updatedCourier);
+                        s_dal.Courier.Update(updatedCourier);
                         Console.WriteLine("Courier updated successfully!");
                     }
                     break;
@@ -281,14 +283,14 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        s_dalCourier.Delete(delID);
+                        s_dal.Courier.Delete(delID);
                     }
                     break;
 
                 case CourierMenuOption.DeleteAllCouriers:
                     {
                         // Delete All Couriers logic here
-                        s_dalCourier.DeleteAll();
+                        s_dal.Courier.DeleteAll();
                         Console.WriteLine("All couriers deleted successfully!");
                     }
                     break;
@@ -419,7 +421,7 @@ internal class Program
                          Weight: newWeight,
                          Fragile: newFragile
                         );
-                        s_dalOrder!.Create(newOrder);
+                        s_dal.Order!.Create(newOrder);
                         Console.WriteLine("Order added successfully!");
                     }
                     break;
@@ -433,7 +435,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        Order? existingID = s_dalOrder!.Read(id);
+                        Order? existingID = s_dal.Order!.Read(id);
                         if (existingID == null)
                         {
                             throw new Exception("Order with this ID does not exist.");
@@ -445,7 +447,7 @@ internal class Program
                 case OrderMenuOption.GetAllOrders:
                     // Get All Orders logic here
                     {
-                        var orders = s_dalOrder!.ReadAll();
+                        var orders = s_dal.Order!.ReadAll();
                         foreach (var order in orders)
                         {
                             Console.WriteLine(order);
@@ -461,7 +463,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format.");
                         }
-                        Order? existing = s_dalOrder!.Read(id);
+                        Order? existing = s_dal.Order!.Read(id);
                         if (existing == null)
                         {
                             throw new Exception("Order with this ID does not exist.");
@@ -533,7 +535,7 @@ internal class Program
                          Weight: newWeight,
                          Fragile: newFragile
                         );
-                        s_dalOrder!.Update(newOrder);
+                        s_dal.Order!.Update(newOrder);
                         Console.WriteLine("Order updated successfully!");
                     }
                     break;
@@ -546,14 +548,14 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        s_dalOrder!.Delete(delID);
+                        s_dal.Order!.Delete(delID);
                     }
                     break;
 
                 case OrderMenuOption.DeleteAllOrders:
                     // Delete All Orders logic here
                     {
-                        s_dalOrder!.DeleteAll();
+                        s_dal.Order!.DeleteAll();
                         Console.WriteLine("All orders deleted successfully!");
                     }
                     break;
@@ -602,7 +604,7 @@ internal class Program
                         {
                             throw new Exception("Invalid Order ID format");
                         }
-                        if (s_dalOrder!.Read(orderId) == null)
+                        if (s_dal.Order!.Read(orderId) == null)
                         {
                             throw new Exception("Order with this ID does not exist.");
                         } //if here- an order with this ID already exists
@@ -612,12 +614,12 @@ internal class Program
                         {
                             throw new Exception("Invalid Courier ID format");
                         }
-                        if (s_dalCourier.Read(newCourierId) == null)
+                        if (s_dal.Courier.Read(newCourierId) == null)
                         {
                             throw new Exception("Courier with this ID does not exist.");
                         } //if here- a courier with this ID already exists
 
-                        EnumDeliveryMethod newDeliveryMethod = s_dalCourier.Read(newCourierId)!.DeliveryMethod;
+                        EnumDeliveryMethod newDeliveryMethod = s_dal.Courier.Read(newCourierId)!.DeliveryMethod;
 
                         Console.WriteLine("Enter Delivery distance: ");
                         double? newDistance;
@@ -635,12 +637,12 @@ internal class Program
                                 OrderId: orderId,
                                 CourierId: newCourierId,
                                 DeliveryMethod: newDeliveryMethod,
-                                DeliveryStartTime: s_dalConfig!.Clock,
+                                DeliveryStartTime: s_dal.Config!.Clock,
                                 DistanceInKm: newDistance,
                                 EndDeliveryStatus: null,
                                 EndDeliveryTime: null
                             );
-                        s_dalDelivery!.Create(newDelivery);
+                        s_dal.Delivery!.Create(newDelivery);
                         Console.WriteLine("Delivery added successfully!");
                     }
                     break;
@@ -654,7 +656,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        Delivery? existingID = s_dalDelivery!.Read(id) ?? throw new Exception("Delivery with this ID does not exist.");
+                        Delivery? existingID = s_dal.Delivery!.Read(id) ?? throw new Exception("Delivery with this ID does not exist.");
                         Console.WriteLine(existingID);
                     }
                     break;
@@ -662,7 +664,7 @@ internal class Program
                 case DeliveryMenuOption.GetAllDeliveries:
                     // Get All Deliveries logic here
                     {
-                        var deliveries = s_dalDelivery!.ReadAll();
+                        var deliveries = s_dal.Delivery!.ReadAll();
                         foreach (var delivery in deliveries)
                         {
                             Console.WriteLine(delivery);
@@ -678,7 +680,7 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format.");
                         }
-                        Delivery? existing = s_dalDelivery!.Read(id) ?? throw new Exception("Delivery with this ID does not exist.");
+                        Delivery? existing = s_dal.Delivery!.Read(id) ?? throw new Exception("Delivery with this ID does not exist.");
 
                         Console.WriteLine("Enter new values for the delivery (leave blank to keep current value):");
 
@@ -700,7 +702,7 @@ internal class Program
 
                         DateTime? newEndDeliveryTime = null;
                         if (newEndDeliveryStatus!=null)
-                            newEndDeliveryTime = s_dalConfig!.Clock;
+                            newEndDeliveryTime = s_dal.Config!.Clock;
 
 
                         Delivery newDelivery = new(
@@ -713,7 +715,7 @@ internal class Program
                                 EndDeliveryStatus: newEndDeliveryStatus,
                                 EndDeliveryTime: newEndDeliveryTime
                             );
-                        s_dalDelivery!.Update(newDelivery);
+                        s_dal.Delivery!.Update(newDelivery);
                         Console.WriteLine("Delivery updated successfully!");
                     }
                     break;
@@ -726,14 +728,14 @@ internal class Program
                         {
                             throw new Exception("Invalid ID format");
                         }
-                        s_dalDelivery!.Delete(delID);
+                        s_dal.Delivery!.Delete(delID);
                     }
                     break;
 
                     case DeliveryMenuOption.DeleteAllDeliveries:
                         // Delete All Deliveries logic here
                     {
-                        s_dalDelivery!.DeleteAll();
+                        s_dal.Delivery!.DeleteAll();
                         Console.WriteLine("All deliveries deleted successfully!");
                     }
                     break;
@@ -775,23 +777,23 @@ internal class Program
             switch (choice)
             {
                 case ConfigMenuOption.Add1MinToClock:
-                    s_dalConfig!.Clock = s_dalConfig.Clock.AddMinutes(1);
-                    Console.WriteLine($"Clock advanced by 1 minute {s_dalConfig.Clock}");
+                    s_dal.Config!.Clock = s_dal.Config.Clock.AddMinutes(1);
+                    Console.WriteLine($"Clock advanced by 1 minute {s_dal.Config.Clock}");
                     break;
                 case ConfigMenuOption.Add1HourToClock:
-                    s_dalConfig!.Clock = s_dalConfig.Clock.AddHours(1);
-                    Console.WriteLine($"Clock advanced by 1 hour {s_dalConfig.Clock}");
+                    s_dal.Config!.Clock = s_dal.Config.Clock.AddHours(1);
+                    Console.WriteLine($"Clock advanced by 1 hour {s_dal.Config.Clock}");
                     break;
                 case ConfigMenuOption.Add1DayToClock:
-                    s_dalConfig!.Clock = s_dalConfig.Clock.AddDays(1);
-                    Console.WriteLine($"Clock advanced by 1 day {s_dalConfig.Clock}");
+                    s_dal.Config!.Clock = s_dal.Config.Clock.AddDays(1);
+                    Console.WriteLine($"Clock advanced by 1 day {s_dal.Config.Clock}");
                     break;
                 case ConfigMenuOption.Add1WeekToClock:
-                    s_dalConfig!.Clock = s_dalConfig.Clock.AddDays(7);
-                    Console.WriteLine($"Clock advanced by 1 week {s_dalConfig.Clock}");
+                    s_dal.Config!.Clock = s_dal.Config.Clock.AddDays(7);
+                    Console.WriteLine($"Clock advanced by 1 week {s_dal.Config.Clock}");
                     break;
                 case ConfigMenuOption.ShowCurrentClock:
-                    Console.WriteLine(s_dalConfig!.Clock);
+                    Console.WriteLine(s_dal.Config!.Clock);
                     break;
                 case ConfigMenuOption.SetConfigParameters:
                     SetConfigParameters();
@@ -800,7 +802,7 @@ internal class Program
                     GetConfigParameters();
                     break;
                 case ConfigMenuOption.ResetConfigToDefault:
-                    s_dalConfig!.Reset();
+                    s_dal.Config!.Reset();
                     Console.WriteLine("Config reset to default successfully!");
                     break;
                 case ConfigMenuOption.Exit:
@@ -818,14 +820,14 @@ internal class Program
     /// <exception cref="Exception">in case DAL is not initialized yet</exception> 
     private static void ResetAll()
     {
-        if (s_dalCourier == null || s_dalOrder == null || s_dalDelivery == null || s_dalConfig == null)
+        if (s_dal.Courier == null || s_dal.Order == null || s_dal.Delivery == null || s_dal.Config == null)
         {
             throw new Exception("Error: DAL not initialized yet!");
         }
-        s_dalCourier.DeleteAll(); //stage 1
-        s_dalOrder.DeleteAll(); //stage 1
-        s_dalDelivery.DeleteAll(); //stage 1                
-        s_dalConfig.Reset(); //stage 1
+        s_dal.Courier.DeleteAll(); //stage 1
+        s_dal.Order.DeleteAll(); //stage 1
+        s_dal.Delivery.DeleteAll(); //stage 1                
+        s_dal.Config.Reset(); //stage 1
         Console.WriteLine("All data and config reset successfully!");
 
     }
@@ -853,13 +855,13 @@ internal class Program
             switch (choice)
             {
                 case SetConfigParametersOption.SetClock:
-                    s_dalConfig!.Clock = DateTime.Now;
+                    s_dal.Config!.Clock = DateTime.Now;
                     break;
                 case SetConfigParametersOption.SetCompanyAddress:
                     {
                         Console.WriteLine("Enter new address: <street>, <building-number>, <city>");
                         string? newAddress = Console.ReadLine();
-                        s_dalConfig!.CompanyAddress = newAddress;
+                        s_dal.Config!.CompanyAddress = newAddress;
                         break;
                     }
                 case SetConfigParametersOption.SetLatitude:
@@ -868,11 +870,11 @@ internal class Program
                         string? input = Console.ReadLine();
                         double newLat;
                         if (double.TryParse(input, out newLat))
-                            s_dalConfig!.Latitude = newLat;
+                            s_dal.Config!.Latitude = newLat;
                         else
                         {
                             Console.WriteLine("Error: Invalid latitude format.");
-                            s_dalConfig!.Latitude = 0.0;
+                            s_dal.Config!.Latitude = s_dal.Config.Latitude;
                         }
                         break;
                     }
@@ -882,11 +884,11 @@ internal class Program
                         string? input = Console.ReadLine();
                         double newLon;
                         if (double.TryParse(input, out newLon))
-                            s_dalConfig!.Longitude = newLon;
+                            s_dal.Config!.Longitude = newLon;
                         else
                         {
                             Console.WriteLine("Error: Invalid longitude format.");
-                            s_dalConfig!.Longitude = 0.0;
+                            s_dal.Config!.Longitude = s_dal.Config.Longitude;
                         }
                         break;
                     }
@@ -927,28 +929,28 @@ internal class Program
             switch (choice)
             {
                 case GetConfigParametersOption.GetClock:
-                    Console.WriteLine(s_dalConfig!.Clock);
+                    Console.WriteLine(s_dal.Config!.Clock);
                     break;
                 case GetConfigParametersOption.GetCompanyAddress:
-                    Console.WriteLine(s_dalConfig!.CompanyAddress);
+                    Console.WriteLine(s_dal.Config!.CompanyAddress);
                     break;
                 case GetConfigParametersOption.GetLatitude:
-                    Console.WriteLine(s_dalConfig!.Latitude);
+                    Console.WriteLine(s_dal.Config!.Latitude);
                     break;
                 case GetConfigParametersOption.GetLongitude:
-                    Console.WriteLine(s_dalConfig!.Longitude);
+                    Console.WriteLine(s_dal.Config!.Longitude);
                     break;
                 case GetConfigParametersOption.GetMaxDeliveryDistance:
-                    Console.WriteLine(s_dalConfig!.MaxDeliveryDistance);
+                    Console.WriteLine(s_dal.Config!.MaxDeliveryDistance);
                     break;
                 case GetConfigParametersOption.GetMaxDeliveryTime:
-                    Console.WriteLine(s_dalConfig!.GetMaxDeliveryTime);
+                    Console.WriteLine(s_dal.Config!.GetMaxDeliveryTime);
                     break;
                 case GetConfigParametersOption.GetRiskRange:
-                    Console.WriteLine(s_dalConfig!.RiskRange);
+                    Console.WriteLine(s_dal.Config!.RiskRange);
                     break;
                 case GetConfigParametersOption.GetInactivityThreshold:
-                    Console.WriteLine(s_dalConfig!.InactivityThreshold);
+                    Console.WriteLine(s_dal.Config!.InactivityThreshold);
                     break;
                 case GetConfigParametersOption.Back:
                     back = true;
