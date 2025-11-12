@@ -7,11 +7,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Stage0", "Stage0\Stage0.csp
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xml", "xml", "{8EC462FD-D22E-90A8-E5CE-7E832BA40C5D}"
 	ProjectSection(SolutionItems) = preProject
-		xml\couriers.xml.txt = xml\couriers.xml.txt
-		xml\data-config.xml.txt = xml\data-config.xml.txt
-		xml\deliverys.xml.txt = xml\deliverys.xml.txt
-		xml\orders.xml.txt = xml\orders.xml.txt
-		README.md = README.md
+		xml\couriers.xml = xml\couriers.xml
+		xml\data-config.xml = xml\data-config.xml
+		xml\deliverys.xml = xml\deliverys.xml
+		xml\orders.xml = xml\orders.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalFacade", "DalFacade\DalFacade.csproj", "{3E206A28-9F65-4992-B42A-85DBDF4F95FB}"
