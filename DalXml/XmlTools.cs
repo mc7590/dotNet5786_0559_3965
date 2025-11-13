@@ -95,6 +95,20 @@ static class XMLTools
         int num = root.ToIntNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
         return num;
     }
+
+    public static double GetConfigDoubleVal(string xmlFileName, string elemName)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        double num = root.ToDoubleNullable(elemName) ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
+        return num;
+    }
+    public static string GetConfigStringVal(string xmlFileName, string elemName)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        string? str = (string?)root.Element(elemName);
+        return str ?? throw new FormatException($"can't convert:  {xmlFileName}, {elemName}");
+    }
+
     public static DateTime GetConfigDateVal(string xmlFileName, string elemName)
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
@@ -105,6 +119,18 @@ static class XMLTools
     {
         XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
         root.Element(elemName)?.SetValue((elemVal).ToString());
+        XMLTools.SaveListToXMLElement(root, xmlFileName);
+    }
+    public static void SetConfigDoubleVal(string xmlFileName, string elemName, double elemVal)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        root.Element(elemName)?.SetValue((elemVal).ToString());
+        XMLTools.SaveListToXMLElement(root, xmlFileName);
+    }
+    public static void SetConfigStringVal(string xmlFileName, string elemName, string elemVal)
+    {
+        XElement root = XMLTools.LoadListFromXMLElement(xmlFileName);
+        root.Element(elemName)?.SetValue(elemVal);
         XMLTools.SaveListToXMLElement(root, xmlFileName);
     }
     public static void SetConfigDateVal(string xmlFileName, string elemName, DateTime elemVal)
