@@ -2,8 +2,7 @@
 namespace Dal;
 using DalApi;
 using DO;
-using System;
-using System.Collections.Generic;
+
 
 internal class OrderImplementation : IOrder
 {
@@ -11,7 +10,11 @@ internal class OrderImplementation : IOrder
 
     public void Create(Order item)
     {
-        throw new NotImplementedException();
+        int nextId = Config.NextOrderId; //no need to summon like this: "Dal.Config..." because we are inside Dal namespace
+        Order newItem = item with { Id = nextId };
+        List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
+        Orders.Add(newItem);
+        XMLTools.SaveListToXMLSerializer(Orders, Config.s_orders_xml);
     }
 
     public void Delete(int id)
@@ -44,7 +47,13 @@ internal class OrderImplementation : IOrder
 
     public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null)
     {
-        throw new NotImplementedException();
+        List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
+        return filter != null
+            ? from item in Orders
+              where filter(item)
+              select item
+            : from item in Orders
+              select item;
     }
 
     public void Update(Order item)

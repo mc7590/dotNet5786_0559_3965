@@ -9,8 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "xml", "xml", "{8EC462FD-D22
 	ProjectSection(SolutionItems) = preProject
 		xml\couriers.xml = xml\couriers.xml
 		xml\data-config.xml = xml\data-config.xml
-		xml\deliverys.xml = xml\deliverys.xml
 		xml\orders.xml = xml\orders.xml
+		xml\deliveries.xml = xml\deliveries.xml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DalFacade", "DalFacade\DalFacade.csproj", "{3E206A28-9F65-4992-B42A-85DBDF4F95FB}"
