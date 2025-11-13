@@ -1,3 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ArrayOfOrder>
+<ArrayOfOrder xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Order>
+    <Id>1005</Id>
+    <OrderType>Regular</OrderType>
+    <Address>jdsf</Address>
+    <Latitude>45</Latitude>
+    <Longitude>456</Longitude>
+    <CustomerName>hila</CustomerName>
+    <CustomerPhone>0777585995</CustomerPhone>
+    <OrderCreationTime>2025-11-13T23:25:32.0001698+02:00</OrderCreationTime>
+    <Weight xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+  </Order>
 </ArrayOfOrder>
