@@ -1,3 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <config>
+	<NextOrderId>1005</NextOrderId>
+	<NextDeliveryId>1100</NextDeliveryId>
+	<Clock>1/1/2023</Clock>
+	<ManagerId>987654321</ManagerId>
+	<ManagerPassword>BDI846924?/</ManagerPassword>
+	<CompanyAddress></CompanyAddress>
+	<Latitude></Latitude>
+	<Longitude></Longitude>
+	<MaxDeliveryDistance></MaxDeliveryDistance>
+	<AveCarSpeedKmH>60</AveCarSpeedKmH>
+	<AveMotorcycleSpeedKmH>60</AveMotorcycleSpeedKmH>
+	<AveBicycleSpeedKmH>15</AveBicycleSpeedKmH>
+	<AveWalkingSpeedKmH>15</AveWalkingSpeedKmH>
+	<GetMaxDeliveryTime>2</GetMaxDeliveryTime>
+	<RiskRange>1.5</RiskRange>
+	<InactivityThreshold>30</InactivityThreshold>
+
 </config>
