@@ -44,7 +44,7 @@ internal class CourierImplementation : ICourier
             new XElement("DeliveryMethod", c.DeliveryMethod),
             new XElement("StartedWorking", c.StartedWorking),
             new XElement("MaxPersonalDistance", c.MaxPersonalDistance)
-        }
+        };
     }
     public void Create(Courier item)
     {
