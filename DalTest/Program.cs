@@ -11,7 +11,8 @@ internal class Program
     //private static IDelivery? s_dalDelivery = new DeliveryImplementation(); //stage 1
     //private static IConfig? s_dalConfig = new ConfigImplementation(); //stage 1
     //static readonly IDal s_dal = new DalList(); //stage 2
-    static readonly IDal s_dal = new Dal.DalXml(); //stage 3
+    //static readonly IDal s_dal = new Dal.DalXml(); //stage 3
+    static readonly IDal s_dal = Factory.Get; //stage 4
 
 
     static void Main(string[] args)
@@ -71,7 +72,8 @@ internal class Program
 
                     case MainMenuOption.InitializeData:
                         //Initialization.Do(s_dalCourier, s_dalOrder, s_dalDelivery, s_dalConfig);
-                        Initialization.Do(s_dal); //stage 2
+                        //Initialization.Do(s_dal); //stage 2
+                        Initialization.Do(); //stage 4
                         Console.WriteLine("Data initialized successfully!");
                         break;
 

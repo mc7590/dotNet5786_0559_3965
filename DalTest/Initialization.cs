@@ -276,7 +276,8 @@ public static class Initialization
 
 
     //public static void Do(ICourier? dalCourier, IOrder? dalOrder, IDelivery? dalDelivery, IConfig? dalConfig)
-    public static void Do(IDal dal) //stage 2
+    //public static void Do(IDal dal) //stage 2
+    public static void Do() //stage 4
     {
         /// Initialize DAL references
         Console.WriteLine("Initializing DAL references...");
@@ -284,7 +285,8 @@ public static class Initialization
         //s_dalOrder = dalOrder ?? throw new NullReferenceException("Order DAL can not be null!"); //Stage 1 
         //s_dalDelivery = dalDelivery ?? throw new NullReferenceException("Delivery DAL can not be null!"); //Stage 1 
         //s_dalConfig = dalConfig ?? throw new NullReferenceException("Config DAL can not be null!"); //Stage 1 
-        s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
+        //s_dal = dal ?? throw new NullReferenceException("DAL object can not be null!"); // stage 2
+        s_dal = DalApi.Factory.Get; //stage 4
 
         /// Reset and clear all data
         Console.WriteLine("Resetting configuration and clearing all data...");
