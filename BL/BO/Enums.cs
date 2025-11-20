@@ -1,7 +1,7 @@
 ﻿namespace BO;
 
 /// <summary>
-/// Used in Courier entity: eumCourierType enum represents the type of courier.
+/// DeliveryMethod represents the method of delivery used by the courier.
 /// </summary>
 public enum EnumDeliveryMethod
 {
@@ -9,7 +9,7 @@ public enum EnumDeliveryMethod
 };
 
 /// <summary>
-/// Used in OrderInProgress entity: EumOrderType represents the type of an order. 
+/// EumOrderType represents the type of an order. 
 /// </summary>
 public enum EnumOrderType
 {
@@ -17,7 +17,7 @@ public enum EnumOrderType
 };
 
 /// <summary>
-/// Used in OrderInProgress entity: OrderStatus represents the status of the order
+/// OrderStatus represents the status of the order
 /// </summary>
 public enum EnumOrderStatus
 {
@@ -29,7 +29,7 @@ public enum EnumOrderStatus
 };
 
 /// <summary>
-/// 
+/// ScheduleStatus represents the schedule status of a delivery
 /// </summary>
 public enum EnumScheduleStatus
 {
@@ -37,3 +37,11 @@ public enum EnumScheduleStatus
     InRisk,
     Late
 };
+
+/// <summary>
+/// EnumEndDeliveryStatus represents the final status of a delivery process.
+/// </summary>
+public enum EnumEndDeliveryStatus
+{
+    Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
+}
