@@ -9,6 +9,7 @@ namespace Helpers;
 internal static class AdminManager //stage 4
 {
     #region Stage 4-7
+
     private static readonly DalApi.IDal s_dal = DalApi.Factory.Get; //stage 4
 
     /// <summary>
@@ -56,7 +57,19 @@ internal static class AdminManager //stage 4
     internal static BO.Config GetConfig() //stage 4
     => new BO.Config()
     {
-        MaxRange = s_dal.Config.MaxRange
+        ManagerId = s_dal.Config.ManagerId,
+        ManagerPassword = s_dal.Config.ManagerPassword,
+        CompanyAddress = s_dal.Config.CompanyAddress,
+        Latitude = s_dal.Config.Latitude,
+        Longitude = s_dal.Config.Longitude,
+        MaxDeliveryDistance = s_dal.Config.MaxDeliveryDistance,
+        AveCarSpeedKmH = s_dal.Config.AveCarSpeedKmH,
+        AveMotorcycleSpeedKmH = s_dal.Config.AveMotorcycleSpeedKmH,
+        AveBicycleSpeedKmH = s_dal.Config.AveBicycleSpeedKmH,
+        AveWalkingSpeedKmH = s_dal.Config.AveWalkingSpeedKmH,
+        GetMaxDeliveryTime = s_dal.Config.GetMaxDeliveryTime,
+        RiskRange = s_dal.Config.RiskRange,
+        InactivityThreshold = s_dal.Config.InactivityThreshold
         //TO_DO: //stage 4
         //add an assignment for each configuration property
         //...
@@ -70,14 +83,71 @@ internal static class AdminManager //stage 4
     {
         bool configChanged = false; // stage 5
 
-        if (s_dal.Config.MaxRange != configuration.MaxRange) //stage 4
+        if (s_dal.Config.ManagerId != configuration.ManagerId) //stage 4
         {
-            s_dal.Config.MaxRange = configuration.MaxRange;
+            s_dal.Config.ManagerId = configuration.ManagerId;
             configChanged = true;
         }
-        //TO_DO: //stage 4
-        //add a condition+assignment for each configuration property
-        //...
+        if (s_dal.Config.ManagerPassword != configuration.ManagerPassword) //stage 4
+        {
+            s_dal.Config.ManagerPassword = configuration.ManagerPassword!;
+            configChanged = true;
+        }
+        if (s_dal.Config.CompanyAddress != configuration.CompanyAddress) //stage 4
+        {
+            s_dal.Config.CompanyAddress = configuration.CompanyAddress;
+            configChanged = true;
+        }
+        if (s_dal.Config.Latitude != configuration.Latitude) //stage 4
+        {
+            s_dal.Config.Latitude = configuration.Latitude;
+            configChanged = true;
+        }
+        if (s_dal.Config.Longitude != configuration.Longitude) //stage 4
+        {
+            s_dal.Config.Longitude = configuration.Longitude;
+            configChanged = true;
+        }
+        if (s_dal.Config.MaxDeliveryDistance != configuration.MaxDeliveryDistance) //stage 4
+        {
+            s_dal.Config.MaxDeliveryDistance = configuration.MaxDeliveryDistance;
+            configChanged = true;
+        }
+        if (s_dal.Config.AveCarSpeedKmH != configuration.AveCarSpeedKmH) //stage 4
+        {
+            s_dal.Config.AveCarSpeedKmH = configuration.AveCarSpeedKmH;
+            configChanged = true;
+        }
+        if (s_dal.Config.AveMotorcycleSpeedKmH != configuration.AveMotorcycleSpeedKmH) //stage 4
+        {
+            s_dal.Config.AveMotorcycleSpeedKmH = configuration.AveMotorcycleSpeedKmH;
+            configChanged = true;
+        }
+        if (s_dal.Config.AveBicycleSpeedKmH != configuration.AveBicycleSpeedKmH) //stage 4
+        {
+            s_dal.Config.AveBicycleSpeedKmH = configuration.AveBicycleSpeedKmH;
+            configChanged = true;
+        }
+        if (s_dal.Config.AveWalkingSpeedKmH != configuration.AveWalkingSpeedKmH) //stage 4
+        {
+            s_dal.Config.AveWalkingSpeedKmH = configuration.AveWalkingSpeedKmH;
+            configChanged = true;
+        }
+        if (s_dal.Config.GetMaxDeliveryTime != configuration.GetMaxDeliveryTime) //stage 4
+        {
+            s_dal.Config.GetMaxDeliveryTime = configuration.GetMaxDeliveryTime;
+            configChanged = true;
+        }
+        if (s_dal.Config.RiskRange != configuration.RiskRange) //stage 4
+        {
+            s_dal.Config.RiskRange = configuration.RiskRange;
+            configChanged = true;
+        }
+        if (s_dal.Config.InactivityThreshold != configuration.InactivityThreshold) //stage 4
+        {
+            s_dal.Config.InactivityThreshold = configuration.InactivityThreshold;
+            configChanged = true;
+        }
 
         //Calling all the observers of configuration update
         if (configChanged) // stage 5

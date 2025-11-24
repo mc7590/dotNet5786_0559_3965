@@ -14,8 +14,7 @@ public class Config
     public double AveMotorcycleSpeedKmH { get; set; }
     public double AveBicycleSpeedKmH { get; set; } 
     public double AveWalkingSpeedKmH { get; set; }
-
-    //public TimeSpan GetMaxDeliveryTime //= TimeSpan.FromHours(2);
-    //public TimeSpan RiskRange  //= TimeSpan.FromHours(1.5);
-    //public TimeSpan InactivityThreshold //= TimeSpan.FromDays(30);
+    public TimeSpan GetMaxDeliveryTime { get; set; } 
+    public TimeSpan RiskRange { get; set; }
+    public TimeSpan InactivityThreshold { get; set; }
 }
