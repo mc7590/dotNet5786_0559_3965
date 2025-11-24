@@ -8,7 +8,7 @@ namespace BO;
 /// <param name="OrderType">The type of the order (Regular, Express, Overnight)</param>
 /// <param name="Description">The description of the order</param>
 /// <param name="Address">The delivery address of the order</param>
-/// <param name="AirDistance">The aerial distance from the company to the delivery address</param>
+/// <param name="AerialDistance">The aerial distance from the company to the delivery address</param>
 /// <param name="ActualDistance">The actual distance traveled to deliver the order (if available)</param>
 /// <param name="CustomerName">The name of the customer</param>
 /// <param name="CustomerPhone">The phone number of the customer</param>
@@ -24,7 +24,7 @@ public class OrderInProgress
     public EnumOrderType OrderType { get; init; }
     public string? Description { get; init; }
     public string? Address { get; init; }
-    public double AirDistance { get; init; }
+    public double AerialDistance { get; init; }
     public double? ActualDistance { get; init; }
     public string? CustomerName { get; init; }
     public string? CustomerPhone { get; init; }
