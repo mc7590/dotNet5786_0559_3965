@@ -9,6 +9,22 @@ namespace Dal;
 internal class ConfigImplementation : IConfig
 {
     /// <summary>
+    /// Get/set the manager ID.
+    /// </summary>
+    public int ManagerId
+    {
+        get => Config.ManagerId;
+        set => Config.ManagerId = value;
+    }
+    /// <summary>
+    /// Get/set the manager password.
+    /// </summary>
+    public string ManagerPassword
+    {
+        get => Config.ManagerPassword;
+        set => Config.ManagerPassword = value;
+    }
+    /// <summary>
     /// Get/set the current clock time used for configuration.
     /// </summary>
     public DateTime Clock
@@ -78,6 +94,38 @@ internal class ConfigImplementation : IConfig
     {
         get => Config.InactivityThreshold;
         set => Config.InactivityThreshold = value;
+    }
+    /// <summary>
+    /// Gets or sets the average car speed in kilometers per hour.
+    /// </summary>
+    public double AveCarSpeedKmH
+    {
+        get => Config.AveCarSpeedKmH;
+        set => Config.AveCarSpeedKmH = value;
+    }
+    /// <summary>
+    /// Gets or sets the average motorcycle speed in kilometers per hour.
+    /// </summary>
+    public double AveMotorcycleSpeedKmH
+    {
+        get => Config.AveMotorcycleSpeedKmH;
+        set => Config.AveMotorcycleSpeedKmH = value;
+    }
+    /// <summary>
+    /// Gets or sets the average bicycle speed in kilometers per hour.
+    /// </summary>
+    public double AveBicycleSpeedKmH
+    {
+        get => Config.AveBicycleSpeedKmH;
+        set => Config.AveBicycleSpeedKmH = value;
+    }
+    /// <summary>
+    /// Gets or sets the average walking speed in kilometers per hour.
+    /// </summary>
+    public double AveWalkingSpeedKmH
+    {
+        get => Config.AveWalkingSpeedKmH;
+        set => Config.AveWalkingSpeedKmH = value;
     }
 
     /// <summary>
