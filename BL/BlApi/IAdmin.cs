@@ -1,0 +1,13 @@
+﻿
+namespace BlApi;
+
+public interface IAdmin
+{
+    void ResetDB();
+    void InitializeDB();
+    DateTime GetClock();
+    void ForwardClock(BO.TimeUnit unit);
+    BO.Config GetConfig();
+    void SetConfig(BO.Config config);
+
+}
