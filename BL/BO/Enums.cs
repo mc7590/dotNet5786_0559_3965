@@ -45,3 +45,14 @@ public enum EnumEndDeliveryStatus
 {
     Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
 }
+/// <summary>
+/// Specifies the fields by which courier data can be sorted.
+/// </summary>
+public enum EnumCourierFieldSort
+{
+    Id,
+    Name,
+    Phone,
+    VehicleType,
+    AvailabilityStatus
+}
