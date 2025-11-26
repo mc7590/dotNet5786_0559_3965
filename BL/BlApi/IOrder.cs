@@ -3,11 +3,50 @@ namespace BlApi;
 
 public interface IOrder
 {
-    void Create(BO.Order boOrder);
-    BO.Order? Read(int id);
+    /// <summary>
+    /// Returns an array of order quantities by all status types.
+    /// </summary>
+    /// <param name="id">the id of the person asking the date</param>
+    int[] GetAmountOfOrdersByStatus(int id);
 
-    IEnumerable<BO.OrderInList> ReadAll(BO.OrderFieldSort? sort = null, BO.OrderFieldFilter? filter = null, object? value = null);
-    void Update(BO.Order boOrder);
-    void Delete(int id);
+    /// <summary>
+    /// returns a BO.OrderInList filtered and sorted
+    /// </summary>
+    BO.OrderInList GetOrderInList(int id, BO.EnumOrderFieldSort? sort = null, object? value = null, BO.EnumOrderFieldSort? filter = null);
+
+    BO.Order? Read(int id, int orderId);
+
+    void Update(int id, BO.Order boOrder);
+
+    /// <summary>
+    /// Checks that the order is open or in processing but not yet fulfilled, otherwise the request is invalid.
+    /// </summary>
+    void CancelOrder(int id, int orderId);
+
+    void Delete(int id, int orderId);
+
+    void Create(int id, BO.Order boOrder);
+
+    /// <summary>
+    /// Attempting to request an update of a DO.Delivery from a data layer
+    /// This function can be done by: The courier who makes the delivery
+    /// </summary>
+    void EndOrderStatus(int id, int orderId, int deliveryId);
+
+    /// <summary>
+    /// Attempting to add (Create) a new DO.Delivery from a data layer
+    /// </summary>
+    void ChooseOrderForDelivery(int id, int orderId, int deliveryId);
+
+    /// <summary>
+    /// Returns a sorted collection BO.ClosedDeliveryInList
+    /// </summary>
+    BO.ClosedDeliveryInList GetClosedOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
+
+    /// <summary>
+    /// Returns a sorted collection BO.OpenOrderInList
+    /// </summary>
+    BO.OpenOrderInList GetOpenOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
+
 
 }
