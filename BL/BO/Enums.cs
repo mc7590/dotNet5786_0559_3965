@@ -56,7 +56,7 @@ public enum EnumCourierFieldSort
 }
 
 /// <summary>
-/// Specifies the fields by which order data can be sorted.
+/// Specifies the fields by which order data can be sorted
 /// </summary>
 public enum EnumOrderFieldSort
 {
