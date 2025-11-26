@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Reflection;
 using System.Text;
-
 namespace Helpers;
 
 internal static class Tools
@@ -51,5 +50,34 @@ internal static class Tools
         sb.AppendLine("--------------------------");
         return sb.ToString();
     }
-
+    public static void IsManager(int id)
+    {
+        if (id != AdminManager.GetConfig().ManagerId)
+            throw new UnauthorizedAccessException("Access denied: User is not a manager.");
+    }
+    public static void IsManagerOrCourier(int id, int courierId)
+    {
+        if (id != AdminManager.GetConfig().ManagerId && id != courierId)
+            throw new UnauthorizedAccessException("Access denied: User is not a manager or courier.");
+    }
+    public static void IsValidId(int id)
+    {
+        if (id < 100000000 || id > 999999999)
+            throw new BO.BlInvalidInputException($"ID must be 9 digits");
+    }
+    public static void IsValidPhone(string phone)
+    {
+        if (phone[0] != 0 || phone.Length != 10 || !phone.All(char.IsDigit))
+            throw new BO.BlInvalidInputException($"Phone number must be 9 or 10 digits");
+    }
+    public static void IsValidEmail(string email)
+    {
+        if (!email.Contains("@") || !email.Contains("."))
+            throw new BO.BlInvalidInputException($"Email must contain '@' and '.' characters");
+    }
+    public static void IsValidAddress(string address)
+    {
+        if (string.IsNullOrWhiteSpace(address))
+            throw new BO.BlInvalidInputException($"Empty address");
+    }
 }
