@@ -51,8 +51,18 @@ public enum EnumEndDeliveryStatus
 public enum EnumCourierFieldSort
 {
     Id,
-    Name,
-    Phone,
     VehicleType,
     AvailabilityStatus
+}
+
+/// <summary>
+/// Specifies the fields by which order data can be sorted.
+/// </summary>
+public enum EnumOrderFieldSort
+{
+    Id,
+    OrderType,
+    Weight,
+    Fragile,
+    Status
 }
