@@ -66,10 +66,17 @@ public enum EnumOrderFieldSort
 {
     Id,
     OrderType,
+    AerialDistance,
+    CustomerName,
     Weight,
     Fragile,
-    Status
+    CreationTime,
+    ExpectedDeliveryTime,
+    MaxDeliveryTime,
+    OrderStatus,
+    ScheduleStatus
 }
+
 /// <summary> 
 /// EnumUserRole represents the role of a user in the system.
 /// <summary>
@@ -77,4 +84,16 @@ public enum EnumUserRole
 {
     Manager,
     Courier
+}
+
+/// <summary>
+/// EnumTimeUnit represents time units for clock manipulation.
+/// </summary>
+public enum EnumTimeUnit
+{
+    Minute,
+    Hour,
+    Day,
+    Month,
+    Year
 }

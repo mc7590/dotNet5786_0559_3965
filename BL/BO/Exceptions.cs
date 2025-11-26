@@ -13,7 +13,15 @@ public class BlDoesNotExistException : Exception
 /// <summary>
 /// Exception thrown when a user attempts to perform an action they are not authorized for.
 /// </summary>
-public class UnauthorizedAccessException : Exception
+public class BlUnauthorizedAccessException : Exception
 {
-    public UnauthorizedAccessException(string? message) : base(message) { }
+    public BlUnauthorizedAccessException(string? message) : base(message) { }
+}
+
+/// <summary>
+/// Exception thrown when invalid input is provided to a BL method.
+/// </summary>
+public class BlInvalidInputException : Exception
+{
+    public BlInvalidInputException(string? message) : base(message) { }
 }
