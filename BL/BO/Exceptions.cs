@@ -25,3 +25,11 @@ public class BlInvalidInputException : Exception
 {
     public BlInvalidInputException(string? message) : base(message) { }
 }
+public class BlAlreadyExistsException : Exception
+{
+    public BlAlreadyExistsException(string? message) : base(message) { }
+}
+public class BlInvalidOperationException : Exception
+{
+    public BlInvalidOperationException(string? message) : base(message) { }
+}

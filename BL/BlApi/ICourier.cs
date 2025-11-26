@@ -1,15 +1,16 @@
-﻿namespace BlApi;
+﻿using BO;
+
+namespace BlApi;
 
 public interface ICourier
 {
-    void Create(int id, BO.Courier boStudent);
+    BO.EnumUserRole Login(string username, string password);    
+    IEnumerable<BO.CourierInList>? GetCourierInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldSort? filter = null);
     BO.Courier? Read(int id, int courierId);
-    IEnumerable<BO.CourierInList> ReadAll(int id, bool? status = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldSort? filter = null);
-    void Update(int id, BO.Courier boCourier);
+    void Update(int id, BO.Courier boCourier);    
     void Delete(int id, int courierId);
-    IEnumerable<BO.OrderInList> GetRegisteredOrdersForCourier(int courierId);
-    //IEnumerable<BO.OrderInList> GetUnRegisteredOrdersForCourier(int courierId);
+    void Create(int id, BO.Courier boCourier);
+    int GetNumOfDeliveryOnTimeForCourier(int id, int courierId);
+    int GetNumOfDeliveryLateForCourier(int id, int courierId);
     void AssignDeliveryToCourier(int courierId, int deliveryId);
-    void UnAssignDeliveryFromCourier(int courierId, int deliveryId);
-    //OrderInProgress GetOrderInProgressOfCourier(int courierId);
 }
