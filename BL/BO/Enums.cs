@@ -51,8 +51,12 @@ public enum EnumEndDeliveryStatus
 public enum EnumCourierFieldSort
 {
     Id,
-    VehicleType,
-    AvailabilityStatus
+    Name,
+    DeliveryMethod,
+    StartedWorking,
+    TotalOnTimeDeliveries,
+    TotalLateDeliveries,
+    OrdersInProgressId
 }
 
 /// <summary>
@@ -65,4 +69,12 @@ public enum EnumOrderFieldSort
     Weight,
     Fragile,
     Status
+}
+/// <summary> 
+/// EnumUserRole represents the role of a user in the system.
+/// <summary>
+public enum EnumUserRole
+{
+    Manager,
+    Courier
 }
