@@ -8,7 +8,8 @@ public interface ICourier
     void Update(int id, BO.Courier boCourier);
     void Delete(int id, int courierId);
     IEnumerable<BO.OrderInList> GetRegisteredOrdersForCourier(int courierId);
-    IEnumerable<BO.OrderInList> GetUnRegisteredOrdersForCourier(int courierId);
+    //IEnumerable<BO.OrderInList> GetUnRegisteredOrdersForCourier(int courierId);
     void AssignDeliveryToCourier(int courierId, int deliveryId);
     void UnAssignDeliveryFromCourier(int courierId, int deliveryId);
+    //OrderInProgress GetOrderInProgressOfCourier(int courierId);
 }
