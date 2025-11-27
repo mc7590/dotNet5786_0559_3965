@@ -65,6 +65,11 @@ internal static class Tools
         if (id < 100000000 || id > 999999999)
             throw new BO.BlInvalidInputException($"ID must be 9 digits");
     }
+    public static void IsValidName(string name)
+    {
+        if (string.IsNullOrWhiteSpace(name) || name.Any(char.IsDigit))
+            throw new BO.BlInvalidInputException($"Invalid name: '{name}'");
+    }
     public static void IsValidPhone(string phone)
     {
         if (phone[0] != 0 || phone.Length != 10 || !phone.All(char.IsDigit))
@@ -81,7 +86,7 @@ internal static class Tools
             throw new BO.BlInvalidInputException($"Empty address");
     }
 
-    public static double CalculateDistanceInKm(string address1, string address2)
+    public static double CalculateDistanceInKm(double longitude, double latitude)
     {
         return 0.0;
     }

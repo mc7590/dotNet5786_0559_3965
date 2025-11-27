@@ -1,4 +1,4 @@
-﻿
+﻿//check if new exceptions are okay!
 namespace BO;
 
 /// <summary>
