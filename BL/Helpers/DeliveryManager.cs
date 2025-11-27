@@ -10,6 +10,12 @@ internal static class DeliveryManager
     internal static BO.DeliveryPerOrderInList GetDeliveryPerOrderInList(int orderId)
     {
         
-    }  
- 
+    }
+
+    internal static TimeSpan GetTotalDeliveryTime(int orderId)
+    {
+
+    }
+
+
 }
