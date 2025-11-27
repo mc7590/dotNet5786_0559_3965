@@ -9,8 +9,8 @@ internal static class OrderManager
 
     internal static void createOrder(int id, BO.Order boOrder)
     {
-        Tools.isManager(id);
-        Tools.isValidAddress(boOrder.Address); // Check if Address is valid
+        Tools.IsManager(id);
+        Tools.IsValidAddress(boOrder.Address); // Check if Address is valid
         //Tools.Location? location = Tools.GetLocationOfAddressSync(boOrder.Address);
 
         DO.Order doOrder = new DO.Order()//????
@@ -33,7 +33,7 @@ internal static class OrderManager
 
     internal static BO.Order? GetOrder(int id, int orderId)
     {
-        isManager(id);
+        Tools.IsManager(id);
 
         DO.Order doOrder;
         doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");

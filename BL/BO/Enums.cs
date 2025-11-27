@@ -45,6 +45,7 @@ public enum EnumEndDeliveryStatus
 {
     Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
 }
+
 /// <summary>
 /// Specifies the fields by which courier data can be sorted.
 /// </summary>
@@ -52,13 +53,17 @@ public enum EnumCourierFieldSort
 {
     Id,
     Name,
-    DeliveryMethod,
     StartedWorking,
     TotalOnTimeDeliveries,
     TotalLateDeliveries,
-    OrdersInProgressId
+    MaxPersonalDistance
 }
-
+public enum EnumCourierFieldFilter
+{
+    Active,
+    DeliveryMethod,
+    MaxPersonalDistance
+}
 /// <summary>
 /// Specifies the fields by which order data can be sorted
 /// </summary>

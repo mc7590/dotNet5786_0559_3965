@@ -1,5 +1,4 @@
-﻿using BO;
-using DalApi;
+﻿using DalApi;
 using System.Data;
 using System.Runtime.CompilerServices;
 
@@ -7,8 +6,6 @@ namespace Helpers;
 
 internal static class CourierManager
 {
-    public static int sumOfOnTimeDeliveries = 0;
-    public static int sumOfLateDeliveries = 0;
 
     private static IDal s_dal = Factory.Get; //stage 4
     internal static void CreateCourier(int id, BO.Courier boCourier)
@@ -19,7 +16,7 @@ internal static class CourierManager
       Tools.IsValidId(boCourier.Id);
       Tools.IsValidPhone(boCourier.CourierPhone!);
       Tools.IsValidEmail(boCourier.Email!);
-      DO.Courier? doCourier = new DO.Courier
+      DO.Courier? doCourier = new()
       {
           Id = boCourier.Id,
           Name = boCourier.Name!,
@@ -53,7 +50,7 @@ internal static class CourierManager
             ActiveDeliveryOrder = GetActiveDeliveryOrderForCourier(id, doCourier.Id)
         };
     }
-    internal static IEnumerable<BO.CourierInList> GetCourierInList(int id, bool? active, BO.EnumCourierFieldSort? sort, BO.EnumCourierFieldSort? filter)
+    internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, bool? active, BO.EnumCourierFieldSort? sort, BO.EnumCourierFieldFilter? filter, object? value)
     {
         IEnumerable<DO.Courier> doCouriers = s_dal.Courier.ReadAll();
         if (active != null)
@@ -77,11 +74,20 @@ internal static class CourierManager
             {
                 BO.EnumCourierFieldSort.Id => boCouriers.OrderBy(c => c.Id),
                 BO.EnumCourierFieldSort.Name => boCouriers.OrderBy(c => c.Name),
-                BO.EnumCourierFieldSort.DeliveryMethod => boCouriers.OrderBy(c => c.DeliveryMethod),
                 BO.EnumCourierFieldSort.StartedWorking => boCouriers.OrderBy(c => c.StartedWorking),
                 BO.EnumCourierFieldSort.TotalOnTimeDeliveries => boCouriers.OrderBy(c => c.TotalOnTimeDeliveries),
                 BO.EnumCourierFieldSort.TotalLateDeliveries => boCouriers.OrderBy(c => c.TotalLateDeliveries),
+                BO.EnumCourierFieldSort.MaxPersonalDistance => boCouriers.OrderBy(c => c.MaxPersonalDistance),
                 _ => boCouriers
+            };
+        }
+        if( filter != null && value != null ) 
+        { 
+            boCouriers = filter switch
+            {
+                BO.EnumCourierFieldFilter.DeliveryMethod => boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!),
+                BO.EnumCourierFieldFilter.MaxPersonalDistance => boCouriers.Where(c => c.MaxPersonalDistance != null && c.MaxPersonalDistance >= (double)value!),
+                _ => doCouriers
             };
         }
         return boCouriers;
@@ -122,13 +128,18 @@ internal static class CourierManager
     }
     public static int GetDeliverierLate(int id, int courierId)
     {
-        return sumOfLateDeliveries;
+        Tools.IsManagerOrCourier(id, courierId);
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) > AdminManager.GetConfig().GetMaxDeliveryTime);
     }
 
     public static int GetDeliverierOnTime(int id, int courierId)
     {
-        return sumOfOnTimeDeliveries;
+        Tools.IsManagerOrCourier(id, courierId);
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) <= AdminManager.GetConfig().GetMaxDeliveryTime);
     }
+
     public static void AssignDeliveryToCourier(int courierId, int deliveryId)
     {
         if (s_dal.Courier.Read(courierId) == null)
@@ -138,6 +149,36 @@ internal static class CourierManager
             throw new BO.BlInvalidOperationException($"Courier with ID={courierId} is not active");
         if(courier.ActiveDeliveryOrder != null)
             throw new BO.BlInvalidOperationException($"Courier with ID={courierId} already has an active delivery");
-        courier.ActiveDeliveryOrder = OrderInProgress.Create(deliveryId);
+        DO.Delivery delivery = s_dal.Delivery.Create();
+ 
+        courier.ActiveDeliveryOrder = new BO.OrderInProgress
+        {
+            DeliveryId = deliveryId,
+            AssignedTime = DateTime.Now
+        };
+    }
+    public static BO.EnumDeliveryMethod GetDeliveryMethod()
+    {
+        return DeliveryMethod;
+    }
+
+    public static IEnumerable<BO.ClosedDeliveryInList> CloseDeliveriesForCourier(int id, int courierId, BO.EnumDeliveryMethod deliveryMethod)
+    {
+        Tools.IsManagerOrCourier(id, courierId);
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+        return from d in deliveries
+               where d.EndDeliveryTime != null
+               let order = s_dal.Order.Read(d.OrderId)!
+               select new BO.ClosedDeliveryInList
+               {
+                   DeliveryId = d.Id,
+                   OrderId = d.OrderId,
+                   OrderType = (BO.EnumOrderType)order.OrderType,
+                   Address = order.Address,
+                   DeliveryMethod = (BO.EnumDeliveryMethod)s_dal.Courier.Read(courierId)!.DeliveryMethod,
+                   DistanceInKm = Tools.CalculateDistanceInKm(AdminManager.GetConfig().CompanyAddress!, order.Address),
+                   TotalDeliveryTime = Tools.CalculateTimeDifference(d.DeliveryStartTime, d.EndDeliveryTime!.Value), 
+                   EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+               };
     }
 }
