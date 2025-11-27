@@ -80,4 +80,13 @@ internal static class Tools
         if (string.IsNullOrWhiteSpace(address))
             throw new BO.BlInvalidInputException($"Empty address");
     }
+
+    public static double CalculateDistanceInKm(string address1, string address2)
+    {
+        return 0.0;
+    }
+    public static TimeSpan CalculateTimeDifference(DateTime start, DateTime end)
+    {
+        return end - start;
+    }
 }
