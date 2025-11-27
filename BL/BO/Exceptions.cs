@@ -25,10 +25,18 @@ public class BlInvalidInputException : Exception
 {
     public BlInvalidInputException(string? message) : base(message) { }
 }
+
+/// <summary>
+/// Represents an exception that is thrown when an attempt is made to create a BL entity that already exists.
+/// </summary>
 public class BlAlreadyExistsException : Exception
 {
     public BlAlreadyExistsException(string? message) : base(message) { }
 }
+
+/// <summary>
+/// Represents an exception that is thrown when an invalid operation is attempted in the BL layer.
+/// </summary>
 public class BlInvalidOperationException : Exception
 {
     public BlInvalidOperationException(string? message) : base(message) { }
