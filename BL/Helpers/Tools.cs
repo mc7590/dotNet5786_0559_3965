@@ -102,4 +102,27 @@ internal static class Tools
     {
         return end - start;
     }
+    public static string HashPassword(string password)
+    {
+        using var sha = System.Security.Cryptography.SHA256.Create();
+        byte[] bytes = System.Text.Encoding.UTF8.GetBytes(password);
+        byte[] hashBytes = sha.ComputeHash(bytes);
+        return BitConverter.ToString(hashBytes).Replace("-", "").ToLower();
+    }
+    public static bool IsStrongPassword(string password)
+    {
+        if (string.IsNullOrEmpty(password))
+            return false;
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
+        bool longEnough = password.Length >= 8;
+        return hasUpper && hasLower && hasDigit && hasSpecial && longEnough;
+    }
+    public static bool VerifyPassword(string password, string? encrypted)
+    {
+        string hashOfInput = HashPassword(password);
+        return string.Equals(hashOfInput, encrypted, StringComparison.OrdinalIgnoreCase);
+    }
 }

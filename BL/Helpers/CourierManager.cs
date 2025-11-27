@@ -10,29 +10,29 @@ internal static class CourierManager
     private static IDal s_dal = Factory.Get; //stage 4
     internal static void CreateCourier(int id, BO.Courier boCourier)
     {
-      Tools.IsManager(id);
-      if(s_dal.Courier.Read(boCourier.Id) != null)
+        Tools.IsManager(id);
+        if (s_dal.Courier.Read(boCourier.Id) != null)
             throw new BO.BlAlreadyExistsException($"Courier with ID={boCourier.Id} already exists");
-      Tools.IsValidId(boCourier.Id);
-      Tools.IsValidName(boCourier.Name!);
-      Tools.IsValidPhone(boCourier.CourierPhone!);
-      Tools.IsValidEmail(boCourier.Email!);
-      if (!IsStrongPassword(boCourier.Password!))
+        Tools.IsValidId(boCourier.Id);
+        Tools.IsValidName(boCourier.Name!);
+        Tools.IsValidPhone(boCourier.CourierPhone!);
+        Tools.IsValidEmail(boCourier.Email!);
+        if (!Tools.IsStrongPassword(boCourier.Password!))
             throw new BO.BlInvalidInputException("Password is not strong enough");
 
         DO.Courier? doCourier = new()
-      {
-          Id = boCourier.Id,
-          Name = boCourier.Name!,
-          CourierPhone = boCourier.CourierPhone!,
-          Email = boCourier.Email!,
-          Password = boCourier.Password!,
-          Active = boCourier.Active,
-          DeliveryMethod = (DO.EnumDeliveryMethod)boCourier.DeliveryMethod,
-          StartedWorking = DateTime.Now,
-          MaxPersonalDistance = boCourier.MaxPersonalDistance
-      };
-      s_dal.Courier.Create(doCourier);
+        {
+            Id = boCourier.Id,
+            Name = boCourier.Name!,
+            CourierPhone = boCourier.CourierPhone!,
+            Email = boCourier.Email!,
+            Password = boCourier.Password!,
+            Active = boCourier.Active,
+            DeliveryMethod = (DO.EnumDeliveryMethod)boCourier.DeliveryMethod,
+            StartedWorking = DateTime.Now,
+            MaxPersonalDistance = boCourier.MaxPersonalDistance
+        };
+        s_dal.Courier.Create(doCourier);
     }
     internal static BO.Courier? GetCourierById(int id, int courierId)
     {
@@ -61,17 +61,17 @@ internal static class CourierManager
             doCouriers = doCouriers.Where(c => c.Active == active);
 
         IEnumerable<BO.CourierInList> boCouriers = from c in doCouriers
-                                                  select new BO.CourierInList
-                                                  {
-                                                      Id = c.Id,
-                                                      Name = c.Name,
-                                                      Active = c.Active,
-                                                      DeliveryMethod = (BO.EnumDeliveryMethod)c.DeliveryMethod,
-                                                      StartedWorking = c.StartedWorking,
-                                                      TotalOnTimeDeliveries = GetDeliverierOnTime(id, c.Id),
-                                                      TotalLateDeliveries = GetDeliverierLate(id, c.Id),
-                                                      OrdersInProgressId = GetActiveDeliveryOrderForCourier(id, c.Id) != null ? GetActiveDeliveryOrderForCourier(id, c.Id)!.OrderId : -1
-                                                  };
+                                                   select new BO.CourierInList
+                                                   {
+                                                       Id = c.Id,
+                                                       Name = c.Name,
+                                                       Active = c.Active,
+                                                       DeliveryMethod = (BO.EnumDeliveryMethod)c.DeliveryMethod,
+                                                       StartedWorking = c.StartedWorking,
+                                                       TotalOnTimeDeliveries = GetDeliverierOnTime(id, c.Id),
+                                                       TotalLateDeliveries = GetDeliverierLate(id, c.Id),
+                                                       OrdersInProgressId = GetActiveDeliveryOrderForCourier(id, c.Id) != null ? GetActiveDeliveryOrderForCourier(id, c.Id)!.OrderId : -1
+                                                   };
         if (sort != null)
         {
             boCouriers = sort switch
@@ -85,8 +85,8 @@ internal static class CourierManager
                 _ => boCouriers
             };
         }
-        if( filter != null && value != null ) 
-        { 
+        if (filter != null && value != null)
+        {
             boCouriers = filter switch
             {
                 BO.EnumCourierFieldFilter.DeliveryMethod => boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!),
@@ -130,9 +130,9 @@ internal static class CourierManager
         if (s_dal.Courier.Read(courierId) == null)
             throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
         BO.Courier courier = GetCourierById(courierId, courierId)!;
-        if(!courier.Active)
+        if (!courier.Active)
             throw new BO.BlInvalidOperationException($"Courier with ID={courierId} is not active");
-        if(courier.ActiveDeliveryOrder != null)
+        if (courier.ActiveDeliveryOrder != null)
             throw new BO.BlInvalidOperationException($"Courier with ID={courierId} already has an active delivery");
         DO.Delivery? delivery = s_dal.Delivery.Read(deliveryId)
             ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does not exist.");
@@ -157,9 +157,20 @@ internal static class CourierManager
     }
     public static BO.EnumUserRole Login(int id, string password)
     {
+        int managerId = AdminManager.GetConfig().ManagerId;
+        if (managerId == id)
+        {
+            if (!Tools.VerifyPassword(password, AdminManager.GetConfig().ManagerPassword))
+                throw new BO.BlUnauthorizedException("Incorrect password for admin.");
 
+            return BO.EnumUserRole.Manager;
+        }
+        DO.Courier? courier = s_dal.Courier.Read(id)
+    ?? throw new BO.BlDoesNotExistException($"Courier with ID={id} does not exist");
+        if (!Tools.VerifyPassword(password, courier.Password))
+            throw new BO.BlUnauthorizedException("Incorrect password.");
+        return BO.EnumUserRole.Courier;
     }
-
 
     public static IEnumerable<BO.ClosedDeliveryInList> CloseDeliveriesForCourier(int id, int courierId, BO.EnumDeliveryMethod deliveryMethod)
     {
@@ -180,17 +191,7 @@ internal static class CourierManager
                };
     }
  
-    public static bool IsStrongPassword(string password)
-    {
-        if (string.IsNullOrEmpty(password))
-            return false;
-        bool hasUpper = password.Any(char.IsUpper);
-        bool hasLower = password.Any(char.IsLower);
-        bool hasDigit = password.Any(char.IsDigit);
-        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
-        bool longEnough = password.Length >= 8;
-        return hasUpper && hasLower && hasDigit && hasSpecial && longEnough;
-    }
+
 }
      
     //לממש!!!!!!
@@ -214,4 +215,5 @@ internal static class CourierManager
     public static BO.EnumDeliveryMethod GetDeliveryMethod()
     {
         return null;
-    }
+    } 
+}

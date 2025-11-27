@@ -41,3 +41,10 @@ public class BlInvalidOperationException : Exception
 {
     public BlInvalidOperationException(string? message) : base(message) { }
 }
+/// <summary>
+/// Represents an exception that is thrown when a user is not authorized to perform a specific action in the BL layer.
+/// </summary>
+public class BlUnauthorizedException : Exception
+{
+    public BlUnauthorizedException(string? message) : base(message) { }
+}
