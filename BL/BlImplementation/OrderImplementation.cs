@@ -7,7 +7,7 @@ internal class OrderImplementation : IOrder
 {
     public void Create(int id, BO.Order boOrder)
     {
-        OrderManager.createOrder(id, boOrder); 
+        OrderManager.CreateOrder(id, boOrder); 
     }
 
     public BO.Order? Read(int id, int orderId)
@@ -17,17 +17,15 @@ internal class OrderImplementation : IOrder
 
     public void Delete(int id, int orderId)
     {
-        throw new NotImplementedException();
+        OrderManager.DeleteOrder(id, orderId);
+    }
+    public IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldSort? sort = null, object? value = null, BO.EnumOrderFieldSort? filter = null)
+    {
+        return OrderManager.GetOrderInList(id, sort, value, filter);
     }
 
-
-    public IEnumerable<BO.OrderInList> ReadAll(int id, bool? status = null, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null)
+    public void Update(int id, BO.Order boOrder)
     {
-        throw new NotImplementedException();
-    }
-
-    public void Update(int id, Order boOrder)
-    {
-        throw new NotImplementedException();
+        OrderManager.UpdateOrder(id, boOrder);
     }
 }

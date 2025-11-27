@@ -12,7 +12,7 @@ public interface IOrder
     /// <summary>
     /// returns a BO.OrderInList filtered and sorted
     /// </summary>
-    BO.OrderInList GetOrderInList(int id, BO.EnumOrderFieldSort? sort = null, object? value = null, BO.EnumOrderFieldSort? filter = null);
+    IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldSort? sort = null, object? value = null, BO.EnumOrderFieldSort? filter = null);
 
     BO.Order? Read(int id, int orderId);
 
