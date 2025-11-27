@@ -14,9 +14,13 @@ internal static class CourierManager
       if(s_dal.Courier.Read(boCourier.Id) != null)
             throw new BO.BlAlreadyExistsException($"Courier with ID={boCourier.Id} already exists");
       Tools.IsValidId(boCourier.Id);
+      Tools.IsValidName(boCourier.Name!);
       Tools.IsValidPhone(boCourier.CourierPhone!);
       Tools.IsValidEmail(boCourier.Email!);
-      DO.Courier? doCourier = new()
+      if (!IsStrongPassword(boCourier.Password!))
+            throw new BO.BlInvalidInputException("Password is not strong enough");
+
+        DO.Courier? doCourier = new()
       {
           Id = boCourier.Id,
           Name = boCourier.Name!,
@@ -25,7 +29,7 @@ internal static class CourierManager
           Password = boCourier.Password!,
           Active = boCourier.Active,
           DeliveryMethod = (DO.EnumDeliveryMethod)boCourier.DeliveryMethod,
-          StartedWorking = boCourier.StartedWorking,
+          StartedWorking = DateTime.Now,
           MaxPersonalDistance = boCourier.MaxPersonalDistance
       };
       s_dal.Courier.Create(doCourier);
@@ -120,6 +124,74 @@ internal static class CourierManager
             MaxPersonalDistance = boCourier.MaxPersonalDistance
         };
     }
+
+    public static void AssignDeliveryToCourier(int courierId, int deliveryId)
+    {
+        if (s_dal.Courier.Read(courierId) == null)
+            throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+        BO.Courier courier = GetCourierById(courierId, courierId)!;
+        if(!courier.Active)
+            throw new BO.BlInvalidOperationException($"Courier with ID={courierId} is not active");
+        if(courier.ActiveDeliveryOrder != null)
+            throw new BO.BlInvalidOperationException($"Courier with ID={courierId} already has an active delivery");
+        DO.Delivery? delivery = s_dal.Delivery.Read(deliveryId)
+            ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does not exist.");
+
+        courier.ActiveDeliveryOrder = new BO.OrderInProgress
+        {
+            DeliveryId = deliveryId,
+            OrderId = delivery.OrderId,
+            OrderType = (BO.EnumOrderType)s_dal.Order.Read(delivery.OrderId)!.OrderType,
+            Description = s_dal.Order.Read(delivery.OrderId)!.Description ?? null,
+            Address = s_dal.Order.Read(delivery.OrderId)!.Address ?? null,
+            AerialDistance = Tools.CalculateAerialDistance(s_dal.Order.Read(delivery.OrderId)!.Longitude, s_dal.Order.Read(delivery.OrderId)!.Latitude),
+            ActualDistance = Tools.CalculateDistanceInKm(s_dal.Order.Read(delivery.OrderId)!.Longitude, s_dal.Order.Read(delivery.OrderId)!.Latitude),
+            CustomerName = s_dal.Order.Read(delivery.OrderId)!.CustomerName ?? null,
+            CustomerPhone = s_dal.Order.Read(delivery.OrderId)!.CustomerPhone ?? null,
+            ExpectedDeliveryTime = delivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime),
+            MaxDeliveryTime = delivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime).Add(AdminManager.GetConfig().RiskRange),
+            OrderStatus = BO.EnumOrderStatus.InProgress,
+            ScheduleStatus = BO.EnumScheduleStatus.OnTime,
+            RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, delivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime))
+        };
+    }
+    public static BO.EnumUserRole Login(int id, string password)
+    {
+
+    }
+
+
+    public static IEnumerable<BO.ClosedDeliveryInList> CloseDeliveriesForCourier(int id, int courierId, BO.EnumDeliveryMethod deliveryMethod)
+    {
+        Tools.IsManagerOrCourier(id, courierId);
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+        return from d in deliveries
+               let order = s_dal.Order.Read(d.OrderId)!
+               select new BO.ClosedDeliveryInList
+               {
+                   DeliveryId = d.Id,
+                   OrderId = d.OrderId,
+                   OrderType = (BO.EnumOrderType)order.OrderType,
+                   Address = order.Address,
+                   DeliveryMethod = (BO.EnumDeliveryMethod)s_dal.Courier.Read(courierId)!.DeliveryMethod,
+                   DistanceInKm = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude),
+                   TotalDeliveryTime = Tools.CalculateTimeDifference(d.DeliveryStartTime, d.EndDeliveryTime!.Value),
+                   EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+               };
+    }
+ 
+    public static bool IsStrongPassword(string password)
+    {
+        if (string.IsNullOrEmpty(password))
+            return false;
+        bool hasUpper = password.Any(char.IsUpper);
+        bool hasLower = password.Any(char.IsLower);
+        bool hasDigit = password.Any(char.IsDigit);
+        bool hasSpecial = password.Any(ch => !char.IsLetterOrDigit(ch));
+        bool longEnough = password.Length >= 8;
+        return hasUpper && hasLower && hasDigit && hasSpecial && longEnough;
+    }
+}
      
     //לממש!!!!!!
     private static BO.OrderInProgress? GetActiveDeliveryOrderForCourier(int id, int courierId)
@@ -139,46 +211,7 @@ internal static class CourierManager
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
         return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) <= AdminManager.GetConfig().GetMaxDeliveryTime);
     }
-
-    public static void AssignDeliveryToCourier(int courierId, int deliveryId)
-    {
-        if (s_dal.Courier.Read(courierId) == null)
-            throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
-        BO.Courier courier = GetCourierById(courierId, courierId)!;
-        if(!courier.Active)
-            throw new BO.BlInvalidOperationException($"Courier with ID={courierId} is not active");
-        if(courier.ActiveDeliveryOrder != null)
-            throw new BO.BlInvalidOperationException($"Courier with ID={courierId} already has an active delivery");
-        DO.Delivery delivery = s_dal.Delivery.Create();
- 
-        courier.ActiveDeliveryOrder = new BO.OrderInProgress
-        {
-            DeliveryId = deliveryId,
-            AssignedTime = DateTime.Now
-        };
-    }
     public static BO.EnumDeliveryMethod GetDeliveryMethod()
     {
-        return DeliveryMethod;
+        return null;
     }
-
-    public static IEnumerable<BO.ClosedDeliveryInList> CloseDeliveriesForCourier(int id, int courierId, BO.EnumDeliveryMethod deliveryMethod)
-    {
-        Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return from d in deliveries
-               where d.EndDeliveryTime != null
-               let order = s_dal.Order.Read(d.OrderId)!
-               select new BO.ClosedDeliveryInList
-               {
-                   DeliveryId = d.Id,
-                   OrderId = d.OrderId,
-                   OrderType = (BO.EnumOrderType)order.OrderType,
-                   Address = order.Address,
-                   DeliveryMethod = (BO.EnumDeliveryMethod)s_dal.Courier.Read(courierId)!.DeliveryMethod,
-                   DistanceInKm = Tools.CalculateDistanceInKm(AdminManager.GetConfig().CompanyAddress!, order.Address),
-                   TotalDeliveryTime = Tools.CalculateTimeDifference(d.DeliveryStartTime, d.EndDeliveryTime!.Value), 
-                   EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
-               };
-    }
-}

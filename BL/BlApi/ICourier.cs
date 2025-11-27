@@ -5,7 +5,7 @@ namespace BlApi;
 public interface ICourier
 {
     BO.EnumUserRole Login(string username, string password);    
-    IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldSort? filter = null, object? value = null);
+    IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldFilter? filter = null, object? value = null);
     BO.Courier? Read(int id, int courierId);
     void Update(int id, BO.Courier boCourier);    
     void Delete(int id, int courierId);

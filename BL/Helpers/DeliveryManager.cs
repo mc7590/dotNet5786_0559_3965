@@ -10,6 +10,6 @@ internal static class DeliveryManager
     internal static BO.DeliveryPerOrderInList GetDeliveryPerOrderInList(int orderId)
     {
         
-    }
-
+    }  
+ 
 }
