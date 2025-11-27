@@ -125,4 +125,13 @@ internal static class Tools
         string hashOfInput = HashPassword(password);
         return string.Equals(hashOfInput, encrypted, StringComparison.OrdinalIgnoreCase);
     }
+    public static void UpdateManagerPassword(int id, string newPassword)
+    {
+        IsManager(id);
+        if(!IsStrongPassword(newPassword))
+            throw new BO.BlInvalidInputException("Password is not strong enough.");
+        var config = AdminManager.GetConfig();
+        config.ManagerPassword = newPassword;
+        AdminManager.SetConfig(config);
+    }
 }
