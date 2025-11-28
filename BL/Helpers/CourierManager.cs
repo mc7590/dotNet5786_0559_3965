@@ -1,4 +1,5 @@
-﻿using DalApi;
+﻿
+using DalApi;
 using System.Data;
 using System.Runtime.CompilerServices;
 
@@ -8,6 +9,14 @@ internal static class CourierManager
 {
 
     private static IDal s_dal = Factory.Get; //stage 4
+
+    private static Enumerable <int, Enumerable<ClosedDeliveryInList>> GetCloseDeliveryToCouriers()
+    {
+        return 
+            from c in s_dal.Courier.ReadAll()
+            select c.Id;
+
+    }
     internal static void CreateCourier(int id, BO.Courier boCourier)
     {
         Tools.IsManager(id);
@@ -215,5 +224,29 @@ internal static class CourierManager
     public static BO.EnumDeliveryMethod GetDeliveryMethod()
     {
         return null;
-    } 
+    }
+    private static BO.ClosedDeliveryInList ConvertToClosedDeliveryInList(DO.Delivery doDelivery)
+    {
+        var order = s_dal.Order.Read(doDelivery.OrderId)
+            ?? throw new BO.BlDoesNotExistException($"Order {doDelivery.OrderId} not found");
+        TimeSpan totalTime = DateTime.Now - order.OrderCreationTime;
+        return new BO.ClosedDeliveryInList
+        {
+            DeliveryId = doDelivery.Id,
+            OrderId = doDelivery.OrderId,
+            OrderType = (BO.EnumOrderType)order.OrderType,
+            Address = order.Address,
+            DeliveryMethod = (BO.EnumDeliveryMethod)doDelivery.DeliveryMethod,
+            DistanceInKm = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude),
+            TotalDeliveryTime = totalTime,
+            EndDeliveryStatus = ChekStatusToDelivery(totalTime, doDelivery.EndDeliveryStatus)
+        };
+    }
+    public static BO.EnumEndDeliveryStatus ChekStatusToDelivery(TimeSpan totalDeliveryTime, DO.EnumEndDeliveryStatus status)
+    {
+        return switch (status) {
+
+        }
+ 
+    }
 }
