@@ -102,3 +102,27 @@ public enum EnumTimeUnit
     Month,
     Year
 }
+/// <summary>
+/// represents the fields by which close delivery data can be filtered
+/// </summary>
+public enum EnumClosedDeliveryInListField
+{
+    DeliveryId,
+    OrderId,
+    Address,
+    DistanceInKm,
+    TotalDeliveryTime
+}
+/// <summary>
+/// represent the fields by which open order data can be filtered
+/// </summary>
+public enum EnumOpenOrderInListField
+{
+    OrderId,
+    OrderType,
+    Weight,
+    AerialDistance,
+    MaxDeliveryTime,
+    RemainingTime,
+    ScheduleStatus
+}

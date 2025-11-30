@@ -1,4 +1,5 @@
 ﻿using DalApi;
+using DO;
 using System.Data;
 using System.Runtime.CompilerServices;
 
@@ -8,6 +9,9 @@ internal static class CourierManager
 {
 
     private static IDal s_dal = Factory.Get; //stage 4
+    /// <summary>
+    /// Creates a new courier in DAL
+    /// </summary>
     internal static void CreateCourier(int id, BO.Courier boCourier)
     {
         Tools.IsManager(id);
@@ -34,6 +38,9 @@ internal static class CourierManager
         };
         s_dal.Courier.Create(doCourier);
     }
+    /// <summary>
+    /// Gets a courier by ID from DAL 
+    /// </summary>
     internal static BO.Courier? GetCourierById(int id, int courierId)
     {
         DO.Courier doCourier;
@@ -49,11 +56,14 @@ internal static class CourierManager
             DeliveryMethod = (BO.EnumDeliveryMethod)doCourier.DeliveryMethod,
             StartedWorking = doCourier.StartedWorking,
             MaxPersonalDistance = doCourier.MaxPersonalDistance,
-            TotalOnTimeDeliveries = GetDeliverierOnTime(id, doCourier.Id),
-            TotalLateDeliveries = GetDeliverierLate(id, doCourier.Id),
+            TotalOnTimeDeliveries = DeliveryManager.GetDeliverierOnTimeForCourier(id, doCourier.Id),
+            TotalLateDeliveries = DeliveryManager.GetDeliverierLateForCourier(id, doCourier.Id),
             ActiveDeliveryOrder = GetActiveDeliveryOrderForCourier(id, doCourier.Id)
         };
     }
+    /// <summary>
+    /// Gets list of couriers from DAL with optional filtering and sorting 
+    /// </summary>
     internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, bool? active, BO.EnumCourierFieldSort? sort, BO.EnumCourierFieldFilter? filter, object? value)
     {
         IEnumerable<DO.Courier> doCouriers = s_dal.Courier.ReadAll();
@@ -68,8 +78,8 @@ internal static class CourierManager
                                                        Active = c.Active,
                                                        DeliveryMethod = (BO.EnumDeliveryMethod)c.DeliveryMethod,
                                                        StartedWorking = c.StartedWorking,
-                                                       TotalOnTimeDeliveries = GetDeliverierOnTime(id, c.Id),
-                                                       TotalLateDeliveries = GetDeliverierLate(id, c.Id),
+                                                       TotalOnTimeDeliveries = DeliveryManager.GetDeliverierOnTimeForCourier(id, c.Id),
+                                                       TotalLateDeliveries = DeliveryManager.GetDeliverierLateForCourier(id, c.Id),
                                                        OrdersInProgressId = GetActiveDeliveryOrderForCourier(id, c.Id) != null ? GetActiveDeliveryOrderForCourier(id, c.Id)!.OrderId : -1
                                                    };
         if (sort != null)
@@ -81,22 +91,18 @@ internal static class CourierManager
                 BO.EnumCourierFieldSort.StartedWorking => boCouriers.OrderBy(c => c.StartedWorking),
                 BO.EnumCourierFieldSort.TotalOnTimeDeliveries => boCouriers.OrderBy(c => c.TotalOnTimeDeliveries),
                 BO.EnumCourierFieldSort.TotalLateDeliveries => boCouriers.OrderBy(c => c.TotalLateDeliveries),
-                BO.EnumCourierFieldSort.MaxPersonalDistance => boCouriers.OrderBy(c => c.MaxPersonalDistance),
                 _ => boCouriers
             };
         }
         if (filter != null && value != null)
         {
-            boCouriers = filter switch
-            {
-                BO.EnumCourierFieldFilter.DeliveryMethod => boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!),
-                BO.EnumCourierFieldFilter.MaxPersonalDistance => boCouriers.Where(c => c.MaxPersonalDistance != null && c.MaxPersonalDistance >= (double)value!),
-                _ => doCouriers
-            };
+            boCouriers = boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!);
         }
         return boCouriers;
     }
-
+    /// <summary>
+    /// Updates a courier in DAL
+    /// </summary>
     internal static void UpdateCourier(int id, BO.Courier boCourier)
     {
         Tools.IsManagerOrCourier(id, boCourier.Id);
@@ -124,7 +130,9 @@ internal static class CourierManager
             MaxPersonalDistance = boCourier.MaxPersonalDistance
         };
     }
-
+    /// <summary>
+    /// Logs in a user (manager or courier) and returns their role 
+    /// </summary>
     public static BO.EnumUserRole Login(int id, string password)
     {
         int managerId = AdminManager.GetConfig().ManagerId;
@@ -141,6 +149,9 @@ internal static class CourierManager
             throw new BO.BlUnauthorizedException("Incorrect password.");
         return BO.EnumUserRole.Courier;
     }
+    /// <summary>
+    /// gets the active delivery order for a specific courier
+    /// </summary>
     private static BO.OrderInProgress? GetActiveDeliveryOrderForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
@@ -163,60 +174,91 @@ internal static class CourierManager
             ExpectedDeliveryTime = activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime),
             MaxDeliveryTime = activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime).Add(AdminManager.GetConfig().RiskRange),
             OrderStatus = BO.EnumOrderStatus.InProgress,
-            ScheduleStatus = /*BO.EnumScheduleStatus.OnTime*/,
+            ScheduleStatus = DeliveryManager.GetScheduleStatus(order),
             RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime))
         };
     }
-    public static IEnumerable<BO.ClosedDeliveryInList> CloseDeliveriesForCourier(int id, int courierId, BO.EnumDeliveryMethod deliveryMethod)
+ 
+    public static void ChoseOrderToCourier(int id, int courierId, int orderId)
     {
         Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return from d in deliveries
-               let order = s_dal.Order.Read(d.OrderId)!
-               select new BO.ClosedDeliveryInList
-               {
-                   DeliveryId = d.Id,
-                   OrderId = d.OrderId,
-                   OrderType = (BO.EnumOrderType)order.OrderType,
-                   Address = order.Address,
-                   DeliveryMethod = (BO.EnumDeliveryMethod)s_dal.Courier.Read(courierId)!.DeliveryMethod,
-                   DistanceInKm = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude),
-                   TotalDeliveryTime = Tools.CalculateTimeDifference(d.DeliveryStartTime, d.EndDeliveryTime!.Value),
-                   EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
-               };
+        DO.Courier? courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+        if (!courier.Active)
+            throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
+        var activeDelivery = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime == null).FirstOrDefault();
+        if (activeDelivery != null)
+            throw new BO.BlInvalidInputException($"Courier with ID={courierId} already has an active delivery");
+        DO.Order? order = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        BO.Order orderBo = OrderManager.DoOrderToBoOrder(order);
+        if (orderBo/*.OrderStatus*/ != BO.EnumOrderStatus.Open)
+            throw new BO.BlInvalidInputException($"Order with ID={orderId} is not open for delivery");
+        double distanceToOrder = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude);
+        if (distanceToOrder > courier.MaxPersonalDistance)
+            throw new BO.BlInvalidInputException($"Order with ID={orderId} is too far for courier with ID={courierId}");
+        DO.Delivery newDelivery = new()
+        {
+            Id = 0,
+            OrderId = orderId,
+            CourierId = courierId,
+            DeliveryMethod = courier.DeliveryMethod,
+            DeliveryStartTime = AdminManager.Now,
+            EndDeliveryStatus = null,
+            EndDeliveryTime = null
+        };
+        s_dal.Delivery.Create(newDelivery);
+        s_dal.Order.Update(order);
     }
-      
-    
-    public static int GetDeliverierLate(int id, int courierId)
+    /// <summary>
+    /// gets list of open orders that a courier can chose from, with optional filtering and sorting
+    /// </summary>
+    public static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) > AdminManager.GetConfig().GetMaxDeliveryTime);
+        DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
+        if(!courier.Active)
+            throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
+        IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude,or.Latitude) <= courier.MaxPersonalDistance);
+        if(typeFilter != null)
+        {
+            orders = orders.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
+        }
+        var result =
+            from o in orders
+            select new BO.OpenOrderInList
+            {
+                CourierId = courierId,
+                OrderId = o.Id,
+                OrderType = (BO.EnumOrderType)o.OrderType,
+                Weight = o.Weight,
+                Fragile = o.Fragile,
+                Adrress = o.Address,
+                AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
+                DistanceInKm = Tools.CalculateDistanceInKm(o.Longitude,o.Latitude),
+                EstimatedArrivalTime = DeliveryManager.CalculateExpectedDeliveryTime(),
+                RemainingTime = Tools.CalculateTimeDifference(o.OrderCreationTime,AdminManager.Now),
+                MaxDeliveryTime = DeliveryManager.CalculateExpectedDeliveryTime(),
+                ScheduleStatus = DeliveryManager.GetScheduleStatus(o)
+            };
+        result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
+            : sortBy switch
+            {
+                BO.EnumOpenOrderInListField.OrderId => result.OrderBy(r => r.OrderId),
+                BO.EnumOpenOrderInListField.OrderType => result.OrderBy(r => r.OrderType),
+                BO.EnumOpenOrderInListField.Weight => result.OrderBy(r => r.Weight),
+                BO.EnumOpenOrderInListField.AerialDistance => result.OrderBy(r => r.AerialDistance),
+                BO.EnumOpenOrderInListField.MaxDeliveryTime => result.OrderBy(r => r.MaxDeliveryTime),
+                BO.EnumOpenOrderInListField.RemainingTime => result.OrderBy(r => r.RemainingTime),
+                BO.EnumOpenOrderInListField.ScheduleStatus => result.OrderBy(r => r.ScheduleStatus),
+                _ => result
+            };
+
+        return result.ToList();
     }
 
-    public static int GetDeliverierOnTime(int id, int courierId)
-    {
-        Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) <= AdminManager.GetConfig().GetMaxDeliveryTime);
-    }
-    private static BO.ClosedDeliveryInList ConvertToClosedDeliveryInList(DO.Delivery doDelivery)
-    {
-        var order = s_dal.Order.Read(doDelivery.OrderId)
-            ?? throw new BO.BlDoesNotExistException($"Order {doDelivery.OrderId} not found");
-        TimeSpan totalTime = DateTime.Now - order.OrderCreationTime;
-        return new BO.ClosedDeliveryInList
-        {
-            DeliveryId = doDelivery.Id,
-            OrderId = doDelivery.OrderId,
-            OrderType = (BO.EnumOrderType)order.OrderType,
-            Address = order.Address,
-            DeliveryMethod = (BO.EnumDeliveryMethod)doDelivery.DeliveryMethod,
-            DistanceInKm = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude),
-            TotalDeliveryTime = totalTime,
-            EndDeliveryStatus = ChekStatusToDelivery(totalTime, doDelivery.EndDeliveryStatus)
-        };
-    }
+    /// <summary>
+    /// functions to update time
+    /// </summary>
+
     public static void PeriodicCouriersUpdates(DateTime oldClock, DateTime newClock)
     {
         DateTime now = newClock;
