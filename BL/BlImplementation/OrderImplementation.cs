@@ -1,6 +1,7 @@
 ﻿
 namespace BlImplementation;
 using BlApi;
+using BO;
 using Helpers;
 
 internal class OrderImplementation : IOrder
@@ -27,5 +28,35 @@ internal class OrderImplementation : IOrder
     public void Update(int id, BO.Order boOrder)
     {
         OrderManager.UpdateOrder(id, boOrder);
+    }
+
+    public int[] GetAmountOfOrdersByStatus(int id)
+    {
+        return OrderManager.GetAmountOfOrdersByStatus(id);
+    }
+
+    public void CancelOrder(int id, int orderId)
+    {
+        OrderManager.CancelOrder(id, orderId);
+    }
+
+    public void EndOrderStatus(int id, int orderId, int deliveryId)
+    {
+        OrderManager.EndOrderStatus(id, orderId, deliveryId);
+    }
+
+    public void ChooseOrderForDelivery(int id, int orderId, int deliveryId)
+    {
+        throw new NotImplementedException();
+    }
+
+    public ClosedDeliveryInList GetClosedOrders(int id, int orderId, EnumOrderFieldSort? sort = null, EnumOrderFieldSort? filter = null)
+    {
+        throw new NotImplementedException();
+    }
+
+    public OpenOrderInList GetOpenOrders(int id, int orderId, EnumOrderFieldSort? sort = null, EnumOrderFieldSort? filter = null)
+    {
+        throw new NotImplementedException();
     }
 }

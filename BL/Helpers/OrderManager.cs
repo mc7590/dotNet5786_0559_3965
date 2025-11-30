@@ -1,12 +1,16 @@
-﻿using DalApi;
+﻿using BO;
+using DalApi;
 
 
 namespace Helpers;
 
 internal static class OrderManager
 {
-    private static IDal s_dal = Factory.Get; //stage 4
+    private static readonly IDal s_dal = Factory.Get; //stage 4
 
+    /// <summary>
+    /// Converts a BO Order to a DO Order
+    /// </summary>
     internal static DO.Order BoOrderToDoOrder(BO.Order boOrder)
     {
         return new DO.Order()
@@ -26,6 +30,9 @@ internal static class OrderManager
 
     }
 
+    /// <summary>
+    /// Converts a DO Order to a BO Order
+    /// </summary>
     internal static BO.Order DoOrderToBoOrder(DO.Order doOrder) => new BO.Order()
     {
         Id = doOrder.Id,
@@ -40,16 +47,18 @@ internal static class OrderManager
         Weight = doOrder.Weight,
         Fragile = doOrder.Fragile,
         CreationTime = doOrder.OrderCreationTime,
-        ExpectedDeliveryTime = CalculateExpectedDeliveryTime(doOrder.Id),//in ManagerDelivery
+        ExpectedDeliveryTime = DeliveryManager.CalculateExpectedDeliveryTime(doOrder.Id),
         MaxDeliveryTime = doOrder.OrderCreationTime + AdminManager.GetConfig().GetMaxDeliveryTime,
-        OrderStatus = CalculateOrderStatus(doOrder.Id),
-        ScheduleStatus = GetScheduleStatus(doOrder),
-        RemainingTime = GetRemainingTime(doOrder),
-        OrderDelivHist = DeliveryManager.GetDeliveryPerOrderInList(doOrder.Id)
+        OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
+        ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
+        RemainingTime = DeliveryManager.GetRemainingTime(doOrder),
+        OrderDelivHist = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id)
     };
 
 
-
+    /// <summary>
+    /// Creates a new order in DAL
+    /// </summary>
     internal static void CreateOrder(int id, BO.Order boOrder)
     {
         Tools.IsManager(id);
@@ -75,6 +84,9 @@ internal static class OrderManager
         s_dal.Order.Create(doOrder);
     }
 
+    /// <summary>
+    /// Gets an order by its ID
+    /// </summary>
     internal static BO.Order? GetOrder(int id, int orderId)
     {
         Tools.IsManager(id);
@@ -84,6 +96,9 @@ internal static class OrderManager
         return DoOrderToBoOrder(doOrder);
     }
 
+    /// <summary>
+    /// Throws exception that orders cannot be deleted
+    /// </summary>
     internal static void DeleteOrder(int id, int orderId)
     {
         Tools.IsManager(id);
@@ -101,8 +116,10 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
 
-        var query = s_dal.Order.ReadAll().Select(DoOrderToBoOrder);
-        
+        var query = s_dal.Order.ReadAll()
+            .Select(doOrder => DoOrderToBoOrder(doOrder))
+            .Distinct();
+
         //filter
         if (filter != null)
         {
@@ -121,7 +138,7 @@ internal static class OrderManager
                     BO.EnumOrderFieldSort.CreationTime => order.CreationTime.Date.Equals(Convert.ToDateTime(value).Date),
                     BO.EnumOrderFieldSort.OrderStatus => order.OrderStatus.Equals(value),
                     BO.EnumOrderFieldSort.ScheduleStatus => order.ScheduleStatus.Equals(value),
-                    _ => true
+                    _ => true //otherwise no filter
                 };
             });
         }
@@ -149,19 +166,97 @@ internal static class OrderManager
         }
 
         //return
-        return query.Select(order => new BO.OrderInList
-        {
-            CourierId 
-            OrderId
-            OrderType 
-            AerialDistance = order.AerialDistance,
-            OrderStatus = order.OrderStatus,
-            ScheduleStatus = order.ScheduleStatus,
-            RemainingTime = order.RemainingTime, // הנחה שזה חושב ב-BO
-            TotalDeliveryTime = DeliveryManager.GetTotalDeliveryTime(order.Id),
-            TotalDeliveries
-        }).ToList();
+        return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder)).ToList();
+
     }
 
+    /// <summary>
+    /// converts a BO Order to a BO OrderInList
+    /// </summary>
+    internal static OrderInList BoOrderToBoOrderInList(Order boOrder)
+    {
+        return new OrderInList
+        {
+            CourierId = DeliveryManager.GetCourierIdToBoOrder(boOrder),
+            OrderId = boOrder.Id,
+            OrderType = boOrder.OrderType,
+            AerialDistance = boOrder.AerialDistance,
+            OrderStatus = boOrder.OrderStatus,
+            ScheduleStatus = boOrder.ScheduleStatus,
+            RemainingTime = boOrder.RemainingTime,
+            TotalDeliveryTime = boOrder.OrderDelivHist != null && boOrder.OrderDelivHist.Count() > 0 ?//check logic again
+                                boOrder.OrderDelivHist.Last().DelCreationTime - boOrder.CreationTime :
+                                TimeSpan.Zero,
+            TotalDeliveries = boOrder.OrderDelivHist != null ? boOrder.OrderDelivHist.Count() : 0
+        };
+    }
+
+    /// <summary>
+    /// Returns an array of order quantities by all status types.
+    /// </summary>
+    /// <param name="id">id of person asking the data</param>
+    internal static int[] GetAmountOfOrdersByStatus(int id)
+    {
+        Tools.IsManager(id);
+
+        var orders = s_dal.Order.ReadAll().Select(doOrder => DoOrderToBoOrder(doOrder));
+        int[] arrayAmountOfOrdersByStatus = new int[Enum.GetValues(typeof(BO.EnumOrderStatus)).Length]; //create array with size of EnumOrderStatus
+
+        // group orders by OrderStatus and count occurrences
+        // GroupBy creates groups of orders with the same OrderStatus
+        // ToDictionary: convert group to dictionary: Key = OrderStatus, Value = count the orders for the status
+        var statusCounts = orders.GroupBy(order => order.OrderStatus) // group orders by their EnumOrderStatus
+                                 .ToDictionary
+                                 (
+                                     g => (int)g.Key, // key in dictionary is the numeric value of EnumOrderStatus
+                                     g => g.Count()   // value in dictionary is the count of items in the group (LINQ func)
+                                 );
+
+        //fill in arrayAmountOfOrdersByStatus with valued from dictionary
+        foreach (var pair in statusCounts)
+        {
+            arrayAmountOfOrdersByStatus[pair.Key] = pair.Value;
+        }
+
+        return arrayAmountOfOrdersByStatus;
+    }
+
+    /// <summary>
+    /// update delivery status to Canceled if possible
+    /// </summary>
+    internal static void CancelOrder(int id, int orderId)
+    {
+        Tools.IsManager(id);
+
+        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        BO.Order boOrder = DoOrderToBoOrder(doOrder);
+        //Can be canceled if: Order is Open or InProgress but not yet delivered.
+        //no need to update order status in DAL, as it is calculated at the conversion "DoOrderToBoOrder"
+        if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
+        {
+            //create a deme delivery with status Canceled
+            DO.Delivery delivery = DeliveryManager.CreateDemeDelivery(orderId);
+            s_dal.Delivery.Create(delivery);
+        }
+        else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
+        {
+            DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
+            if (delivery != null)
+            {
+                var updatedDelivery = delivery with //create delivery copy by updated delivery
+                {
+                    EndDeliveryStatus = DO.EnumEndDeliveryStatus.Canceled,
+                    EndDeliveryTime = AdminManager.Now
+                };
+                s_dal.Delivery.Update(updatedDelivery);
+            }
+        }
+        else throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be canceled as it is already {boOrder.OrderStatus}.");
+    }
+
+    internal static void EndOrderStatus(int id, int orderId, int deliveryId)
+    {
+        throw new NotImplementedException();
+    }
 }
 

@@ -39,8 +39,7 @@ public class Order
     public EnumOrderStatus OrderStatus { get; init; }
     public EnumScheduleStatus ScheduleStatus { get; init; }
     public TimeSpan RemainingTime { get; init; }
-    public List<DeliveryPerOrderInList>? OrderDelivHist { get; init; }
-
+    public IEnumerable<DeliveryPerOrderInList>? OrderDelivHist { get; init; }
 
 
 }
