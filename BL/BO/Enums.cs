@@ -109,9 +109,12 @@ public enum EnumClosedDeliveryInListField
 {
     DeliveryId,
     OrderId,
+    OrderType,
     Address,
+    DeliveryMethod,
     DistanceInKm,
-    TotalDeliveryTime
+    TotalDeliveryTime,
+    //EndDeliveryStatus - unnecessary, because it's the difault sorting field (all deliveries here are closed)
 }
 /// <summary>
 /// represent the fields by which open order data can be filtered

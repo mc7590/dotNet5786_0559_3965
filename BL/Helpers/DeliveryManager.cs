@@ -123,25 +123,35 @@ internal static class DeliveryManager
     }
 
     /// <summary>
-    /// gets the closed deliveries in list for a specific courier with optional filtering and sorting
+    /// get the closed deliveries in list for a specific courier with optional filtering and sorting
     /// </summary>
-    internal static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id ,int courierId ,BO.EnumOrderType? typeFilter = null ,BO.EnumClosedDeliveryInListField? sortBy = null)
+    internal static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id ,int courierId ,BO.EnumOrderType? typeFilter = null ,BO.EnumClosedDeliveryInListField? sortBy = null)
     {
-        Tools.IsManagerOrCourier(Id, courierId);
-        var deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime != null);
+        //check if the person asking is a manager or the courier assigned to the delivery
+        Tools.IsManagerOrCourier(id, courierId);
+
+        //get all closed deliveries for the given courier 
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime != null) ?? throw new BO.BlDoesNotExistException($"No closed deliveries found for courier with ID={courierId}");
+
+        //filter
         if (typeFilter != null)
         {
             deliveries = deliveries.Where(d => s_dal.Order.Read(d.OrderId)!.OrderType == (DO.EnumOrderType)typeFilter);
         }
+
+        //sort
         deliveries = sortBy switch
         {
             BO.EnumClosedDeliveryInListField.DeliveryId => deliveries.OrderBy(d => d.Id),
             BO.EnumClosedDeliveryInListField.OrderId => deliveries.OrderBy(d => d.OrderId),
+            BO.EnumClosedDeliveryInListField.OrderType => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.OrderType),
             BO.EnumClosedDeliveryInListField.Address => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.Address),
+            BO.EnumClosedDeliveryInListField.DeliveryMethod => deliveries.OrderBy(d => d.DeliveryMethod),
             BO.EnumClosedDeliveryInListField.DistanceInKm => deliveries.OrderBy(d => Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude)),
             BO.EnumClosedDeliveryInListField.TotalDeliveryTime => deliveries.OrderBy(d => d.EndDeliveryTime - d.DeliveryStartTime),
-            _ => deliveries
+            _ => deliveries.OrderBy(d => d.EndDeliveryStatus) //default sorting by end delivery status (all deliveries here are closed)
         };
+
         return deliveries.Select(d => new BO.ClosedDeliveryInList
         {
             DeliveryId = d.Id,
@@ -150,8 +160,8 @@ internal static class DeliveryManager
             Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
             DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
             DistanceInKm = Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude),
-            TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId),
-            EndDeliveryStatus = 
+            TotalDeliveryTime = DeliveryManager.GetTotalDeliveryTime(d.OrderId),
+            EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
         });
     }
 
@@ -167,6 +177,11 @@ internal static class DeliveryManager
         int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
         int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         Tools.IsManagerOrCourier(id, s_dal.Delivery.Read(deliveryId)!.CourierId);
+
+        //check if the order exists
+        if (s_dal.Order.Read(orderId) == null)
+            throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+
         //try to update the delivery end status and time
         DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Delivered, AdminManager.Now);
@@ -188,4 +203,6 @@ internal static class DeliveryManager
             s_dal.Delivery.Update(updatedDelivery);
         }
     }
+
+
 }

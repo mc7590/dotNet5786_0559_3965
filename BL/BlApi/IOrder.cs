@@ -41,12 +41,12 @@ public interface IOrder
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList
     /// </summary>
-    BO.ClosedDeliveryInList GetClosedOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
+    IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
 
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList
     /// </summary>
-    BO.OpenOrderInList GetOpenOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
+    IEnumerable<BO.OpenOrderInList> GetOpenOrders(int id, int courierId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
 
 
 }

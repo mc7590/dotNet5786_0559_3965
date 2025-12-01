@@ -240,23 +240,54 @@ internal static class OrderManager
         }
         else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
         {
-            DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
-            if (delivery != null)
-            {
-                var updatedDelivery = delivery with //create delivery copy by updated delivery
-                {
-                    EndDeliveryStatus = DO.EnumEndDeliveryStatus.Canceled,
-                    EndDeliveryTime = AdminManager.Now
-                };
-                s_dal.Delivery.Update(updatedDelivery);
-            }
+            /////connect to deliveryManager to update delivery
+            DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with Order ID={orderId} does Not exist");
+            DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Canceled, AdminManager.Now);
         }
         else throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be canceled as it is already {boOrder.OrderStatus}.");
     }
 
-    internal static void EndOrderStatus(int id, int orderId, int deliveryId)
+    /// <summary>
+    /// Selects an order for delivery by associating it with a specific courier.
+    /// </summary>
+    /// <param name="id">The person asking the date - manager / courier</param>
+    /// <param name="courierId">The courier id assigned to deliver the order.</param>
+    /// <param name="orderId">The order id to be delivered.</param>
+    internal static void ChooseOrderForDelivery(int id, int courierId, int orderId)
     {
-        throw new NotImplementedException();
+        //check if the person asking is a manager or the courier assigned to the delivery
+        Tools.IsManagerOrCourier(id, courierId);
+
+        //check if order exists
+        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+
+        //check if a delivery for this order already exists
+        if (s_dal.Delivery.Read(d => d.OrderId == orderId) != null)
+            throw new BO.BlInvalidOperationException($"Order with ID={orderId} is already assigned to a delivery.");
+
+        //check if courier exists
+        DO.Courier doCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+
+        BO.Order boOrder = DoOrderToBoOrder(doOrder);
+        if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
+        {
+            //create a new delivery for this order and courier
+            DO.Delivery delivery = new DO.Delivery()
+            {
+                Id = 0, //will be set by DAL
+                OrderId = orderId,
+                CourierId = courierId,
+                DeliveryMethod = doCourier.DeliveryMethod,
+                DeliveryStartTime = AdminManager.Now,
+                DistanceInKm = Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude),
+                EndDeliveryStatus = null,
+                EndDeliveryTime = null
+            };
+            s_dal.Delivery.Create(delivery);
+        }
+        else
+        {
+            throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be assigned to delivery as its status is {boOrder.OrderStatus}.");
+        }
     }
 }
-

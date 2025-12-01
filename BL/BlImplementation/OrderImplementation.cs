@@ -42,20 +42,20 @@ internal class OrderImplementation : IOrder
 
     public void EndOrderStatus(int id, int orderId, int deliveryId)
     {
-        OrderManager.EndOrderStatus(id, orderId, deliveryId);
+        DeliveryManager.EndOrderStatus(id, orderId, deliveryId);
     }
 
-    public void ChooseOrderForDelivery(int id, int orderId, int deliveryId)
+    public void ChooseOrderForDelivery(int id, int courierId, int orderId)
     {
-        throw new NotImplementedException();
+        OrderManager.ChooseOrderForDelivery(id, courierId, orderId);
     }
 
-    public ClosedDeliveryInList GetClosedOrders(int id, int orderId, EnumOrderFieldSort? sort = null, EnumOrderFieldSort? filter = null)
+    public IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
     {
-        throw new NotImplementedException();
+        return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
     }
 
-    public OpenOrderInList GetOpenOrders(int id, int orderId, EnumOrderFieldSort? sort = null, EnumOrderFieldSort? filter = null)
+    public IEnumerable<BO.OpenOrderInList> GetOpenOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null)
     {
         throw new NotImplementedException();
     }
