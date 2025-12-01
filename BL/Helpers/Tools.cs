@@ -90,14 +90,37 @@ internal static class Tools
         if (string.IsNullOrWhiteSpace(address))
             throw new BO.BlInvalidInputException($"Empty address");
     }
-
+    /// <summary>
+    /// Calculates the estimated road distance in kilometers from the company location to the given coordinates.
+    /// </summary>
     public static double CalculateDistanceInKm(double longitude, double latitude)
     {
-        throw new NotImplementedException();
+        double aerialDistance = CalculateAerialDistance(longitude, latitude);
+        const double roadFactor = 1.25;
+        return Math.Round(aerialDistance * roadFactor, 2);
     }
+    /// <summary>
+    /// Calculates the aerial distance in kilometers between the company location and the given coordinates using the Haversine formula.
+    /// </summary>
     public static double CalculateAerialDistance(double longitude, double latitude)
     {
-        throw new NotImplementedException();
+        double? companyLat = AdminManager.GetConfig().Latitude;
+        double? companyLon = AdminManager.GetConfig().Longitude;
+        if (companyLat == null || companyLon == null)
+            throw new BO.BlInvalidInputException("Company coordinates are not defined in Config");
+        const double earthRadiusKm = 6371;
+        double dLat = ToRadians(latitude - companyLat.Value);
+        double dLon = ToRadians(longitude - companyLon.Value);
+        double lat1 = ToRadians(companyLat.Value);
+        double lat2 = ToRadians(latitude);
+        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
+        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+        return Math.Round(earthRadiusKm * c, 2);
+    }
+    private static double ToRadians(double angle)
+    {
+        return angle * Math.PI / 180;
     }
     public static TimeSpan CalculateTimeDifference(DateTime start, DateTime end)
     {
