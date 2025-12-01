@@ -78,14 +78,14 @@ internal static class DeliveryManager
     {
         // look at function OrderManager.BoOrderToBoOrderInList
     }
-    public static int GetDeliverierLateForCourier(int id, int courierId)
+    internal static int GetDeliverierLateForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
         return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) > AdminManager.GetConfig().GetMaxDeliveryTime);
     }
 
-    public static int GetDeliverierOnTimeForCourier(int id, int courierId)
+    internal static int GetDeliverierOnTimeForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
@@ -95,7 +95,7 @@ internal static class DeliveryManager
     /// <summary>
     /// gets the closed deliveries in list for a specific courier with optional filtering and sorting
     /// </summary>
-    public static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id ,int courierId ,BO.EnumOrderType? typeFilter = null ,BO.EnumClosedDeliveryInListField? sortBy = null)
+    internal static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id ,int courierId ,BO.EnumOrderType? typeFilter = null ,BO.EnumClosedDeliveryInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(Id, courierId);
         var deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime != null);
@@ -148,7 +148,7 @@ internal static class DeliveryManager
     /// <summary>
     /// updates the delivery with given ID to new status and end time
     /// </summary>
-    private static void UpdateDelivery(DO.Delivery? delivery, BO.EnumEndDeliveryStatus newStatus, DateTime endTime)
+    internal static void UpdateDelivery(DO.Delivery? delivery, BO.EnumEndDeliveryStatus newStatus, DateTime endTime)
     {
         if (delivery != null)
         {
