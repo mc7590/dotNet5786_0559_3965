@@ -6,12 +6,24 @@ namespace Helpers;
 internal static class DeliveryManager
 {
     private static IDal s_dal = Factory.Get; //stage 4
-
-    internal static DateTime? CalculateExpectedDeliveryTime(int id)
+    /// <summary>
+    /// calculte the estimated delivery time based on delivery method and distance
+    /// </summary>
+    public static TimeSpan CalculateEstimatedDeliveryTime(DO.EnumDeliveryMethod method, double distanceInKm)
     {
-        throw new NotImplementedException();
+        TimeSpan estimatedTime = method switch
+        {
+            DO.EnumDeliveryMethod.Car => TimeSpan.FromMinutes(distanceInKm / AdminManager.GetConfig().AveCarSpeedKmH),
+            DO.EnumDeliveryMethod.Motorcycle => TimeSpan.FromMinutes(distanceInKm / AdminManager.GetConfig().AveMotorcycleSpeedKmH),
+            DO.EnumDeliveryMethod.Bicycle => TimeSpan.FromMinutes(distanceInKm / AdminManager.GetConfig().AveBicycleSpeedKmH),
+            DO.EnumDeliveryMethod.Foot => TimeSpan.FromMinutes(distanceInKm / AdminManager.GetConfig().AveWalkingSpeedKmH),
+            _ => throw new BO.BlInvalidInputException("Invalid delivery method")
+        };
+        return estimatedTime;
     }
-
+    /// <summary>
+    /// calculates the order status based on deliveries associated with the order
+    /// </summary>
     internal static BO.EnumOrderStatus CalculateOrderStatus(int id)
     {
         throw new NotImplementedException();
@@ -30,8 +42,6 @@ internal static class DeliveryManager
             EndDeliveryTime = AdminManager.Now
         };
     }
-
-
     /// <summary>
     /// returns the courier ID that delivered the given BO order
     /// </summary>
@@ -67,29 +77,49 @@ internal static class DeliveryManager
                 EndDeliveryTime = delivery.EndDeliveryTime
             }).ToList();
     }
-
-
+    /// <summary>
+    /// get the schedule status of the given DO order
+    /// </summary>
     internal static BO.EnumScheduleStatus GetScheduleStatus(DO.Order doOrder)
     {
-        throw new NotImplementedException();
+        TimeSpan timePass = doOrder.OrderCreationTime - AdminManager.Now;
+        if (timePass > AdminManager.GetConfig().GetMaxDeliveryTime)
+            return BO.EnumScheduleStatus.Late;
+        if (timePass > AdminManager.GetConfig().RiskRange)
+            return BO.EnumScheduleStatus.InRisk;
+        return BO.EnumScheduleStatus.OnTime;
     }
-
+    
     internal static TimeSpan GetTotalDeliveryTime(int orderId)
     {
         // look at function OrderManager.BoOrderToBoOrderInList
     }
-    internal static int GetDeliverierLateForCourier(int id, int courierId)
+    /// <summary>
+    /// checks if the given delivery was delivered on time or not
+    /// </summary>
+    private static bool IsDeliveredOnTime(DO.Delivery d)
     {
-        Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) > AdminManager.GetConfig().GetMaxDeliveryTime);
+        TimeSpan totalTime = (d.EndDeliveryTime ?? DateTime.Now) - d.DeliveryStartTime;
+        TimeSpan maxTime = AdminManager.GetConfig().GetMaxDeliveryTime;
+        return totalTime <= maxTime;
     }
-
-    internal static int GetDeliverierOnTimeForCourier(int id, int courierId)
+    /// <summary>
+    /// gets the number of late deliveries for a specific courier
+    /// </summary>
+    public static int GetDeliverierLateForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
-        return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) <= AdminManager.GetConfig().GetMaxDeliveryTime);
+        return deliveries.Count(d => IsDeliveredOnTime(d));
+    }
+    /// <summary>
+    /// gets the number of on-time deliveries for a specific courier
+    /// </summary>
+    public static int GetDeliverierOnTimeForCourier(int id, int courierId)
+    {
+        Tools.IsManagerOrCourier(id, courierId);
+        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+        return deliveries.Count(d => !IsDeliveredOnTime(d));
     }
 
     /// <summary>
@@ -137,10 +167,8 @@ internal static class DeliveryManager
         int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
         int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         Tools.IsManagerOrCourier(id, s_dal.Delivery.Read(deliveryId)!.CourierId);
-
         //try to update the delivery end status and time
-        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null);
-
+        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Delivered, AdminManager.Now);
 
     }
