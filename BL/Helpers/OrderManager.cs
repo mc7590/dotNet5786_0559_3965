@@ -1,5 +1,5 @@
-﻿using BO;
-using DalApi;
+﻿using DalApi;
+using System.Reflection.Metadata.Ecma335;
 
 
 namespace Helpers;
@@ -47,11 +47,11 @@ internal static class OrderManager
         Weight = doOrder.Weight,
         Fragile = doOrder.Fragile,
         CreationTime = doOrder.OrderCreationTime,
-        ExpectedDeliveryTime = DeliveryManager.CalculateExpectedDeliveryTime(doOrder.Id),
+        ExpectedDeliveryTime = AdminManager.Now + CalculateExpectedDeliveryTime(doOrder.Id),
         MaxDeliveryTime = doOrder.OrderCreationTime + AdminManager.GetConfig().GetMaxDeliveryTime,
         OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
         ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
-        RemainingTime = DeliveryManager.GetRemainingTime(doOrder),
+        RemainingTime = GetRemainingTime(doOrder),
         OrderDelivHist = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id)
     };
 
@@ -173,9 +173,9 @@ internal static class OrderManager
     /// <summary>
     /// converts a BO Order to a BO OrderInList
     /// </summary>
-    internal static OrderInList BoOrderToBoOrderInList(Order boOrder)
+    internal static BO.OrderInList BoOrderToBoOrderInList(BO.Order boOrder)
     {
-        return new OrderInList
+        return new BO.OrderInList
         {
             CourierId = DeliveryManager.GetCourierIdToBoOrder(boOrder),
             OrderId = boOrder.Id,
@@ -341,4 +341,17 @@ internal static class OrderManager
         return result.ToList();
     }
 
+    private static TimeSpan GetRemainingTime(DO.Order doOrder)
+    {
+        DateTime maxDeliveryTime = doOrder.OrderCreationTime + AdminManager.GetConfig().GetMaxDeliveryTime;
+        return Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime);
+    }
+    private static TimeSpan CalculateExpectedDeliveryTime(int orderId)
+    {
+        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
+        if (delivery == null || delivery.DistanceInKm == null)
+            return TimeSpan.Zero;
+        return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude));
+    }
 }
