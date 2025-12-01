@@ -90,9 +90,10 @@ internal static class DeliveryManager
         return BO.EnumScheduleStatus.OnTime;
     }
     
-    internal static TimeSpan GetTotalDeliveryTime(int orderId)
+    internal static TimeSpan GetTotalDeliveryTime(int orderId, DateTime? end)
     {
-        // look at function OrderManager.BoOrderToBoOrderInList
+        DO.Order order = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        return order.OrderCreationTime - end ?? throw new BO.BlInvalidInputException("Delivery is not yet closed");
     }
     /// <summary>
     /// checks if the given delivery was delivered on time or not
@@ -160,7 +161,7 @@ internal static class DeliveryManager
             Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
             DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
             DistanceInKm = Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude),
-            TotalDeliveryTime = DeliveryManager.GetTotalDeliveryTime(d.OrderId),
+            TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
             EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
         });
     }
