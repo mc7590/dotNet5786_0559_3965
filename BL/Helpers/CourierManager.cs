@@ -1,5 +1,4 @@
 ﻿using DalApi;
-using DO;
 using System.Data;
 using System.Runtime.CompilerServices;
 
@@ -133,7 +132,7 @@ internal static class CourierManager
     /// <summary>
     /// Logs in a user (manager or courier) and returns their role 
     /// </summary>
-    public static BO.EnumUserRole Login(int id, string password)
+    internal static BO.EnumUserRole Login(int id, string password)
     {
         int managerId = AdminManager.GetConfig().ManagerId;
         if (managerId == id)
@@ -179,39 +178,10 @@ internal static class CourierManager
         };
     }
  
-    public static void ChoseOrderToCourier(int id, int courierId, int orderId)
-    {
-        Tools.IsManagerOrCourier(id, courierId);
-        DO.Courier? courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
-        if (!courier.Active)
-            throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
-        var activeDelivery = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime == null).FirstOrDefault();
-        if (activeDelivery != null)
-            throw new BO.BlInvalidInputException($"Courier with ID={courierId} already has an active delivery");
-        DO.Order? order = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
-        BO.Order orderBo = OrderManager.DoOrderToBoOrder(order);
-        if (orderBo/*.OrderStatus*/ != BO.EnumOrderStatus.Open)
-            throw new BO.BlInvalidInputException($"Order with ID={orderId} is not open for delivery");
-        double distanceToOrder = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude);
-        if (distanceToOrder > courier.MaxPersonalDistance)
-            throw new BO.BlInvalidInputException($"Order with ID={orderId} is too far for courier with ID={courierId}");
-        DO.Delivery newDelivery = new()
-        {
-            Id = 0,
-            OrderId = orderId,
-            CourierId = courierId,
-            DeliveryMethod = courier.DeliveryMethod,
-            DeliveryStartTime = AdminManager.Now,
-            EndDeliveryStatus = null,
-            EndDeliveryTime = null
-        };
-        s_dal.Delivery.Create(newDelivery);
-        s_dal.Order.Update(order);
-    }
     /// <summary>
     /// gets list of open orders that a courier can chose from, with optional filtering and sorting
     /// </summary>
-    public static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    internal static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
         DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
@@ -224,6 +194,8 @@ internal static class CourierManager
         }
         var result =
             from o in orders
+            let distance = Tools.CalculateDistanceInKm(o.Longitude,o.Latitude)
+            let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
             select new BO.OpenOrderInList
             {
                 CourierId = courierId,
@@ -233,11 +205,11 @@ internal static class CourierManager
                 Fragile = o.Fragile,
                 Adrress = o.Address,
                 AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
-                DistanceInKm = Tools.CalculateDistanceInKm(o.Longitude,o.Latitude),
-                EstimatedArrivalTime = DeliveryManager.CalculateExpectedDeliveryTime(),
-                RemainingTime = Tools.CalculateTimeDifference(o.OrderCreationTime,AdminManager.Now),
-                MaxDeliveryTime = DeliveryManager.CalculateExpectedDeliveryTime(),
-                ScheduleStatus = DeliveryManager.GetScheduleStatus(o)
+                DistanceInKm = distance,
+                EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod,distance),
+                ScheduleStatus = DeliveryManager.GetScheduleStatus(o),              
+                RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now,maxDeliveryTime),
+                MaxDeliveryTime = maxDeliveryTime,
             };
         result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
             : sortBy switch
@@ -299,5 +271,6 @@ internal static class CourierManager
             .ToList()
             .ForEach(c => s_dal.Courier.Update(c));
     }
-    public static void SimulateCourseRegistrationAndGrade() => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
+    public static void SimulateCourierInactivity() => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
+ 
 }
