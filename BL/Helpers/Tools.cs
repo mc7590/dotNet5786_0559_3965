@@ -93,11 +93,11 @@ internal static class Tools
 
     public static double CalculateDistanceInKm(double longitude, double latitude)
     {
-        return 0.0;
+        throw new NotImplementedException();
     }
     public static double CalculateAerialDistance(double longitude, double latitude)
     {
-        return 0.0;
+        throw new NotImplementedException();
     }
     public static TimeSpan CalculateTimeDifference(DateTime start, DateTime end)
     {

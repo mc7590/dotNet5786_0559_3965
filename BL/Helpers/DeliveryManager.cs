@@ -1,4 +1,6 @@
-﻿using DalApi;
+﻿using BO;
+using DalApi;
+using DO;
 namespace Helpers;
 
 internal static class DeliveryManager
@@ -89,6 +91,7 @@ internal static class DeliveryManager
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
         return deliveries.Count(d => (d.DeliveryStartTime - d.EndDeliveryTime) <= AdminManager.GetConfig().GetMaxDeliveryTime);
     }
+
     /// <summary>
     /// gets the closed deliveries in list for a specific courier with optional filtering and sorting
     /// </summary>
@@ -120,5 +123,41 @@ internal static class DeliveryManager
             TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId),
             EndDeliveryStatus = 
         });
+    }
+
+    /// <summary>
+    /// make delivery end for given order and delivery IDs
+    /// </summary>
+    /// <param name="id">id of person asking data</param>
+    /// <param name="orderId">order id</param>
+    /// <param name="deliveryId">delivery id to be ended</param>
+    internal static void EndOrderStatus(int id, int orderId, int deliveryId)
+    {
+        //check if the person asking is a manager or the courier assigned to the delivery
+        int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
+        int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
+        Tools.IsManagerOrCourier(id, s_dal.Delivery.Read(deliveryId)!.CourierId);
+
+        //try to update the delivery end status and time
+        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null);
+
+        DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Delivered, AdminManager.Now);
+
+    }
+
+    /// <summary>
+    /// updates the delivery with given ID to new status and end time
+    /// </summary>
+    private static void UpdateDelivery(DO.Delivery? delivery, BO.EnumEndDeliveryStatus newStatus, DateTime endTime)
+    {
+        if (delivery != null)
+        {
+            var updatedDelivery = delivery with //create delivery copy by updated delivery
+            {
+                EndDeliveryStatus = (DO.EnumEndDeliveryStatus)newStatus,
+                EndDeliveryTime = endTime
+            };
+            s_dal.Delivery.Update(updatedDelivery);
+        }
     }
 }
