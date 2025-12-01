@@ -55,8 +55,8 @@ internal class OrderImplementation : IOrder
         return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
     }
 
-    public IEnumerable<BO.OpenOrderInList> GetOpenOrders(int id, int orderId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null)
+    public IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
-        throw new NotImplementedException();
+        return OrderManager.GetListOfOpenOrderToChose(id, courierId, typeFilter, sortBy);
     }
 }

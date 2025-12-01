@@ -290,4 +290,55 @@ internal static class OrderManager
             throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be assigned to delivery as its status is {boOrder.OrderStatus}.");
         }
     }
+
+
+    /// <summary>
+    /// gets list of open orders that a courier can chose from, with optional filtering and sorting
+    /// </summary>
+    internal static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    {
+        Tools.IsManagerOrCourier(id, courierId);
+        DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
+        if (!courier.Active)
+            throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
+        IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
+        if (typeFilter != null)
+        {
+            orders = orders.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
+        }
+        var result =
+            from o in orders
+            let distance = Tools.CalculateDistanceInKm(o.Longitude, o.Latitude)
+            let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
+            select new BO.OpenOrderInList
+            {
+                CourierId = courierId,
+                OrderId = o.Id,
+                OrderType = (BO.EnumOrderType)o.OrderType,
+                Weight = o.Weight,
+                Fragile = o.Fragile,
+                Adrress = o.Address,
+                AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
+                DistanceInKm = distance,
+                EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
+                ScheduleStatus = DeliveryManager.GetScheduleStatus(o),
+                RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
+                MaxDeliveryTime = maxDeliveryTime,
+            };
+        result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
+            : sortBy switch
+            {
+                BO.EnumOpenOrderInListField.OrderId => result.OrderBy(r => r.OrderId),
+                BO.EnumOpenOrderInListField.OrderType => result.OrderBy(r => r.OrderType),
+                BO.EnumOpenOrderInListField.Weight => result.OrderBy(r => r.Weight),
+                BO.EnumOpenOrderInListField.AerialDistance => result.OrderBy(r => r.AerialDistance),
+                BO.EnumOpenOrderInListField.MaxDeliveryTime => result.OrderBy(r => r.MaxDeliveryTime),
+                BO.EnumOpenOrderInListField.RemainingTime => result.OrderBy(r => r.RemainingTime),
+                BO.EnumOpenOrderInListField.ScheduleStatus => result.OrderBy(r => r.ScheduleStatus),
+                _ => result
+            };
+
+        return result.ToList();
+    }
+
 }

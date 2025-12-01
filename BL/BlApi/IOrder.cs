@@ -46,7 +46,7 @@ public interface IOrder
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList
     /// </summary>
-    IEnumerable<BO.OpenOrderInList> GetOpenOrders(int id, int courierId, BO.EnumOrderFieldSort? sort = null, BO.EnumOrderFieldSort? filter = null);
+    IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null);
 
 
 }
