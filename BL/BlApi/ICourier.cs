@@ -1,6 +1,4 @@
-﻿using BO;
-
-namespace BlApi;
+﻿namespace BlApi;
 
 public interface ICourier
 {
@@ -12,6 +10,6 @@ public interface ICourier
     void Create(int id, BO.Courier boCourier);
     int GetNumOfDeliveryOnTimeForCourier(int id, int courierId);
     int GetNumOfDeliveryLateForCourier(int id, int courierId);
-    void AssignDeliveryToCourier(int courierId, int deliveryId);
+    void AssignDeliveryToCourier(int courierId, int orderId);
     IEnumerable<BO.ClosedDeliveryInList> GetCloseDeliveriesForCourier(int id, int courierId);
 }

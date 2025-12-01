@@ -1,28 +1,24 @@
 ﻿using BlApi;
-using BO;
 using Helpers;
 
 namespace BlImplementation;
 
 internal class CourierImplementation : ICourier
-{       
-    public EnumUserRole Login(string username, string password)
-    {
-        throw new NotImplementedException();
-    }
-    public void Create(int id, Courier boCourier)
+{
+    public BO.EnumUserRole Login(string username, string password) => CourierManager.Login(username, password);
+    public void Create(int id, BO.Courier boCourier)
     {
         CourierManager.CreateCourier(id,boCourier);
     }
-    public Courier? Read(int id, int courierId)
+    public BO.Courier? Read(int id, int courierId)
     {
         return CourierManager.GetCourierById(id,courierId);
     }
-    public IEnumerable<CourierInList>? GetCouriersInList(int id, bool? active = null, EnumCourierFieldSort? sort = null, BO.EnumCourierFieldFilter? filter = null, object? value = null)
+    public IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldFilter? filter = null, object? value = null)
     {
         return CourierManager.GetCouriersInList(id, active, sort, filter, value);
     }
-    public void Update(int id, Courier boCourier)
+    public void Update(int id, BO.Courier boCourier)
     {
         CourierManager.UpdateCourier(id, boCourier);
     }
@@ -32,19 +28,18 @@ internal class CourierImplementation : ICourier
     }    
     public int GetNumOfDeliveryOnTimeForCourier(int id, int courierId)
     {
-        return CourierManager.GetDeliverierOnTime(id, courierId);
+        return DeliveryManager.GetDeliverierOnTimeForCourier(id, courierId);
     }
     public int GetNumOfDeliveryLateForCourier(int id, int courierId)
     {
-        return CourierManager.GetDeliverierLate(id, courierId);
+        return DeliveryManager.GetDeliverierLateForCourier(id, courierId);
     }
-    public void AssignDeliveryToCourier(int courierId, int deliveryId)
+    public void AssignDeliveryToCourier(int courierId, int orderId)
     {
-        CourierManager.AssignDeliveryToCourier(courierId, deliveryId);
+        OrderManager.(courierId, orderId);
     }
-
-    public IEnumerable<ClosedDeliveryInList> GetCloseDeliveriesForCourier(int id, int courierId)
+    public IEnumerable<BO.ClosedDeliveryInList> GetCloseDeliveriesForCourier(int id, int courierId)
     {
-        return CourierManager.CloseDeliveriesForCourier(id, courierId, CourierManager.GetDeliveryMethod());
+        return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId);
     }
 }

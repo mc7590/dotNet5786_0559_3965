@@ -132,8 +132,9 @@ internal static class CourierManager
     /// <summary>
     /// Logs in a user (manager or courier) and returns their role 
     /// </summary>
-    internal static BO.EnumUserRole Login(int id, string password)
+    internal static BO.EnumUserRole Login(string userName, string password)
     {
+        int id = int.Parse(userName);
         int managerId = AdminManager.GetConfig().ManagerId;
         if (managerId == id)
         {
