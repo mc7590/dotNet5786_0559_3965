@@ -1,6 +1,6 @@
-﻿using BO;
+﻿//using BO;
 using DalApi;
-using DO;
+//using DO;
 namespace Helpers;
 
 internal static class DeliveryManager

@@ -105,7 +105,10 @@ internal static class CourierManager
     internal static void UpdateCourier(int id, BO.Courier boCourier)
     {
         Tools.IsManagerOrCourier(id, boCourier.Id);
-        DO.Courier? existingCourier = s_dal.Courier.Read(boCourier.Id) ?? throw new BO.BlDoesNotExistException($"Courier with ID={boCourier.Id} does Not exist");
+        //check if courier exists
+        if(s_dal.Courier.Read(boCourier.Id)==null)
+            throw new BO.BlDoesNotExistException($"Courier with ID={boCourier.Id} does Not exist");
+
         DO.Courier doCourier = courierBoToDo(boCourier)!;
         s_dal.Courier.Update(doCourier);
     }

@@ -1,4 +1,6 @@
-﻿using DalApi;
+﻿//using BO;
+using DalApi;
+using DO;
 using System.Reflection.Metadata.Ecma335;
 
 
@@ -353,5 +355,24 @@ internal static class OrderManager
         if (delivery == null || delivery.DistanceInKm == null)
             return TimeSpan.Zero;
         return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude));
+    }
+
+    /// <summary>
+    /// updates an order in DAL
+    /// </summary>
+    internal static void UpdateOrder(int id, BO.Order boOrder)
+    {
+        Tools.IsManager(id);
+
+        if (boOrder != null)
+        {
+            //check if order exists
+            if (s_dal.Order.Read(boOrder.Id) == null)
+                throw new BO.BlDoesNotExistException($"Order with ID={boOrder.Id} does Not exist");
+
+            DO.Order doOrder = BoOrderToDoOrder(boOrder);
+            s_dal.Order.Update(doOrder);
+        }
+
     }
 }
