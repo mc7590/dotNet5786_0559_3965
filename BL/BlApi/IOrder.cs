@@ -36,7 +36,7 @@ public interface IOrder
     /// <summary>
     /// Attempting to add (Create) a new DO.Delivery from a data layer
     /// </summary>
-    void ChooseOrderForDelivery(int id, int orderId, int deliveryId);
+    void CreateDeliveryForOrder(int id, int orderId, int deliveryId);
 
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList
@@ -46,7 +46,7 @@ public interface IOrder
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList
     /// </summary>
-    IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null);
+    IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null);
 
 
 }

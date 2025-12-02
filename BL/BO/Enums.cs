@@ -161,5 +161,22 @@ public enum OrderMenuOptions
     ShowListOfOrders = 3,
     UpdateOrder = 4,
     DeleteOrder = 5,
-    GetOrderStatus = 6
+    CancelOrder = 6,
+    AmountOfOrderByStatus = 7,
+    EndOrderStatus = 8,
+    CreateDeliveryForOrder = 9,
+    ClosedDeliveriesInListToCourier=10,
+    ListOfOpenOrderToChoose = 11
+
+}
+
+public enum ConfigMenuOptions
+{
+    Exit = 0,
+    MoveClock = 1,
+    GetClock = 2,
+    GetConfig = 3,
+    InitializeDB = 4,
+    ResetDB = 5,
+    SetConfig = 6
 }

@@ -45,9 +45,9 @@ internal class OrderImplementation : IOrder
         DeliveryManager.EndOrderStatus(id, orderId, deliveryId);
     }
 
-    public void ChooseOrderForDelivery(int id, int courierId, int orderId)
+    public void CreateDeliveryForOrder(int id, int courierId, int orderId)
     {
-        OrderManager.ChooseOrderForDelivery(id, courierId, orderId);
+        OrderManager.CreateDeliveryForOrder(id, courierId, orderId);
     }
 
     public IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
@@ -55,8 +55,8 @@ internal class OrderImplementation : IOrder
         return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
     }
 
-    public IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    public IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
-        return OrderManager.GetListOfOpenOrderToChose(id, courierId, typeFilter, sortBy);
+        return OrderManager.GetListOfOpenOrderToChoose(id, courierId, typeFilter, sortBy);
     }
 }

@@ -3,6 +3,8 @@
 //using BO;
 //using DO;
 
+using BO;
+
 namespace BlTest;
 
 public class Program
@@ -144,7 +146,128 @@ public class Program
 
     private static void OrderFunctionsMenu()
     {
+        bool back = false;
+        while (!back)
+        {
+            Console.WriteLine("\n--- Order Functions Menu ---");
+            Console.WriteLine("1. Create Order");
+            Console.WriteLine("2. Read Order");
+            Console.WriteLine("3. Show List Of Orders");
+            Console.WriteLine("4. Update Order");
+            Console.WriteLine("5. Delete Order");
+            Console.WriteLine("6. Cancel Order");
+            Console.WriteLine("7. Amount Of Order By Status");
+            Console.WriteLine("8. End Order Status");
+            Console.WriteLine("9. Create Delivery For Order");
+            Console.WriteLine("10. Closed Deliveries In List To Courier");
+            Console.WriteLine("11. List Of Open Orders To Choose");
+            Console.WriteLine("0. Back");
+            Console.Write("Choose: ");
 
+            if (!Enum.TryParse(Console.ReadLine(), out BO.OrderMenuOptions choice))
+            {
+                Console.WriteLine("Invalid choice!");
+                continue;
+            }
+            switch (choice)
+            {
+                case BO.OrderMenuOptions.AddOrder:
+                    // Implement Create Order functionality
+                    break;
+                case BO.OrderMenuOptions.ShowOrderById:
+                    // Implement Show Order by ID functionality
+                    break;
+                case BO.OrderMenuOptions.ShowListOfOrders:
+                    // Implement Show List of Orders functionality
+                    break;
+                case BO.OrderMenuOptions.UpdateOrder:
+                    // Implement Update Order functionality
+                    break;
+                case BO.OrderMenuOptions.DeleteOrder:
+                    // Implement Delete Order functionality
+                    break;
+                case BO.OrderMenuOptions.CancelOrder:
+                    // Implement Cancel Order functionality
+                    break;
+                case BO.OrderMenuOptions.AmountOfOrderByStatus:
+                    // Implement 
+                    break;
+                case BO.OrderMenuOptions.EndOrderStatus:
+                    // Implement 
+                    break;
+                case BO.OrderMenuOptions.CreateDeliveryForOrder:
+                    // Implement 
+                    break;
+                case BO.OrderMenuOptions.ClosedDeliveriesInListToCourier:
+                    // Implement 
+                    break;
+                case BO.OrderMenuOptions.ListOfOpenOrderToChoose:
+                    // Implement 
+                    break;
+                case BO.OrderMenuOptions.Exit:
+                    back = true;
+                    break;
+                default:
+                    throw new BO.BlInvalidInputException($"Invalid option: {choice}");
+            }
+        }
+    }
+
+    private static void ConfigFunctionsMenu()
+    {
+        bool back = false;
+        while(!back)
+        {
+            //        MoveClock = 1,
+            //GetClock = 2,
+            //GetConfig = 3,
+            //InitializeDB = 4,
+            //ResetDB = 5,
+            //SetConfig = 6
+            Console.WriteLine("\n--- Config Functions Menu (Admin) ---");
+            Console.WriteLine("1. Move Clock");
+            Console.WriteLine("2. Get Clock");
+            Console.WriteLine("3. Get Config");
+            Console.WriteLine("4. Initialize DB");
+            Console.WriteLine("5. Reset DB");
+            Console.WriteLine("6. Set Config");
+            Console.WriteLine("0. Back");
+
+            if (!Enum.TryParse(Console.ReadLine(), out BO.ConfigMenuOptions choice))
+            {
+                Console.WriteLine("Invalid choice!");
+                continue;
+            }
+            switch (choice)
+            {
+                case BO.ConfigMenuOptions.MoveClock:
+                    //implement
+                    break;
+                    case BO.ConfigMenuOptions.GetClock:
+                        //implement
+                        break;
+                    case BO.ConfigMenuOptions.GetConfig:
+                        //implement
+                        break;
+                    case BO.ConfigMenuOptions.InitializeDB:
+                        //implement
+                        break;
+                    case BO.ConfigMenuOptions.ResetDB:
+                        //implement
+                        break;
+                    case BO.ConfigMenuOptions.SetConfig:
+                        //implement
+                        break;
+                case BO.ConfigMenuOptions.Exit:
+                    back = true;
+                    break;
+                default:
+                    throw new BO.BlInvalidInputException($"Invalid option: {choice}");
+
+            }
+
+        }
     }
 }
+
 

@@ -34,9 +34,9 @@ internal class CourierImplementation : ICourier
     {
         return DeliveryManager.GetDeliverierLateForCourier(id, courierId);
     }
-    public void AssignDeliveryToCourier(int courierId, int orderId)
+    public void AssignOrderToCourier(int courierId, int orderId)
     {
-        OrderManager.(courierId, orderId);
+        OrderManager.CreateDeliveryForOrder(courierId, courierId, orderId); //?right?
     }
     public IEnumerable<BO.ClosedDeliveryInList> GetCloseDeliveriesForCourier(int id, int courierId)
     {

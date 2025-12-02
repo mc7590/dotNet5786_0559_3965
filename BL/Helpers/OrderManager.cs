@@ -255,7 +255,7 @@ internal static class OrderManager
     /// <param name="id">The person asking the date - manager / courier</param>
     /// <param name="courierId">The courier id assigned to deliver the order.</param>
     /// <param name="orderId">The order id to be delivered.</param>
-    internal static void ChooseOrderForDelivery(int id, int courierId, int orderId)
+    internal static void CreateDeliveryForOrder(int id, int courierId, int orderId)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
@@ -297,7 +297,7 @@ internal static class OrderManager
     /// <summary>
     /// gets list of open orders that a courier can chose from, with optional filtering and sorting
     /// </summary>
-    internal static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    internal static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
         DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
