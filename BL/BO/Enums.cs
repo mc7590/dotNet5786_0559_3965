@@ -129,3 +129,37 @@ public enum EnumOpenOrderInListField
     RemainingTime,
     ScheduleStatus
 }
+
+public enum MainMenuOption
+{
+    Exit = 0,
+    CourierFunctions = 1,
+    OrderFunctions = 2,
+    ConfigFunctions = 3
+}
+
+public enum CourierMenuOption
+{
+    Exit = 0,   
+    LogIn = 1, //should be forced to log in before using courier functions
+    AddCourier = 2,
+    ShowCourierById = 3,
+    ShowListOfCouriers = 4,
+    UpdateCourier = 5,
+    DeleteCourier = 6,
+    NumberOfDeliveriesOnTimeForCourier = 7,
+    NumberOfDeliveriesLateForCourier = 8,
+    AssignDeliveryToCourier = 9,
+    CloseDeliveriesForCourier = 10
+}
+
+public enum OrderMenuOptions
+{
+    Exit = 0,
+    AddOrder = 1,
+    ShowOrderById = 2,
+    ShowListOfOrders = 3,
+    UpdateOrder = 4,
+    DeleteOrder = 5,
+    GetOrderStatus = 6
+}
