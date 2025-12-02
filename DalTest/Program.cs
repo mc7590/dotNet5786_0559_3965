@@ -86,7 +86,7 @@ internal class Program
                         break;
 
                     default:
-                        throw new DalTestInvalidInputException($"Invalid option: {choice}");
+                        throw new DalInvalidInputException($"Invalid option: {choice}");
                 }
             }
             catch (Exception ex)
@@ -128,7 +128,7 @@ internal class Program
                         Console.Write("Enter ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Courier ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Courier ID={id} format");
                         }
                         Courier? existingID = s_dal!.Courier.Read(id);
                         if (existingID != null)
@@ -138,27 +138,27 @@ internal class Program
 
                         //if input is only spaces- will not throw exception here
                         Console.Write("Enter Name: ");
-                        string? name = Console.ReadLine() ?? throw new DalTestInvalidInputException("Name was not entered");
+                        string? name = Console.ReadLine() ?? throw new DalInvalidInputException("Name was not entered");
 
                         Console.Write("Enter Phone: ");
-                        string? phone = Console.ReadLine() ?? throw new DalTestInvalidInputException("Phone was not entered");
+                        string? phone = Console.ReadLine() ?? throw new DalInvalidInputException("Phone was not entered");
 
                         Console.Write("Enter Email: ");
-                        string? email = Console.ReadLine() ?? throw new DalTestInvalidInputException("Email was not entered");
+                        string? email = Console.ReadLine() ?? throw new DalInvalidInputException("Email was not entered");
 
                         Console.Write("Enter Password: ");
-                        string? password = Console.ReadLine() ?? throw new DalTestInvalidInputException("Password was not entered");
+                        string? password = Console.ReadLine() ?? throw new System.IO.InvalidDataException("Password was not entered");
 
                         Console.WriteLine("Enter true/false if the courier is active");
                         if (!bool.TryParse(Console.ReadLine(), out bool active))
                         {
-                            throw new DalTestInvalidInputException("Active status was not entered");
+                            throw new DalInvalidInputException("Active status was not entered");
                         }
 
                         Console.Write("Delivery method (Car, Motorcycle, Bicycle, Foot): ");
                         if (!Enum.TryParse(Console.ReadLine(), true, out EnumDeliveryMethod method))
                         {
-                            throw new DalTestInvalidInputException("Delivery method was not entered");
+                            throw new DalInvalidInputException("Delivery method was not entered");
                         }
 
                         Console.Write("Enter Max Personal Distance: ");
@@ -195,7 +195,7 @@ internal class Program
 
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Courier ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Courier ID={id} format");
                         }
                         Courier? existingID = s_dal.Courier.Read(id) ?? throw new DalDoesNotExistException($"Courier with ID={id} does not exist.");
                         Console.WriteLine(existingID);
@@ -219,7 +219,7 @@ internal class Program
                         Console.Write("Enter ID of courier to update: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Courier ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Courier ID={id} format");
                         }
                         Courier? existing = s_dal.Courier.Read(id) ?? throw new DalDoesNotExistException($"Courier with ID={id} does not exist.");
                         Console.WriteLine("Enter new values (leave empty to keep current value):");
@@ -283,7 +283,7 @@ internal class Program
                         Console.Write("Enter ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int delID))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Courier ID={delID} format");
+                            throw new DalInvalidInputException($"Invalid Courier ID={delID} format");
                         }
                         s_dal.Courier.Delete(delID);
                     }
@@ -301,7 +301,7 @@ internal class Program
                     back = true;
                     break;
                 default:
-                    throw new DalTestInvalidInputException($"Invalid option: {choice}");
+                    throw new DalInvalidInputException($"Invalid option: {choice}");
             }
 
 
@@ -340,7 +340,7 @@ internal class Program
                         Console.Write("Enter type of order: Regular, Express, Overnight");
                         if (!Enum.TryParse(Console.ReadLine(), true, out EnumOrderType newOrderType))
                         {
-                            throw new DalTestInvalidInputException($"Invalid order type");
+                            throw new DalInvalidInputException($"Invalid order type");
                         }
 
                         Console.WriteLine("Enter order description");
@@ -354,7 +354,7 @@ internal class Program
                         string? tryAddress = Console.ReadLine();
                         if (string.IsNullOrWhiteSpace(tryAddress))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Address format: {tryAddress}");
+                            throw new DalInvalidInputException($"Invalid Address format: {tryAddress}");
                         }
                         string newAddress = tryAddress!;
 
@@ -362,21 +362,21 @@ internal class Program
                         string? tryLatitude = Console.ReadLine();
                         if (!double.TryParse(tryLatitude, out double newLatitude))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Latitude format: {tryLatitude}");
+                            throw new DalInvalidInputException($"Invalid Latitude format: {tryLatitude}");
                         }
 
                         Console.WriteLine("Enter address longitude");
                         string? tryLongitude = Console.ReadLine();
                         if (!double.TryParse(tryLongitude, out double newLongitude))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Longitude format: {tryLongitude}");
+                            throw new DalInvalidInputException($"Invalid Longitude format: {tryLongitude}");
                         }
 
                         Console.WriteLine("Enter customer name");
                         string? tryCustomerName = Console.ReadLine();
                         if (string.IsNullOrWhiteSpace(tryCustomerName))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Customer Name format: {tryCustomerName}");
+                            throw new DalInvalidInputException($"Invalid Customer Name format: {tryCustomerName}");
                         }
                         string newCustomerName = tryCustomerName!;
 
@@ -384,7 +384,7 @@ internal class Program
                         string? tryCustomerPhone = Console.ReadLine();
                         if (string.IsNullOrWhiteSpace(tryCustomerPhone))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Customer Phone Number format {tryCustomerPhone}");
+                            throw new DalInvalidInputException($"Invalid Customer Phone Number format {tryCustomerPhone}");
                         }
                         string newCustomerPhone = tryCustomerPhone!;
 
@@ -435,7 +435,7 @@ internal class Program
 
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Order ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Order ID={id} format");
                         }
                         Order? existingID = s_dal.Order!.Read(id) ?? throw new DalDoesNotExistException($"Order with ID={id} does not exist.");
                         Console.WriteLine(existingID);
@@ -459,7 +459,7 @@ internal class Program
                         Console.Write("Enter ID of Order to update: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Order ID={id} format.");
+                            throw new DalInvalidInputException($"Invalid Order ID={id} format.");
                         }
                         Order? existing = s_dal.Order!.Read(id) ?? throw new DalDoesNotExistException($"Order with ID={id} does not exist.");
 
@@ -540,7 +540,7 @@ internal class Program
                         Console.Write("Enter ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int delID))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Order ID={delID} format");
+                            throw new DalInvalidInputException($"Invalid Order ID={delID} format");
                         }
                         s_dal.Order!.Delete(delID);
                     }
@@ -559,7 +559,7 @@ internal class Program
                     break;
 
                 default:
-                    throw new DalTestInvalidInputException($"Invalid option: {choice}");
+                    throw new DalInvalidInputException($"Invalid option: {choice}");
             }
         }
     }
@@ -596,7 +596,7 @@ internal class Program
                         Console.WriteLine("Enter Order ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int orderId))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Order ID={orderId} format");
+                            throw new DalInvalidInputException($"Invalid Order ID={orderId} format");
                         }
                         if (s_dal.Order!.Read(orderId) == null)
                         {
@@ -606,7 +606,7 @@ internal class Program
                         Console.WriteLine("Enter Courier ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int newCourierId))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Courier ID={newCourierId} format");
+                            throw new DalInvalidInputException($"Invalid Courier ID={newCourierId} format");
                         }
                         if (s_dal.Courier.Read(newCourierId) == null)
                         {
@@ -648,7 +648,7 @@ internal class Program
 
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Delivery ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Delivery ID={id} format");
                         }
                         Delivery? existingID = s_dal.Delivery!.Read(id) ?? throw new DalDoesNotExistException($"Delivery with ID={id} does not exist.");
                         Console.WriteLine(existingID);
@@ -672,7 +672,7 @@ internal class Program
                         Console.Write("Enter ID of Delivery to update: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Delivery ID={id} format");
+                            throw new DalInvalidInputException($"Invalid Delivery ID={id} format");
                         }
                         Delivery? existing = s_dal.Delivery!.Read(id) ?? throw new DalDoesNotExistException($"Delivery with ID={id} does not exist.");
 
@@ -720,7 +720,7 @@ internal class Program
                         Console.Write("Enter ID: ");
                         if (!int.TryParse(Console.ReadLine(), out int delID))
                         {
-                            throw new DalTestInvalidInputException($"Invalid Delivery ID={delID} format");
+                            throw new DalInvalidInputException($"Invalid Delivery ID={delID} format");
                         }
                         s_dal.Delivery!.Delete(delID);
                     }
@@ -738,7 +738,7 @@ internal class Program
                     back = true;
                     break;
                 default:
-                    throw new DalTestInvalidInputException($"Invalid option: {choice}");
+                    throw new DalInvalidInputException($"Invalid option: {choice}");
             }
         }
     }
@@ -767,7 +767,7 @@ internal class Program
             string? input = Console.ReadLine();
             if (!Enum.TryParse(input, true, out ConfigMenuOption choice))
             {
-                throw new DalTestInvalidInputException($"Invalid option: {input}");
+                throw new DalInvalidInputException($"Invalid option: {input}");
             }
             switch (choice)
             {
@@ -804,7 +804,7 @@ internal class Program
                     exit = true;
                     break;
                 default:
-                    throw new DalTestInvalidInputException($"Invalid option: {choice}");
+                    throw new DalInvalidInputException($"Invalid option: {choice}");
             }
         }
     }
@@ -812,12 +812,12 @@ internal class Program
     /// <summary>
     /// Reset all data and config
     /// </summary>
-    /// <exception cref="DalTestInvalidInputException">in case DAL is not initialized yet</exception> 
+    /// <exception cref="DalInvalidInputException">in case DAL is not initialized yet</exception> 
     private static void ResetAll()
     {
         if (s_dal.Courier == null || s_dal.Order == null || s_dal.Delivery == null || s_dal.Config == null)
         {
-            throw new DalTestInvalidInputException("Error: DAL not initialized yet!");
+            throw new DalInvalidInputException("Error: DAL not initialized yet!");
         }
         s_dal.Courier.DeleteAll(); //stage 1
         s_dal.Order.DeleteAll(); //stage 1
@@ -846,7 +846,7 @@ internal class Program
             string? inputChoice = Console.ReadLine();
             if (!Enum.TryParse(inputChoice, true, out SetConfigParametersOption choice))
             {
-                throw new DalTestInvalidInputException($"Invalid option: {inputChoice}");
+                throw new DalInvalidInputException($"Invalid option: {inputChoice}");
             }
             switch (choice)
             {
@@ -920,7 +920,7 @@ internal class Program
             string? inputChoice = Console.ReadLine();
             if (!Enum.TryParse(inputChoice, true, out GetConfigParametersOption choice))
             {
-               throw new DalTestInvalidInputException($"Invalid option: {inputChoice}");
+               throw new DalInvalidInputException($"Invalid option: {inputChoice}");
             }
             switch (choice)
             {

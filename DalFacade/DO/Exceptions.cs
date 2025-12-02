@@ -23,17 +23,13 @@ public class DalAlreadyExistsException : Exception
 /// Exception thrown when invalid input is provided to a data-access-layer(DAL) method (in DalTest).
 /// </summary>
 [Serializable]
-public class DalTestInvalidInputException : Exception
+public class DalInvalidInputException : Exception
 {
-    public DalTestInvalidInputException(): base() { }
-    public DalTestInvalidInputException(string? message) : base(message) { }
-    public DalTestInvalidInputException(string message, Exception inner) : base(message, inner) { }
+    public DalInvalidInputException(string? message) : base(message) { }
 }
 
+[Serializable]
 public class DalXMLFileLoadCreateException : Exception
 {   
-    public DalXMLFileLoadCreateException() : base() { }
     public DalXMLFileLoadCreateException(string? message) : base(message) { }
-    public DalXMLFileLoadCreateException(string message, Exception inner) : base(message, inner) { }  
-
 }
