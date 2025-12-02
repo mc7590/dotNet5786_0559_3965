@@ -1,7 +1,7 @@
 ﻿
 namespace BlImplementation;
 using BlApi;
-using BO;
+//using BO;
 using Helpers;
 
 internal class OrderImplementation : IOrder
