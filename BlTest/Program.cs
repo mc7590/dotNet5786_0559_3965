@@ -3,7 +3,6 @@
 //using BO;
 //using DO;
 
-using BO;
 
 namespace BlTest;
 
@@ -66,7 +65,7 @@ public class Program
                         break;
 
                     default:
-                        throw new BlInvalidInputException($"Invalid option: {choice}");
+                        throw new BO.BlInvalidInputException($"Invalid option: {choice}");
                 }
             }
             catch (Exception ex)
