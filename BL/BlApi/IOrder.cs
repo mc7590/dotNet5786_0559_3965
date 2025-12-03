@@ -41,7 +41,7 @@ public interface IOrder
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList
     /// </summary>
-    IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
+    IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null);
 
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList

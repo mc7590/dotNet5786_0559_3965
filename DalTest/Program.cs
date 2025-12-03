@@ -239,13 +239,7 @@ internal class Program
                         Console.Write($"Password ({existing.Password}): ");
                         string? password = Console.ReadLine();
                         if (string.IsNullOrWhiteSpace(password)) password = existing.Password;
-
-                        Console.WriteLine($"Active ({existing.Active}): ");
-                        if (!bool.TryParse(Console.ReadLine(), out bool active))
-                        {
-                            active = existing.Active;
-                        }
-
+                         
                         Console.Write($"Delivery method ({existing.DeliveryMethod}): ");
                         string? methodInput = Console.ReadLine();
                         EnumDeliveryMethod method = existing.DeliveryMethod;
@@ -266,9 +260,9 @@ internal class Program
                             CourierPhone: phone,
                             Email: email,
                             Password: password,
-                            Active: active,
+                            Active: existing.Active,
                             DeliveryMethod: method,
-                            StartedWorking: existing.StartedWorking, //Stays the same
+                            StartedWorking: existing.StartedWorking, 
                             MaxPersonalDistance: maxDist
                         );
 

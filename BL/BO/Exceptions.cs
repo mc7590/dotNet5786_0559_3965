@@ -56,3 +56,12 @@ public class BlUnauthorizedException : Exception
     public BlUnauthorizedException(string message, Exception innerException)
                 : base(message, innerException) { }
 }
+/// <summary>
+/// Exception thrown when the BL layer is temporarily unavailable, such as during simulator operation.
+/// </summary>
+public class BLTemporaryNotAvailableException : Exception
+{
+    public BLTemporaryNotAvailableException(string? message) : base(message) { }
+    public BLTemporaryNotAvailableException(string message, Exception innerException)
+                : base(message, innerException) { }
+}
