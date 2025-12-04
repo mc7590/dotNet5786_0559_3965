@@ -4,7 +4,7 @@ using System.Reflection;
 using System.Text;
 namespace Helpers;
 
-internal static class Tools
+public static class Tools
 {
     /// <summary>
     /// Helper method to convert any object of type T to a string representation of its properties and their values.

@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using Helpers;
 
 namespace BlTest;
+using Helpers;
 
 class Program
 {
@@ -112,11 +112,19 @@ class Program
 
                     Console.Write($"ManagerId ({currentCfg.ManagerId}): ");
                     input = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(input) && int.TryParse(input, out int managerId)) currentCfg.ManagerId = managerId;
-
+                    if (!string.IsNullOrWhiteSpace(input) && int.TryParse(input, out int managerId))
+                    {
+                        Tools.IsValidId(managerId);
+                        currentCfg.ManagerId = managerId;
+                    }
                     Console.Write($"ManagerPassword ({currentCfg.ManagerPassword}): ");
                     input = Console.ReadLine();
-                    if (!string.IsNullOrWhiteSpace(input)) currentCfg.ManagerPassword = input;
+                    if (!string.IsNullOrWhiteSpace(input)) 
+                    { 
+                        if(!Tools.IsStrongPassword(input))
+                            throw new BO.BlInvalidInputException("Password is not strong enough.");
+                        currentCfg.ManagerPassword = input; 
+                    }
 
                     Console.Write($"CompanyAddress ({currentCfg.CompanyAddress}): ");
                     input = Console.ReadLine();
@@ -359,7 +367,8 @@ class Program
                     if (!int.TryParse(Console.ReadLine(), out int asker2)) break;
                     IEnumerable<BO.CourierInList>? list = s_bl.Courier.GetCouriersInList(asker2);
                     if (list == null) { Console.WriteLine("No couriers found."); break; }
-                    foreach (var c in list) Console.WriteLine(c);
+                    foreach (var c in list) 
+                        Console.WriteLine(c);
                     break;
                 case "3":
                     Console.Write("Asker ID: ");
