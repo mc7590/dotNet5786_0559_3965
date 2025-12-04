@@ -31,7 +31,7 @@ public interface IOrder
     /// Attempting to request an update of a DO.Delivery from a data layer
     /// This function can be done by: The courier who makes the delivery
     /// </summary>
-    void EndOrderStatus(int id, int orderId, int deliveryId);
+    void EndOrderStatus(int id, int courierId, int deliveryId);
 
     /// <summary>
     /// Attempting to add (Create) a new DO.Delivery from a data layer

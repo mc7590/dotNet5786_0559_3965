@@ -40,9 +40,9 @@ internal class OrderImplementation : IOrder
         OrderManager.CancelOrder(id, orderId);
     }
 
-    public void EndOrderStatus(int id, int orderId, int deliveryId)
+    public void EndOrderStatus(int id, int courierId, int deliveryId)
     {
-        DeliveryManager.EndOrderStatus(id, orderId, deliveryId);
+        DeliveryManager.EndOrderStatus(id, courierId, deliveryId);
     }
 
     public void CreateDeliveryForOrder(int id, int courierId, int orderId)

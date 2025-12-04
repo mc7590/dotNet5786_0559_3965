@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
   <NextOrderId>1050</NextOrderId>
-  <NextDeliveryId>1040</NextDeliveryId>
-  <Clock>04/12/2025 15:07:34</Clock>
-  <ManagerId>123456789</ManagerId>
-  <ManagerPassword>1234</ManagerPassword>
+  <NextDeliveryId>1039</NextDeliveryId>
+  <Clock>04/12/2025 19:20:56</Clock>
+  <ManagerId>0</ManagerId>
+  <ManagerPassword>BDI846924?/</ManagerPassword>
   <CompanyAddress></CompanyAddress>
   <Latitude>0</Latitude>
   <Longitude>0</Longitude>

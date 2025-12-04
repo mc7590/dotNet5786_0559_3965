@@ -8,7 +8,7 @@ internal static class Config
     private static int nextOrderId = startOrderId;
     internal static int NextOrderId { get => nextOrderId++; }
 
-    internal const int startDeliveryId = 1000;
+    internal const int startDeliveryId = 100000;
     private static int nextDeliveryId = startDeliveryId;
     internal static int NextDeliveryId { get => nextDeliveryId++; }
     internal static DateTime Clock { get; set; } = DateTime.Now;

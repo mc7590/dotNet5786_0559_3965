@@ -228,7 +228,7 @@ class Program
                 case "4":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int askerId4)) break;
-                    BO.Order existingOrder = InputNewOrder();
+                    BO.Order existingOrder =  InputNewOrder();
                     s_bl.Order.Update(askerId4, existingOrder);
                     Console.WriteLine("Order updated.");
                     break;
@@ -255,23 +255,26 @@ class Program
                     s_bl.Order.Create(askerId7, newOrder);
                     Console.WriteLine("Order added.");
                     break;
+
                 case "8":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int askerId8)) break;
-                    Console.Write("Order ID: ");
-                    if (!int.TryParse(Console.ReadLine(), out int orderId8)) break;
+                    Console.Write("Courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId8)) break;
                     Console.Write("Delivery ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int deliveryId8)) break;
-                    s_bl.Order.EndOrderStatus(askerId8, orderId8, deliveryId8);
+
+                    s_bl.Order.EndOrderStatus(askerId8, courierId8, deliveryId8);
                     Console.WriteLine("Order treatment ended.");
                     break;
+
                 case "9":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int askerId9)) break;
                     Console.Write("Courier ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int courierId9)) break;
                     var closed = s_bl.Order.GetClosedDeliveriesInListsToCourier(askerId9, courierId9);
-                    foreach (var c in closed) Console.WriteLine(c);
+                    foreach (var c in closed) Console.WriteLine(Tools.ToStringProperty(c));
                     break;
                 case "10":
                     Console.Write("Asker ID: ");
@@ -279,7 +282,7 @@ class Program
                     Console.Write("Courier ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int courierId10)) break;
                     var open = s_bl.Order.GetListOfOpenOrderToChoose(askerId10, courierId10);
-                    foreach (var o in open) Console.WriteLine(o);
+                    foreach (var o in open) Console.WriteLine(Tools.ToStringProperty(o));
                     break;
                 default:
                     Console.WriteLine("Invalid option.");
@@ -290,6 +293,9 @@ class Program
 
     public static BO.Order InputNewOrder()
     {
+        //Console.Write("Enter Order Id to update: ");
+        //int.TryParse(Console.ReadLine(), out int newId);
+
         Console.Write("Enter Order Type (Standard / Express / HeavyLoad): ");
         Enum.TryParse(Console.ReadLine(), true, out BO.EnumOrderType orderType);
 

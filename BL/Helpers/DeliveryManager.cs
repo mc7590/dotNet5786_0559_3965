@@ -43,8 +43,6 @@ internal static class DeliveryManager
         IDal dal = Factory.Get;
         DO.Order order = dal.Order.Read(id) ?? throw new BO.BlDoesNotExistException($"Order with ID {id} does not exist.");
 
-        // אחזר את כל המשלוחים המשויכים להזמנה זו
-        // הנחה: קיימת שיטה לאחזור משלוחים לפי מזהה הזמנה
         IEnumerable<DO.Delivery> deliveries = dal.Delivery.ReadAll(d => d.OrderId == id);
 
         //case: finished delivery
@@ -229,18 +227,18 @@ internal static class DeliveryManager
     /// make delivery end for given order and delivery IDs
     /// </summary>
     /// <param name="id">id of person asking data</param>
-    /// <param name="orderId">order id</param>
+    /// <param name="courierId">order id</param>
     /// <param name="deliveryId">delivery id to be ended</param>
-    internal static void EndOrderStatus(int id, int orderId, int deliveryId)
+    internal static void EndOrderStatus(int id, int courierId, int deliveryId)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
-        int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
-        int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
+            //int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
+            //int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         Tools.IsManagerOrCourier(id, s_dal.Delivery.Read(deliveryId)!.CourierId);
 
         //check if the order exists
-        if (s_dal.Order.Read(orderId) == null)
-            throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        if (s_dal.Courier.Read(courierId) == null)
+            throw new BO.BlDoesNotExistException($"Order with ID={courierId} does Not exist");
 
         //try to update the delivery end status and time
         DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
