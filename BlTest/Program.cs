@@ -21,18 +21,25 @@ class Program
 
             string? choice = Console.ReadLine();
             if (choice == "0") break;
-
-            switch (choice)
+            try
             {
-                case "1": AdminMenu(); break;
-                case "2": OrderMenu(); break;
-                case "3": CourierMenu(); break;
-                default: Console.WriteLine("Invalid choice."); break;
+                switch (choice)
+                {
+                    case "1": AdminMenu(); break;
+                    case "2": OrderMenu(); break;
+                    case "3": CourierMenu(); break;
+                    default: Console.WriteLine("Invalid choice."); break;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
             }
         }
 
-        Console.WriteLine("Exiting BlTest.");
+            Console.WriteLine("Exiting BlTest.");
     }
+
 
     #region Admin Menu
     static void AdminMenu()
@@ -52,119 +59,117 @@ class Program
             string? opt = Console.ReadLine();
             if (opt == "0") return;
 
-            try
+
+            switch (opt)
             {
-                switch (opt)
-                {
-                    case "1":
-                        s_bl.Admin.ResetDB();
-                        Console.WriteLine("ResetDB called.");
-                        break;
-                    case "2":
-                        s_bl.Admin.InitializeDB();
-                        Console.WriteLine("InitializeDB called.");
-                        break;
-                    case "3":
-                        Console.Write("Forward by TimeUnit (Minute / Hour / Day / Month / Year): ");
-                        string? unitStr = Console.ReadLine();
+                case "1":
+                    s_bl.Admin.ResetDB();
+                    Console.WriteLine("ResetDB called.");
+                    break;
+                case "2":
+                    s_bl.Admin.InitializeDB();
+                    Console.WriteLine("InitializeDB called.");
+                    break;
+                case "3":
+                    Console.Write("Forward by TimeUnit, Enter choice: (Minute / Hour / Day / Month / Year): ");
+                    string? unitStr = Console.ReadLine();
 
-                        if (Enum.TryParse(unitStr, true, out BO.EnumTimeUnit unit))
-                        {
-                            s_bl.Admin.ForwardClock(unit);
-                            Console.WriteLine("Clock forwarded.");
-                        }
-                        else
-                        {
-                            Console.WriteLine("Invalid TimeUnit.");
-                        }
-                        break;
-                    case "4":
-                        Console.WriteLine($"Current Clock: {s_bl.Admin.GetClock()}");
-                        break;
-                    case "5":
-                        var cfg = s_bl.Admin.GetConfig();
-                        //Console.WriteLine($"Max Range = {cfg.MaxRange}");
-                        Console.WriteLine($"Manager Id = {cfg.ManagerId}");
-                        Console.WriteLine($"Manager Password = {cfg.ManagerPassword}");
-                        Console.WriteLine($"Company Address = {cfg.CompanyAddress}");
-                        Console.WriteLine($"Latitude = {cfg.Latitude}");
-                        Console.WriteLine($"Longitude = {cfg.Longitude}");
-                        Console.WriteLine($"MaxDeliveryDistanceKm = {cfg.MaxDeliveryDistance}");
-                        Console.WriteLine($"AvgCarSpeedKmH = {cfg.AveCarSpeedKmH}");
-                        Console.WriteLine($"AvgMotorcycleSpeedKmH = {cfg.AveMotorcycleSpeedKmH}");
-                        Console.WriteLine($"AvgBicycleSpeedKmH = {cfg.AveBicycleSpeedKmH}");
-                        Console.WriteLine($"AvgWalkingSpeedKmH = {cfg.AveWalkingSpeedKmH}");
-                        Console.WriteLine($"MaxDeliveryTimeRange = {cfg.GetMaxDeliveryTime}");
-                        Console.WriteLine($"RiskRange = {cfg.RiskRange}");
-                        Console.WriteLine($"InactivityTimeRange = {cfg.InactivityThreshold}");
-                        break;
-                    case "6":
-                        var currentCfg = s_bl.Admin.GetConfig();
-                        Console.WriteLine("Press ENTER to leave a value unchanged.");
+                    if (Enum.TryParse(unitStr, true, out BO.EnumTimeUnit unit))
+                    {
+                        s_bl.Admin.ForwardClock(unit);
+                        Console.WriteLine("Clock forwarded.");
+                    }
+                    else
+                    {
+                        Console.WriteLine("Invalid TimeUnit.");
+                    }
+                    break;
+                case "4":
+                    Console.WriteLine($"Current Clock: {s_bl.Admin.GetClock()}");
+                    break;
+                case "5":
+                    var cfg = s_bl.Admin.GetConfig();
+                    //Console.WriteLine($"Max Range = {cfg.MaxRange}");
+                    Console.WriteLine($"Manager Id = {cfg.ManagerId}");
+                    Console.WriteLine($"Manager Password = {cfg.ManagerPassword}");
+                    Console.WriteLine($"Company Address = {cfg.CompanyAddress}");
+                    Console.WriteLine($"Latitude = {cfg.Latitude}");
+                    Console.WriteLine($"Longitude = {cfg.Longitude}");
+                    Console.WriteLine($"MaxDeliveryDistanceKm = {cfg.MaxDeliveryDistance}");
+                    Console.WriteLine($"AvgCarSpeedKmH = {cfg.AveCarSpeedKmH}");
+                    Console.WriteLine($"AvgMotorcycleSpeedKmH = {cfg.AveMotorcycleSpeedKmH}");
+                    Console.WriteLine($"AvgBicycleSpeedKmH = {cfg.AveBicycleSpeedKmH}");
+                    Console.WriteLine($"AvgWalkingSpeedKmH = {cfg.AveWalkingSpeedKmH}");
+                    Console.WriteLine($"MaxDeliveryTimeRange = {cfg.GetMaxDeliveryTime}");
+                    Console.WriteLine($"RiskRange = {cfg.RiskRange}");
+                    Console.WriteLine($"InactivityTimeRange = {cfg.InactivityThreshold}");
+                    break;
+                case "6":
+                    var currentCfg = s_bl.Admin.GetConfig();
+                    Console.WriteLine("Press ENTER to leave a value unchanged.");
 
-                        string? input;
+                    string? input;
 
-                        Console.Write($"ManagerId ({currentCfg.ManagerId}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && int.TryParse(input, out int managerId)) currentCfg.ManagerId = managerId;
+                    Console.Write($"ManagerId ({currentCfg.ManagerId}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && int.TryParse(input, out int managerId)) currentCfg.ManagerId = managerId;
 
-                        Console.Write($"ManagerPassword ({currentCfg.ManagerPassword}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input)) currentCfg.ManagerPassword = input;
+                    Console.Write($"ManagerPassword ({currentCfg.ManagerPassword}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input)) currentCfg.ManagerPassword = input;
 
-                        Console.Write($"CompanyAddress ({currentCfg.CompanyAddress}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input)) currentCfg.CompanyAddress = input;
+                    Console.Write($"CompanyAddress ({currentCfg.CompanyAddress}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input)) currentCfg.CompanyAddress = input;
 
-                        Console.Write($"Latitude ({currentCfg.Latitude}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double lat)) currentCfg.Latitude = lat;
+                    Console.Write($"Latitude ({currentCfg.Latitude}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double lat)) currentCfg.Latitude = lat;
 
-                        Console.Write($"Longitude ({currentCfg.Longitude}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double lon)) currentCfg.Longitude = lon;
+                    Console.Write($"Longitude ({currentCfg.Longitude}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double lon)) currentCfg.Longitude = lon;
 
-                        Console.Write($"MaxDeliveryDistance ({currentCfg.MaxDeliveryDistance}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double maxDist)) currentCfg.MaxDeliveryDistance = maxDist;
+                    Console.Write($"MaxDeliveryDistance ({currentCfg.MaxDeliveryDistance}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double maxDist)) currentCfg.MaxDeliveryDistance = maxDist;
 
-                        Console.Write($"AvgCarSpeedKmH ({currentCfg.AveCarSpeedKmH}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double carSpeed)) currentCfg.AveCarSpeedKmH = carSpeed;
+                    Console.Write($"AvgCarSpeedKmH ({currentCfg.AveCarSpeedKmH}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double carSpeed)) currentCfg.AveCarSpeedKmH = carSpeed;
 
-                        Console.Write($"AvgMotorcycleSpeedKmH ({currentCfg.AveMotorcycleSpeedKmH}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double motoSpeed)) currentCfg.AveMotorcycleSpeedKmH = motoSpeed;
+                    Console.Write($"AvgMotorcycleSpeedKmH ({currentCfg.AveMotorcycleSpeedKmH}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double motoSpeed)) currentCfg.AveMotorcycleSpeedKmH = motoSpeed;
 
-                        Console.Write($"AvgBicycleSpeedKmH ({currentCfg.AveBicycleSpeedKmH}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double bikeSpeed)) currentCfg.AveBicycleSpeedKmH = bikeSpeed;
+                    Console.Write($"AvgBicycleSpeedKmH ({currentCfg.AveBicycleSpeedKmH}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double bikeSpeed)) currentCfg.AveBicycleSpeedKmH = bikeSpeed;
 
-                        Console.Write($"AvgWalkingSpeedKmH ({currentCfg.AveWalkingSpeedKmH}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double walkSpeed)) currentCfg.AveWalkingSpeedKmH = walkSpeed;
+                    Console.Write($"AvgWalkingSpeedKmH ({currentCfg.AveWalkingSpeedKmH}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && double.TryParse(input, out double walkSpeed)) currentCfg.AveWalkingSpeedKmH = walkSpeed;
 
-                        Console.Write($"MaxDeliveryTime (hh:mm:ss) ({currentCfg.GetMaxDeliveryTime}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan maxTime)) currentCfg.GetMaxDeliveryTime = maxTime;
+                    Console.Write($"MaxDeliveryTime (hh:mm:ss) ({currentCfg.GetMaxDeliveryTime}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan maxTime)) currentCfg.GetMaxDeliveryTime = maxTime;
 
-                        Console.Write($"RiskRange (hh:mm:ss) ({currentCfg.RiskRange}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan risk)) currentCfg.RiskRange = risk;
+                    Console.Write($"RiskRange (hh:mm:ss) ({currentCfg.RiskRange}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan risk)) currentCfg.RiskRange = risk;
 
-                        Console.Write($"InactivityThreshold (hh:mm:ss) ({currentCfg.InactivityThreshold}): ");
-                        input = Console.ReadLine();
-                        if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan inactivity)) currentCfg.InactivityThreshold = inactivity;
+                    Console.Write($"InactivityThreshold (hh:mm:ss) ({currentCfg.InactivityThreshold}): ");
+                    input = Console.ReadLine();
+                    if (!string.IsNullOrWhiteSpace(input) && TimeSpan.TryParse(input, out TimeSpan inactivity)) currentCfg.InactivityThreshold = inactivity;
 
-                        s_bl.Admin.SetConfig(currentCfg);
-                        Console.WriteLine("Configuration updated successfully.");
-                        break;
-                    default:
-                        Console.WriteLine("Invalid option.");
-                        break;
-                }
+                    s_bl.Admin.SetConfig(currentCfg);
+                    Console.WriteLine("Configuration updated successfully.");
+                    break;
+                default:
+                    Console.WriteLine("Invalid option.");
+                    break;
             }
-            catch (Exception ex) { PrintBlException(ex); }
+
         }
     }
     #endregion
@@ -191,91 +196,87 @@ class Program
             string? opt = Console.ReadLine();
             if (opt == "0") return;
 
-            try
+            switch (opt)
             {
-                switch (opt)
-                {
-                    case "1":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId1)) break;
-                        var summary = s_bl.Order.GetAmountOfOrdersByStatus(askerId1);
-                        foreach (var s in summary) Console.WriteLine(s);
-                        break;
-                    case "2":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId2)) break;
-                        var ordersList = s_bl.Order.GetOrderInList(askerId2, null);
-                        foreach (var o in ordersList) Console.WriteLine(o);
-                        break;
-                    case "3":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId3)) break;
-                        Console.Write("Order ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int orderId3)) break;
-                        Console.WriteLine(s_bl.Order.Read(askerId3, orderId3));
-                        break;
-                    case "4":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId4)) break;
-                        BO.Order existingOrder = InputNewOrder();
-                        s_bl.Order.Update(askerId4, existingOrder);
-                        Console.WriteLine("Order updated.");
-                        break;
-                    case "5":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId5)) break;
-                        Console.Write("Order ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int orderId5)) break;
-                        s_bl.Order.CancelOrder(askerId5, orderId5);
-                        Console.WriteLine("Order canceled.");
-                        break;
-                    case "6":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId6)) break;
-                        Console.Write("Order ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int orderId6)) break;
-                        s_bl.Order.Delete(askerId6, orderId6);
-                        Console.WriteLine("Order deleted.");
-                        break;
-                    case "7":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId7)) break;
-                        var newOrder = InputNewOrder();
-                        s_bl.Order.Create(askerId7, newOrder);
-                        Console.WriteLine("Order added.");
-                        break;
-                    case "8":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId8)) break;
-                        Console.Write("Order ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int orderId8)) break;
-                        Console.Write("Delivery ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int deliveryId8)) break;
-                        s_bl.Order.EndOrderStatus(askerId8, orderId8, deliveryId8);
-                        Console.WriteLine("Order treatment ended.");
-                        break;
-                    case "9":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId9)) break;
-                        Console.Write("Courier ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int courierId9)) break;
-                        var closed = s_bl.Order.GetClosedDeliveriesInListsToCourier(askerId9, courierId9);
-                        foreach (var c in closed) Console.WriteLine(c);
-                        break;
-                    case "10":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int askerId10)) break;
-                        Console.Write("Courier ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int courierId10)) break;
-                        var open = s_bl.Order.GetListOfOpenOrderToChoose(askerId10, courierId10);
-                        foreach (var o in open) Console.WriteLine(o);
-                        break;
-                    default:
-                        Console.WriteLine("Invalid option.");
-                        break;
-                }
+                case "1":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId1)) break;
+                    var summary = s_bl.Order.GetAmountOfOrdersByStatus(askerId1);
+                    foreach (var s in summary) Console.WriteLine(s);
+                    break;
+                case "2":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId2)) break;
+                    var ordersList = s_bl.Order.GetOrderInList(askerId2, null);
+                    foreach (var o in ordersList) Console.WriteLine(o);
+                    break;
+                case "3":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId3)) break;
+                    Console.Write("Order ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int orderId3)) break;
+                    Console.WriteLine(s_bl.Order.Read(askerId3, orderId3));
+                    break;
+                case "4":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId4)) break;
+                    BO.Order existingOrder = InputNewOrder();
+                    s_bl.Order.Update(askerId4, existingOrder);
+                    Console.WriteLine("Order updated.");
+                    break;
+                case "5":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId5)) break;
+                    Console.Write("Order ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int orderId5)) break;
+                    s_bl.Order.CancelOrder(askerId5, orderId5);
+                    Console.WriteLine("Order canceled.");
+                    break;
+                case "6":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId6)) break;
+                    Console.Write("Order ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int orderId6)) break;
+                    s_bl.Order.Delete(askerId6, orderId6);
+                    Console.WriteLine("Order deleted.");
+                    break;
+                case "7":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId7)) break;
+                    var newOrder = InputNewOrder();
+                    s_bl.Order.Create(askerId7, newOrder);
+                    Console.WriteLine("Order added.");
+                    break;
+                case "8":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId8)) break;
+                    Console.Write("Order ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int orderId8)) break;
+                    Console.Write("Delivery ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int deliveryId8)) break;
+                    s_bl.Order.EndOrderStatus(askerId8, orderId8, deliveryId8);
+                    Console.WriteLine("Order treatment ended.");
+                    break;
+                case "9":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId9)) break;
+                    Console.Write("Courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId9)) break;
+                    var closed = s_bl.Order.GetClosedDeliveriesInListsToCourier(askerId9, courierId9);
+                    foreach (var c in closed) Console.WriteLine(c);
+                    break;
+                case "10":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId10)) break;
+                    Console.Write("Courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId10)) break;
+                    var open = s_bl.Order.GetListOfOpenOrderToChoose(askerId10, courierId10);
+                    foreach (var o in open) Console.WriteLine(o);
+                    break;
+                default:
+                    Console.WriteLine("Invalid option.");
+                    break;
             }
-            catch (Exception ex) { PrintBlException(ex); }
         }
     }
 
@@ -342,60 +343,56 @@ class Program
             string? opt = Console.ReadLine();
             if (opt == "0") return;
 
-            try
+            switch (opt)
             {
-                switch (opt)
-                {
-                    case "1":
-                        Console.Write("Courier ID (empty = null): ");
-                        string? idStr = Console.ReadLine();
-                        string? cId = string.IsNullOrWhiteSpace(idStr) ? null : idStr;
-                        Console.Write("Password: ");
-                        string? pwd = Console.ReadLine();
-                        var user = s_bl.Courier.Login(cId ?? string.Empty, pwd ?? string.Empty);
-                        Console.WriteLine(user);
-                        break;
-                    case "2":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int asker2)) break;
-                        IEnumerable<BO.CourierInList>? list = s_bl.Courier.GetCouriersInList(asker2);
-                        if (list == null) { Console.WriteLine("No couriers found."); break; }
-                        foreach (var c in list) Console.WriteLine(c);
-                        break;
-                    case "3":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int asker3)) break;
-                        Console.Write("Courier ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int courierId3)) break;
-                        Console.WriteLine(s_bl.Courier.Read(asker3, courierId3));
-                        break;
-                    case "4":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int asker4)) break;
-                        var newCourier = InputNewCourier();
-                        s_bl.Courier.Create(asker4, newCourier);
-                        Console.WriteLine("Courier added.");
-                        break;
-                    case "5":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int asker5)) break;
-                        var updated = InputNewCourier();
-                        s_bl.Courier.Update(asker5, updated);
-                        Console.WriteLine("Courier updated.");
-                        break;
-                    case "6":
-                        Console.Write("Asker ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int asker6)) break;
-                        Console.Write("Courier ID: ");
-                        if (!int.TryParse(Console.ReadLine(), out int courierId6)) break;
-                        s_bl.Courier.Delete(asker6, courierId6);
-                        Console.WriteLine("Courier deleted.");
-                        break;
-                }
+                case "1":
+                    Console.Write("Courier ID (empty = null): ");
+                    string? idStr = Console.ReadLine();
+                    string? cId = string.IsNullOrWhiteSpace(idStr) ? null : idStr;
+                    Console.Write("Password: ");
+                    string? pwd = Console.ReadLine();
+                    var user = s_bl.Courier.Login(cId ?? string.Empty, pwd ?? string.Empty);
+                    Console.WriteLine(user);
+                    break;
+                case "2":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int asker2)) break;
+                    IEnumerable<BO.CourierInList>? list = s_bl.Courier.GetCouriersInList(asker2);
+                    if (list == null) { Console.WriteLine("No couriers found."); break; }
+                    foreach (var c in list) Console.WriteLine(c);
+                    break;
+                case "3":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int asker3)) break;
+                    Console.Write("Courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId3)) break;
+                    Console.WriteLine(s_bl.Courier.Read(asker3, courierId3));
+                    break;
+                case "4":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int asker4)) break;
+                    var newCourier = InputNewCourier();
+                    s_bl.Courier.Create(asker4, newCourier);
+                    Console.WriteLine("Courier added.");
+                    break;
+                case "5":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int asker5)) break;
+                    var updated = InputNewCourier();
+                    s_bl.Courier.Update(asker5, updated);
+                    Console.WriteLine("Courier updated.");
+                    break;
+                case "6":
+                    Console.Write("Asker ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int asker6)) break;
+                    Console.Write("Courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId6)) break;
+                    s_bl.Courier.Delete(asker6, courierId6);
+                    Console.WriteLine("Courier deleted.");
+                    break;
             }
-            catch (Exception ex) { PrintBlException(ex); }
         }
-    }
+    }    
 
     public static BO.Courier InputNewCourier()
     {

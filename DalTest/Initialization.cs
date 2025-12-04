@@ -306,7 +306,7 @@ public static class Initialization
         Console.WriteLine("Creating Deliveries...");
         createDeliveries();
 
-        /// Finalization
+        /// Finish Initioalization
         Console.WriteLine("Initialization completed successfully");
 
     }

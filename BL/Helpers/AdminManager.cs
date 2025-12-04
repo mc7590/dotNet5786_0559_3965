@@ -55,7 +55,7 @@ internal static class AdminManager //stage 4
     internal static BO.Config GetConfig() //stage 4
     => new BO.Config()
     {
-        ManagerId = s_dal.Config.ManagerId,
+        ManagerId = s_dal.Config.ManagerId, 
         ManagerPassword = s_dal.Config.ManagerPassword,
         CompanyAddress = s_dal.Config.CompanyAddress,
         Latitude = s_dal.Config.Latitude,
@@ -79,6 +79,9 @@ internal static class AdminManager //stage 4
     [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     internal static void SetConfig(BO.Config configuration) //stage 4
     {
+
+        //send to func: first check new val, then set config
+
         bool configChanged = false; // stage 5
 
         if (s_dal.Config.ManagerId != configuration.ManagerId) //stage 4

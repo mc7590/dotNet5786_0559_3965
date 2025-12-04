@@ -78,7 +78,6 @@ internal static class Config
         set => XMLTools.SetConfigDoubleVal(s_data_config_xml, "AveWalkingSpeedKmH", value);
     }
 
-    //no get/set ?
     internal static TimeSpan GetMaxDeliveryTime = TimeSpan.FromHours(2);
     internal static TimeSpan RiskRange = TimeSpan.FromHours(1.5);
     internal static TimeSpan InactivityThreshold = TimeSpan.FromDays(30);
