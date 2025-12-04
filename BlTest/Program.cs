@@ -228,7 +228,10 @@ class Program
                 case "4":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int askerId4)) break;
-                    BO.Order existingOrder =  InputNewOrder();
+                    Console.WriteLine("Enter order ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int orderId4)) break;
+                    BO.Order existing = s_bl.Order.Read(askerId4,orderId4)?? throw new Exception("Order not found.");
+                    BO.Order existingOrder =  InputUpdateOrder(existing);
                     s_bl.Order.Update(askerId4, existingOrder);
                     Console.WriteLine("Order updated.");
                     break;
@@ -337,6 +340,75 @@ class Program
             CreationTime = DateTime.Now
         };
     }
+    public static BO.Order InputUpdateOrder(BO.Order existing)
+    {
+        Console.WriteLine("Enter new values for the order (leave blank to keep current value):");
+
+        Console.Write($"Order Type ({existing.OrderType}): ");
+        string? orderTypeInput = Console.ReadLine();
+        BO.EnumOrderType newOrderType = existing.OrderType;
+        if (!string.IsNullOrWhiteSpace(orderTypeInput))
+            if (!Enum.TryParse(orderTypeInput, true, out newOrderType))
+                newOrderType = existing.OrderType;
+
+        Console.Write($"Description ({existing.Description}): ");
+        string? newDescription = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(newDescription))
+            newDescription = existing.Description;
+
+        Console.Write($"Address ({existing.Address}): ");
+        string? newAddress = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(newAddress))
+            newAddress = existing.Address;
+
+        Console.Write($"Latitude ({existing.Latitude}): ");
+        string? latInput = Console.ReadLine();
+        double newLatitude = existing.Latitude;
+        if (!string.IsNullOrWhiteSpace(latInput) && double.TryParse(latInput, out double latVal))
+            newLatitude = latVal;
+
+        Console.Write($"Longitude ({existing.Longitude}): ");
+        string? lonInput = Console.ReadLine();
+        double newLongitude = existing.Longitude;
+        if (!string.IsNullOrWhiteSpace(lonInput) && double.TryParse(lonInput, out double lonVal))
+            newLongitude = lonVal;
+
+        Console.Write($"Customer Name ({existing.CustomerName}): ");
+        string? newCustomerName = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(newCustomerName))
+            newCustomerName = existing.CustomerName;
+
+        Console.Write($"Customer Phone ({existing.CustomerPhone}): ");
+        string? newCustomerPhone = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(newCustomerPhone))
+            newCustomerPhone = existing.CustomerPhone;
+
+        Console.Write($"Weight ({existing.Weight}): ");
+        string? weightInput = Console.ReadLine();
+        double? newWeight = existing.Weight;
+        if (!string.IsNullOrWhiteSpace(weightInput) && double.TryParse(weightInput, out double weightVal))
+            newWeight = weightVal;
+
+        Console.Write($"Fragile ({existing.Fragile}): ");
+        string? fragileInput = Console.ReadLine();
+        bool? newFragile = existing.Fragile;
+        if (!string.IsNullOrWhiteSpace(fragileInput) && bool.TryParse(fragileInput, out bool fragileVal))
+            newFragile = fragileVal;
+        return new BO.Order
+        {
+            Id = existing.Id,
+            OrderType = newOrderType,
+            Description = newDescription,
+            Address = newAddress,
+            Latitude = newLatitude,
+            Longitude = newLongitude,
+            CustomerName = newCustomerName,
+            CustomerPhone =newCustomerPhone,
+            Weight = newWeight,
+            Fragile = newFragile,
+            CreationTime = DateTime.Now
+        };
+    }
     #endregion
 
     #region Courier Menu
@@ -393,7 +465,10 @@ class Program
                 case "5":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int asker5)) break;
-                    var updated = InputNewCourier();
+                    Console.WriteLine("Enter courier ID: ");
+                    if (!int.TryParse(Console.ReadLine(), out int courierId5)) break;
+                    BO.Courier exsitingCourier = s_bl.Courier.Read(asker5, courierId5) ?? throw new Exception("Courier not found.");
+                    var updated = InputUpdateCourier(exsitingCourier);
                     s_bl.Courier.Update(asker5, updated);
                     Console.WriteLine("Courier updated.");
                     break;
@@ -450,6 +525,52 @@ class Program
             Password = password,
             Active = isActive,
             MaxPersonalDistance = maxDistance
+        };
+    }
+    public static BO.Courier InputUpdateCourier(BO.Courier existing)
+    {
+        Console.Write("Courier ID: ");
+        Console.WriteLine("Enter new values (leave empty to keep current value):");
+
+        Console.Write($"Name ({existing.Name}): ");
+        string? name = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(name)) name = existing.Name;
+
+        Console.Write($"Phone ({existing.CourierPhone}): ");
+        string? phone = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(phone)) phone = existing.CourierPhone;
+
+        Console.Write($"Email ({existing.Email}): ");
+        string? email = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(email)) email = existing.Email;
+
+        Console.Write($"Password ({existing.Password}): ");
+        string? password = Console.ReadLine();
+        if (string.IsNullOrWhiteSpace(password)) password = existing.Password;
+
+        Console.Write($"Delivery method ({existing.DeliveryMethod}): ");
+        string? methodInput = Console.ReadLine();
+        BO.EnumDeliveryMethod method = existing.DeliveryMethod;
+        if (!string.IsNullOrWhiteSpace(methodInput))
+            if (!Enum.TryParse(methodInput, true, out method))
+                method = existing.DeliveryMethod;
+
+        Console.Write($"Max Personal Distance ({existing.MaxPersonalDistance}): ");
+        string? maxDistInput = Console.ReadLine();
+        double? maxDist = existing.MaxPersonalDistance;
+        if (!string.IsNullOrWhiteSpace(maxDistInput) && double.TryParse(maxDistInput, out double d))
+            maxDist = d;
+
+        return new BO.Courier
+        {
+            Id = existing.Id,
+            StartedWorking = existing.StartedWorking,
+            Name = name,
+            CourierPhone = phone,
+            Email = email,
+            Password = password,
+            Active = existing.Active,
+            MaxPersonalDistance = maxDist
         };
     }
     #endregion
