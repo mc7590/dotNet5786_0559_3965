@@ -286,7 +286,7 @@ class Program
                     if (!int.TryParse(Console.ReadLine(), out int courierId10)) break;
                     var open = s_bl.Order.GetListOfOpenOrderToChoose(askerId10, courierId10);
                     foreach (var o in open) Console.WriteLine(Tools.ToStringProperty(o));
-                    break;
+                    break; 
                 default:
                     Console.WriteLine("Invalid option.");
                     break;
