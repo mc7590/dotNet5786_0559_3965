@@ -43,7 +43,7 @@ internal static class CourierManager
     internal static BO.Courier? GetCourierById(int id, int courierId)
     {
         DO.Courier doCourier;
-        doCourier = s_dal.Courier.Read(id) ?? throw new BO.BlDoesNotExistException($"Courier with ID={id} does Not exist");
+        doCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={id} does Not exist");
         return new BO.Courier
         {
             Id = doCourier.Id,

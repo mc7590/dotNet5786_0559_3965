@@ -223,7 +223,7 @@ class Program
                     if (!int.TryParse(Console.ReadLine(), out int askerId3)) break;
                     Console.Write("Order ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int orderId3)) break;
-                    Console.WriteLine(s_bl.Order.Read(askerId3, orderId3));
+                    Console.WriteLine(Tools.ToStringProperty(s_bl.Order.Read(askerId3, orderId3)));
                     break;
                 case "4":
                     Console.Write("Asker ID: ");
@@ -360,7 +360,7 @@ class Program
                     Console.Write("Password: ");
                     string? pwd = Console.ReadLine();
                     var user = s_bl.Courier.Login(cId ?? string.Empty, pwd ?? string.Empty);
-                    Console.WriteLine(user);
+                    Console.WriteLine(Tools.ToStringProperty(user));
                     break;
                 case "2":
                     Console.Write("Asker ID: ");
@@ -368,14 +368,14 @@ class Program
                     IEnumerable<BO.CourierInList>? list = s_bl.Courier.GetCouriersInList(asker2);
                     if (list == null) { Console.WriteLine("No couriers found."); break; }
                     foreach (var c in list) 
-                        Console.WriteLine(c);
+                        Console.WriteLine(Tools.ToStringProperty(c));
                     break;
                 case "3":
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int asker3)) break;
                     Console.Write("Courier ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int courierId3)) break;
-                    Console.WriteLine(s_bl.Courier.Read(asker3, courierId3));
+                    Console.WriteLine(Tools.ToStringProperty(s_bl.Courier.Read(asker3, courierId3)));
                     break;
                 case "4":
                     Console.Write("Asker ID: ");
@@ -407,6 +407,7 @@ class Program
     {
         Console.Write("Courier ID: ");
         if (!int.TryParse(Console.ReadLine(), out int id)) throw new Exception("Invalid ID");
+        Tools.IsValidId(id);
 
         Console.Write("Start Date (yyyy-mm-dd): ");
         DateTime.TryParse(Console.ReadLine(), out DateTime startAtCompany);
@@ -416,12 +417,15 @@ class Program
 
         Console.Write("Phone: ");
         string? phone = Console.ReadLine();
+        Tools.IsValidPhone(phone);
 
         Console.Write("Email: ");
         string? email = Console.ReadLine();
+        Tools.IsValidEmail(email);
 
         Console.Write("Password: ");
         string? password = Console.ReadLine();
+        Tools.IsStrongPassword(password ?? string.Empty);
 
         Console.Write("Is Active (true/false): ");
         bool.TryParse(Console.ReadLine(), out bool isActive);
