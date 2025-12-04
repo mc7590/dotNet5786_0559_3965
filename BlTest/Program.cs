@@ -1,12 +1,11 @@
-﻿
-
-//using BO;
+﻿//using BO;
 //using DO;
-
 
 using DalApi;
 
 namespace BlTest;
+using Helpers;
+using System.Runtime.CompilerServices;
 
 public class Program
 {
@@ -116,21 +115,47 @@ public class Program
                             return;
                         }
                         string idString = id.ToString();
-                        Console.WriteLine("Enter the password to lig in: ");
+                        Console.WriteLine("Enter the password to log in: ");
                         string? password = Console.ReadLine() ?? throw new BO.BlInvalidInputException("Password cannot be null.");
                         BO.EnumUserRole User = s_bl.Courier.Login(idString,password);
+                        Console.WriteLine($"Logged in as");
                     }
                     break;
+
                 case BO.CourierMenuOption.AddCourier:
                     // Implement Add Courier functionality
+                    Console.WriteLine("Enter your ID to check request: ");
+                    if (!int.TryParse(Console.ReadLine(), out int askerId))
+                    {
+                        throw new BO.BlInvalidInputException("Invalid id format.");
+                    }
+                    //
+                    //get info
+                    DO.Courier? doCourier = new()
+                    {
+                        Id = boCourier.Id,
+                        Name = boCourier.Name!,
+                        CourierPhone = boCourier.CourierPhone!,
+                        Email = boCourier.Email!,
+                        Password = boCourier.Password!,
+                        Active = boCourier.Active,
+                        DeliveryMethod = (DO.EnumDeliveryMethod)boCourier.DeliveryMethod,
+                        StartedWorking = DateTime.Now,
+                        MaxPersonalDistance = boCourier.MaxPersonalDistance
+                    };
+                    BO.Courier newCourier= 
+                    s_bl.Courier.Create(askerId, newCourier);
+                    Console.WriteLine("Courier added.");
+
                     break;
+
                 case BO.CourierMenuOption.ShowCourierById:
                     // Implement Show Courier by ID functionality
                     {
                         Console.Write("Enter courier ID to display: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw BO.BlInvalidInputException("Invalid id format.");
+                            throw new BO.BlInvalidInputException("Invalid id format.");
                         }
                         var bo = s_bl.Courier.Read(id, id);
                         Console.WriteLine(bo);
@@ -139,10 +164,10 @@ public class Program
                 case BO.CourierMenuOption.ShowListOfCouriers:
                     // Implement Show List of Couriers functionality
                     {
-                        Console.WriteLine("Enter the ID of the requester: ");
+                        Console.WriteLine("Enter your ID to check request: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
                         {
-                            throw BO.BlInvalidInputException("Invalid id format.");
+                            throw new BO.BlInvalidInputException("Invalid id format.");
                         }
                         IEnumerable<BO.CourierInList>? list = s_bl.Courier.GetCouriersInList(id);
                         if (list == null)
@@ -158,7 +183,7 @@ public class Program
                         Console.WriteLine("Enter the ID of the requester: ");
                         if (!int.TryParse(Console.ReadLine(), out int idR))
                         {
-                            throw BO.BlInvalidInputException("Invalid id format.");
+                            throw new BO.BlInvalidInputException("Invalid id format.");
                         }
                         Console.Write("Enter ID of courier to update: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
@@ -219,7 +244,7 @@ public class Program
                         Console.WriteLine("Enter the ID of the requester: ");
                         if (!int.TryParse(Console.ReadLine(), out int idR))
                         {
-                            throw BO.BlInvalidInputException("Invalid id format.");
+                            throw new BO.BlInvalidInputException("Invalid id format.");
                         }
                         Console.Write("Enter ID of courier to delete: ");
                         if (!int.TryParse(Console.ReadLine(), out int id))
@@ -324,7 +349,7 @@ public class Program
         bool back = false;
         while(!back)
         {
-            //        MoveClock = 1,
+            //MoveClock = 1,
             //GetClock = 2,
             //GetConfig = 3,
             //InitializeDB = 4,
