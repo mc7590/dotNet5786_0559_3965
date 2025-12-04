@@ -132,7 +132,7 @@ internal static class DeliveryManager
                 CourierName = s_dal.Courier.Read(delivery.CourierId)!.Name,
                 DeliveryMethod = (BO.EnumDeliveryMethod)delivery.DeliveryMethod,
                 DelCreationTime = delivery.DeliveryStartTime,
-                EndDeliveryStatus = (BO.EnumEndDeliveryStatus)delivery.EndDeliveryStatus!,
+                EndDeliveryStatus = (BO.EnumEndDeliveryStatus?)delivery.EndDeliveryStatus,
                 EndDeliveryTime = delivery.EndDeliveryTime
             }).ToList();
     }

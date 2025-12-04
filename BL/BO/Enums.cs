@@ -43,7 +43,7 @@ public enum EnumScheduleStatus
 /// </summary>
 public enum EnumEndDeliveryStatus
 {
-    Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
+    Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed, Unknown
 }
 
 /// <summary>

@@ -216,7 +216,7 @@ class Program
                     Console.Write("Asker ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int askerId2)) break;
                     var ordersList = s_bl.Order.GetOrderInList(askerId2, null);
-                    foreach (var o in ordersList) Console.WriteLine(o);
+                    foreach (var o in ordersList) Console.WriteLine(Tools.ToStringProperty(o));
                     break;
                 case "3":
                     Console.Write("Asker ID: ");
