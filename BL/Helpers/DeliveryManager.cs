@@ -21,13 +21,72 @@ internal static class DeliveryManager
         };
         return estimatedTime;
     }
+    ///// <summary>
+    ///// calculates the order status based on deliveries associated with the order
+    ///// </summary>
+    //internal static BO.EnumOrderStatus CalculateOrderStatus(int OrderId)
+    //{
+
+
+    //    throw new NotImplementedException();
+    //}
+
     /// <summary>
-    /// calculates the order status based on deliveries associated with the order
+    /// Calculates the order status based on deliveries associated with the order
     /// </summary>
+    /// <param name="id">The ID of the order.</param>
+    /// <returns>The calculated BO.EnumOrderStatus.</returns>
+    /// <exception cref="BO.ObjectNotFoundException">Thrown if the order ID is not found.</exception>
     internal static BO.EnumOrderStatus CalculateOrderStatus(int id)
     {
-        throw new NotImplementedException();
+        // get the order from DAL
+        IDal dal = Factory.Get;
+        DO.Order order = dal.Order.Read(id) ?? throw new BO.BlDoesNotExistException($"Order with ID {id} does not exist.");
+
+        // אחזר את כל המשלוחים המשויכים להזמנה זו
+        // הנחה: קיימת שיטה לאחזור משלוחים לפי מזהה הזמנה
+        IEnumerable<DO.Delivery> deliveries = dal.Delivery.ReadAll(d => d.OrderId == id);
+
+        //case: finished delivery
+        //if last delivery found that ended, that determines the order status
+        DO.Delivery? lastDelivery = deliveries.OrderByDescending(d => d.EndDeliveryTime).FirstOrDefault(d => d.EndDeliveryTime != null);
+
+        if (lastDelivery != null)
+        {
+            //order is closed, status determined by last delivery end status
+            switch (lastDelivery.EndDeliveryStatus)
+            {
+                case DO.EnumEndDeliveryStatus.Delivered:
+                    return BO.EnumOrderStatus.Delivered;
+
+                case DO.EnumEndDeliveryStatus.RefusedToReceive:
+                    return BO.EnumOrderStatus.CustomerRefused;
+
+                case DO.EnumEndDeliveryStatus.Canceled:
+                    return BO.EnumOrderStatus.Canceled;
+
+                default:
+                    return BO.EnumOrderStatus.Canceled;
+            }
+        }
+
+        //check for active delivery (not ended yet)
+
+        //if no finished delivery found, check for active delivery (not yet ended)
+        DO.Delivery? activeDelivery = deliveries.FirstOrDefault(d => d.EndDeliveryTime == null);
+
+        if (activeDelivery != null)
+        {
+            //in progress - there is an active delivery that has not yet ended
+            return BO.EnumOrderStatus.InProgress;
+        }
+
+        //default: opened
+
+        //no finished delivery and no active delivery: the order is open
+        return BO.EnumOrderStatus.Open;
     }
+
 
     internal static DO.Delivery CreateDemeDelivery(int orderId)
     {
