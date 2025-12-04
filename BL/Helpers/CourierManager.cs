@@ -112,8 +112,9 @@ internal static class CourierManager
         DO.Courier doCourier = CourierBoToDo(boCourier)!;
         s_dal.Courier.Update(doCourier);
     }
-    internal static void DeleteCourier(int courierId)
+    internal static void DeleteCourier(int id, int courierId)
     {
+        Tools.IsManager(id);
         DO.Courier? existingCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
         s_dal.Courier.Delete(courierId);
     }

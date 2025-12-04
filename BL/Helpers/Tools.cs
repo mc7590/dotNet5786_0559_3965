@@ -75,8 +75,8 @@ public static class Tools
     {
         if (string.IsNullOrWhiteSpace(phone))
             throw new BO.BlInvalidInputException($"Empty phone number");
-        if (phone[0] != 0 || phone.Length != 10 || !phone.All(char.IsDigit))
-            throw new BO.BlInvalidInputException($"Phone number must be 9 or 10 digits");
+        if (phone[0] != '0' || phone.Length != 10 || !phone.All(char.IsDigit))
+            throw new BO.BlInvalidInputException($"Invalid phone: '{phone}'");
     }
     public static void IsValidEmail(string? email)
     {

@@ -24,7 +24,7 @@ internal class CourierImplementation : ICourier
     }
     public void Delete(int id, int courierId)
     {
-        CourierManager.DeleteCourier(courierId);
+        CourierManager.DeleteCourier(id,courierId);
     }    
     public int GetNumOfDeliveryOnTimeForCourier(int id, int courierId)
     {
