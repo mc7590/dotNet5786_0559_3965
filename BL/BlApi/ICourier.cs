@@ -1,6 +1,6 @@
 ﻿namespace BlApi;
 
-public interface ICourier
+public interface ICourier : IObservable //stage 5
 {
     BO.EnumUserRole Login(string username, string password);    
     IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldFilter? filter = null, object? value = null);

@@ -1,14 +1,15 @@
-﻿//using BO;
+﻿namespace Helpers;
+//using BO;
 using DalApi;
-using DO;
+//using DO;
 using System.Reflection.Metadata.Ecma335;
 
-
-namespace Helpers;
 
 internal static class OrderManager
 {
     private static readonly IDal s_dal = Factory.Get; //stage 4
+    internal static ObserverManager Observers = new(); //stage 5 
+
 
     /// <summary>
     /// Converts a BO Order to a DO Order
@@ -84,6 +85,10 @@ internal static class OrderManager
         };
 
         s_dal.Order.Create(doOrder);
+
+        Observers.NotifyListUpdated(); //stage 5 //no need to notify item updated as it is a new item
+
+
     }
 
     /// <summary>
@@ -239,6 +244,9 @@ internal static class OrderManager
             //create a deme delivery with status Canceled
             DO.Delivery delivery = DeliveryManager.CreateDemeDelivery(orderId);
             s_dal.Delivery.Create(delivery);
+
+            Observers.NotifyListUpdated();  //stage 5
+
         }
         else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
         {
@@ -286,6 +294,8 @@ internal static class OrderManager
                 EndDeliveryTime = null
             };
             s_dal.Delivery.Create(delivery);
+
+            Observers.NotifyListUpdated();  //stage 5
         }
         else
         {
@@ -372,6 +382,10 @@ internal static class OrderManager
 
             DO.Order doOrder = BoOrderToDoOrder(boOrder);
             s_dal.Order.Update(doOrder);
+
+            Observers.NotifyItemUpdated(id); //stage 5
+            Observers.NotifyListUpdated();  //stage 5
+
         }
 
     }

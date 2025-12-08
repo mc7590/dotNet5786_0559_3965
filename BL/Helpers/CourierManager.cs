@@ -8,6 +8,9 @@ internal static class CourierManager
 {
 
     private static IDal s_dal = Factory.Get; //stage 4
+    internal static ObserverManager Observers = new(); //stage 5 
+
+
     /// <summary>
     /// Creates a new courier in DAL
     /// </summary>
@@ -35,8 +38,12 @@ internal static class CourierManager
             StartedWorking = DateTime.Now,
             MaxPersonalDistance = boCourier.MaxPersonalDistance
         };
-        s_dal.Courier.Create(doCourier);
+            s_dal.Courier.Create(doCourier);
+
+        Observers.NotifyListUpdated(); //stage 5 /no need to notify item updated as it is a new item
     }
+
+
     /// <summary>
     /// Gets a courier by ID from DAL 
     /// </summary>
@@ -111,12 +118,18 @@ internal static class CourierManager
 
         DO.Courier doCourier = CourierBoToDo(boCourier)!;
         s_dal.Courier.Update(doCourier);
+
+        Observers.NotifyItemUpdated(id); //stage 5
+        Observers.NotifyListUpdated();  //stage 5
     }
     internal static void DeleteCourier(int id, int courierId)
     {
         Tools.IsManager(id);
         DO.Courier? existingCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
         s_dal.Courier.Delete(courierId);
+
+        Observers.NotifyItemUpdated(id); //stage 5
+        Observers.NotifyListUpdated();  //stage 5
     }
     internal static DO.Courier? CourierBoToDo(BO.Courier boCourier)
     {
@@ -226,7 +239,14 @@ internal static class CourierManager
         inactiveCouriers
             .Select(c => c with { Active = false })
             .ToList()
-            .ForEach(c => s_dal.Courier.Update(c));
+            .ForEach(c =>
+            {
+                s_dal.Courier.Update(c);
+                Observers.NotifyItemUpdated(c.Id);  //stage 5
+            });
+
+        Observers.NotifyListUpdated();  //stage 5
+
     }
     public static void SimulateCourierInactivity() => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
  

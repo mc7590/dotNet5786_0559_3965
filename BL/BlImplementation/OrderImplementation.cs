@@ -8,7 +8,7 @@ internal class OrderImplementation : IOrder
 {
     public void Create(int id, BO.Order boOrder)
     {
-        OrderManager.CreateOrder(id, boOrder); 
+        OrderManager.CreateOrder(id, boOrder);
     }
 
     public BO.Order? Read(int id, int orderId)
@@ -59,4 +59,15 @@ internal class OrderImplementation : IOrder
     {
         return OrderManager.GetListOfOpenOrderToChoose(id, courierId, typeFilter, sortBy);
     }
+
+    #region Stage 5
+    public void AddObserver(Action listObserver) =>
+    OrderManager.Observers.AddListObserver(listObserver); //stage 5
+    public void AddObserver(int id, Action observer) =>
+    OrderManager.Observers.AddObserver(id, observer); //stage 5
+    public void RemoveObserver(Action listObserver) =>
+    OrderManager.Observers.RemoveListObserver(listObserver); //stage 5
+    public void RemoveObserver(int id, Action observer) =>
+    OrderManager.Observers.RemoveObserver(id, observer); //stage 5
+    #endregion Stage 5
 }

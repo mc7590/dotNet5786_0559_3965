@@ -1,7 +1,7 @@
 ﻿
 namespace BlApi;
 
-public interface IOrder
+public interface IOrder : IObservable //stage 5
 {
     /// <summary>
     /// Returns an array of order quantities by all status types.
