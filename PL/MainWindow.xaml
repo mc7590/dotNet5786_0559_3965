@@ -3,22 +3,22 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow" Height="500" Width="850"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
 
-    <!-- === Main Grid: 3 main sections === -->
+
     <Grid Margin="10">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- System Clock Area -->
+            <!-- System Clock -->
             <RowDefinition Height="*"/>
-            <!-- Configuration Area -->
+            <!-- Configuration -->
             <RowDefinition Height="Auto"/>
-            <!-- Database Control Area -->
+            <!-- Database Buttons -->
         </Grid.RowDefinitions>
 
-        <!--       System Clock Area     -->
+               <!--1) System Clock Area-->
         <Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -27,7 +27,7 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
@@ -35,49 +35,95 @@
             <Border Grid.Column="1"
                     Background="#00BFFF"
                     Padding="10"
-                    CornerRadius="4"
+                    CornerRadius="6"
                     HorizontalAlignment="Center">
-                <Label FontSize="26"
+                <Label Content="{Binding CurrentTime}"
+                    FontSize="26"
                        FontWeight="Bold"
-                       Foreground="White"
-                       Content="00.00.0000 00:00"/>
+                       Foreground="White"/>
             </Border>
 
             <!-- Time adjustment buttons -->
             <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
-                <Button Content="Add One Minute" Margin="3"/>
-                <Button Content="Add One Hour" Margin="3"/>
-                <Button Content="Add One Day" Margin="3"/>
-                <Button Content="Add One Month" Margin="3"/>
-                <Button Content="Add One Year" Margin="3"/>
+                <Button Content="Add One Minute" Margin="3" Click="BtnAddOneMinute_Click"/>
+                <Button Content="Add One Hour" Margin="3" Click="BtnAddOneHour_Click"/>
+                <Button Content="Add One Day" Margin="3" Click="BtnAddOneDay_Click"/>
+                <Button Content="Add One Month" Margin="3" Click="BtnAddOneMonth_Click"/>
+                <Button Content="Add One Year" Margin="3" Click="BtnAddOneYear_Click"/>
             </StackPanel>
         </Grid>
 
-        <!--     Configuration Area      -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <!-- Input Area -->
-                <ColumnDefinition Width="*"/>
-                <!-- Navigation Buttons -->
-            </Grid.ColumnDefinitions>
-        </Grid>
+               <!--2) Configuration Area (SCROLLABLE)-->
+        <ScrollViewer Grid.Row="1" Margin="0,10,0,10" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-        <!--     Database Control Area   -->
-        <Grid Grid.Row="2" Margin="0,20,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="180"/>
+                    <!-- Label -->
+                    <ColumnDefinition Width="*"/>
+                    <!-- TextBox -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Configuration Fields -->
+                <Label Grid.Row="0" Grid.Column="0" Content="Ave Car Speed:" Margin="5"/>
+                <TextBox Grid.Row="0" Grid.Column="1" Margin="5" Text="{Binding Configuration.AveCarSpeedKmH, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="1" Grid.Column="0" Content="Ave Motorcycle Speed:" Margin="5"/>
+                <TextBox Grid.Row="1" Grid.Column="1" Margin="5" Text="{Binding Configuration.AveMotorcycleSpeedKmH, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="2" Grid.Column="0" Content="Ave Bicycle Speed:" Margin="5"/>
+                <TextBox Grid.Row="2" Grid.Column="1" Margin="5" Text="{Binding Configuration.AveBicycleSpeedKmH, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="3" Grid.Column="0" Content="Ave Walking Speed:" Margin="5"/>
+                <TextBox Grid.Row="3" Grid.Column="1" Margin="5" Text="{Binding Configuration.AveWalkingSpeedKmH, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="4" Grid.Column="0" Content="Max Delivery Time:" Margin="5"/>
+                <TextBox Grid.Row="4" Grid.Column="1" Margin="5" Text="{Binding Configuration.GetMaxDeliveryTime, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="5" Grid.Column="0" Content="Risk Range:" Margin="5"/>
+                <TextBox Grid.Row="5" Grid.Column="1" Margin="5" Text="{Binding Configuration.RiskRange, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="6" Grid.Column="0" Content="Inactivity Threshold:" Margin="5"/>
+                <TextBox Grid.Row="6" Grid.Column="1" Margin="5" Text="{Binding Configuration.InactivityThreshold, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Button Grid.Row="7" Grid.Column="1" Margin="5" Content="Update" Click="SaveConfigurationCommand"/>
+            </Grid>
+        </ScrollViewer>
+
+               <!--3) DATABASE CONTROL AREA-->
+        <Grid Grid.Row="2" Margin="0,10,0,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="65*"/>
-                <ColumnDefinition Width="65*"/>
-                <ColumnDefinition Width="65*"/>
-                <ColumnDefinition Width="18*"/>
-                <ColumnDefinition Width="47*"/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
-            <!-- Database management buttons -->
-            <Button Content="Reset Database" Grid.Column="0" Margin="10,65,10,65" Height="40"/>
-            <Button Content="Initialize Database" Grid.Column="1" Margin="10,65,10,65" Height="40"/>
-            <Button Content="Handle Couriers" Grid.Column="2" Margin="10,65,10,65" Height="40"/>
-            <Button Content="Handle Orders" Grid.Column="3" Margin="10,65,10,65" Height="40" Grid.ColumnSpan="2"/>
+            <Button Grid.Column="0"
+                    Content="Reset Database"
+                    Margin="10" Height="45"/>
+
+            <Button Grid.Column="1"
+                    Content="Initialize Database"
+                    Margin="10" Height="45"/>
+
+            <Button Grid.Column="2"
+                    Content="Handle Couriers"
+                    Margin="10" Height="45"/>
+
+            <Button Grid.Column="3"
+                    Content="Handle Orders"
+                    Margin="10" Height="45"/>
         </Grid>
 
     </Grid>
