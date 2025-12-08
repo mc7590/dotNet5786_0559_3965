@@ -12,45 +12,82 @@ public static class Tools
     public static string ToStringProperty<T>(this T t)
     {
         if (t == null)
-        {
-            return "NULL";
-        }
+            return "null";
 
-        // use 'StringBuilder' to efficiently build the output string
-        var sb = new StringBuilder();
+        Type type = t.GetType();
+        PropertyInfo[] properties = type.GetProperties();
 
-        // get all properties of T
-        PropertyInfo[] properties = typeof(T).GetProperties(BindingFlags.Public | BindingFlags.Instance);
-
-        sb.AppendLine($"--- Type: {typeof(T).Name} ---");
+        string str = $"{type.Name} {{ ";
 
         foreach (var prop in properties)
         {
-            var value = prop.GetValue(t);
+            object? value = prop.GetValue(t);
 
-            //check if the property is an collection (List, Array, ICollection etc.) that is not a string
-            if (value is IEnumerable enumerable && !(value is string))
+            // If property value is null
+            if (value == null)
             {
-                sb.AppendLine($"  {prop.Name}: [");
+                str += $"{prop.Name} = null, ";
+                continue;
+            }
 
-                //string the collection items
+            Type valueType = value.GetType();
+
+            // If the value is a collection (but not a string)
+            if (value is IEnumerable enumerable && valueType != typeof(string))
+            {
+                str += $"{prop.Name} = [ ";
+
                 foreach (var item in enumerable)
                 {
-                    sb.AppendLine($"    {item?.ToString()}");
+                    if (item == null)
+                    {
+                        str += "null, ";
+                    }
+                    else
+                    {
+                        Type itemType = item.GetType();
+
+                        // Simple types are printed directly
+                        if (itemType.IsPrimitive ||
+                            itemType.IsEnum ||
+                            itemType == typeof(string) ||
+                            itemType == typeof(decimal) ||
+                            itemType == typeof(DateTime))
+                        {
+                            str += $"{item}, ";
+                        }
+                        else
+                        {
+                            // Complex objects → recursive call
+                            str += item.ToStringProperty() + ", ";
+                        }
+                    }
                 }
 
-                sb.AppendLine("  ]");
+                str += "], ";
             }
+
+            // If the value type is simple → print directly
+            else if (valueType.IsPrimitive ||
+                     valueType.IsEnum ||
+                     valueType == typeof(string) ||
+                     valueType == typeof(decimal) ||
+                     valueType == typeof(DateTime))
+            {
+                str += $"{prop.Name} = {value}, ";
+            }
+
+            // Otherwise, it's a complex object → recursive call
             else
             {
-                // property is not a collection
-                sb.AppendLine($"  {prop.Name}: {value}");
+                str += $"{prop.Name} = {value.ToStringProperty()}, ";
             }
         }
 
-        sb.AppendLine("--------------------------");
-        return sb.ToString();
-    }
+        str += "}";
+
+        return str;
+    }   
     public static void IsManager(int id)
     {
         if (id != AdminManager.GetConfig().ManagerId)

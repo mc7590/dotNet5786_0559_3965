@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCourier>
   <Courier>
-    <Id>368369867</Id>
-    <Name>Dani Levy</Name>
-    <CourierPhone>0522818527</CourierPhone>
-    <Email>danilevy@gmail.com</Email>
-    <Password>password9867</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Motorcycle</DeliveryMethod>
-    <StartedWorking>2025-05-13T19:20:56</StartedWorking>
-    <MaxPersonalDistance>9</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>294235518</Id>
     <Name>Eli Amar</Name>
     <CourierPhone>0579161927</CourierPhone>
@@ -230,5 +219,16 @@
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2024-06-24T19:20:56</StartedWorking>
     <MaxPersonalDistance>4</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>368369867</Id>
+    <Name>miri</Name>
+    <CourierPhone>0522818527</CourierPhone>
+    <Email>danilevy@gmail.com</Email>
+    <Password>password9867</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Car</DeliveryMethod>
+    <StartedWorking>2025-05-13T19:20:56</StartedWorking>
+    <MaxPersonalDistance>9</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

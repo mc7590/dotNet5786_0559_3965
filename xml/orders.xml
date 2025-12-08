@@ -27,19 +27,6 @@
     <Fragile>false</Fragile>
   </Order>
   <Order>
-    <Id>1002</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Delivery for office meeting</Description>
-    <Address>Arlozorov 28, Ramat Gan</Address>
-    <Latitude>32.08058627022238</Latitude>
-    <Longitude>34.81255700496421</Longitude>
-    <CustomerName>Avi Weis</CustomerName>
-    <CustomerPhone>0527891234</CustomerPhone>
-    <OrderCreationTime>2025-11-13T19:20:56</OrderCreationTime>
-    <Weight>3.77</Weight>
-    <Fragile>false</Fragile>
-  </Order>
-  <Order>
     <Id>1003</Id>
     <OrderType>Overnight</OrderType>
     <Description>Family meal ordered for dinner</Description>
@@ -649,5 +636,18 @@
     <OrderCreationTime>2025-10-11T19:20:56</OrderCreationTime>
     <Weight>3.52</Weight>
     <Fragile>true</Fragile>
+  </Order>
+  <Order>
+    <Id>1002</Id>
+    <OrderType>Regular</OrderType>
+    <Description>khgb</Description>
+    <Address>Arlozorov 28, Ramat Gan</Address>
+    <Latitude>32.08058627022238</Latitude>
+    <Longitude>34.81255700496421</Longitude>
+    <CustomerName>Avi Weis</CustomerName>
+    <CustomerPhone>0527891234</CustomerPhone>
+    <OrderCreationTime>2025-12-04T21:51:02.8607521+02:00</OrderCreationTime>
+    <Weight>3.77</Weight>
+    <Fragile>false</Fragile>
   </Order>
 </ArrayOfOrder>
