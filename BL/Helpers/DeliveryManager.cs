@@ -262,6 +262,10 @@ internal static class DeliveryManager
                 EndDeliveryTime = endTime
             };
             s_dal.Delivery.Update(updatedDelivery);
+
+            Observers.NotifyItemUpdated(updatedDelivery.Id); //stage 5
+            Observers.NotifyListUpdated();  //stage 5
+
         }
     }
 
