@@ -12,32 +12,55 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Courier
+namespace PL.Courier;
+
+/// <summary>
+/// Interaction logic for CourierListWindow.xaml
+/// </summary>
+public partial class CourierListWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for CourierListWindow.xaml
-    /// </summary>
-    public partial class CourierListWindow : Window
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
+    public CourierListWindow()
     {
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-
-        public CourierListWindow()
-        {
-            InitializeComponent();
-        }
-
-
-        public IEnumerable<BO.CourierInList> CourierList
-        {   
-            get { return (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty); }
-            set { SetValue(CourierListProperty, value); }
-        }
-
-        // Using a DependencyProperty as the backing store for CourierList.  This enables animation, styling, binding, etc...
-        public static readonly DependencyProperty CourierListProperty =
-            DependencyProperty.Register("CourierList", typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(null));
-
-
-
+        InitializeComponent();
     }
+
+
+    public IEnumerable<BO.CourierInList> CourierList
+    {
+        get { return (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty); }
+        set { SetValue(CourierListProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for CourierList.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty CourierListProperty =
+        DependencyProperty.Register("CourierList", typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(null));
+
+    public BO.EnumDeliveryMethod MethodDelivery { get; set; } = BO.EnumDeliveryMethod.None;
+    /// <summary>
+    /// Filter the list when the selection in the ComboBox changes
+    /// </summary>
+    private void FilterCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) => RefreshCourierList();
+    
+    /// <summary>
+    /// Refresh the courier list according to the selected filter
+    /// </summary>
+    private void RefreshCourierList()    
+    {
+        int managerId = s_bl?.Admin.GetConfig().ManagerId ?? 0;
+        if (MethodDelivery == BO.EnumDeliveryMethod.None)
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(managerId)!;
+        }
+        else
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(managerId, null, null, BO.EnumCourierFieldFilter.DeliveryMethod, MethodDelivery)!;
+        }
+    }
+
+    /// <summary>
+    /// Load the courier list when the window is loaded 
+    /// </summary>
+    private void Window_Loaded(object sender, RoutedEventArgs e) => RefreshCourierList();
 }

@@ -5,7 +5,7 @@
 /// </summary>
 public enum EnumDeliveryMethod
 {
-    Car, Motorcycle, Bicycle, Foot
+    None, Car, Motorcycle, Bicycle, Foot
 };
 
 /// <summary>
@@ -21,6 +21,7 @@ public enum EnumOrderType
 /// </summary>
 public enum EnumOrderStatus
 {
+    None,
     Open,
     InProgress,
     Delivered,

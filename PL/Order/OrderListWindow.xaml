@@ -6,8 +6,10 @@
         xmlns:local="clr-namespace:PL.Order"
         mc:Ignorable="d"
         Title="OrderListWindow" Height="640" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="Window_Loaded">
     
+   
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -23,10 +25,11 @@
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="176,0,0,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
-                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+                      SelectedValue="{Binding OrderStatus, Mode=TwoWay}"
+                      SelectionChanged="FilterCombo_SelectionChanged"
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=OrderList}" SelectionChanged="DataGrid_SelectionChanged"/>
-
+        <DataGrid Grid.Row="1" ItemsSource="{Binding OrderList}"/>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
 
     </Grid>

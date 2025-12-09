@@ -6,7 +6,8 @@
         xmlns:local="clr-namespace:PL.Courier"
         mc:Ignorable="d"
         Title="CourierListWindow" Height="640" Width="800"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="Window_Loaded">
 
     <!--External Grid-->
     <Grid>
@@ -21,11 +22,13 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
-            <Label Grid.Column="0" Content="Label" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Center"/>
+            <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Center"/>
             <ComboBox ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
-                Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                      SelectedValue="{Binding MethodDelivery, Mode=TwoWay}"
+                      SelectionChanged="FilterCombo_SelectionChanged"
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <DataGrid Grid.Row="1" d:ItemsSource="{Binding Path=CourierList}"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding CourierList}"/>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
     </Grid>
 </Window>
