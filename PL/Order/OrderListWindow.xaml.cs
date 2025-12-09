@@ -25,5 +25,22 @@ namespace PL.Order
         {
             InitializeComponent();
         }
+
+
+
+        public IEnumerable<BO.OrderInList> OrderList
+        {
+            get { return (IEnumerable<BO.OrderInList>)GetValue(OrderListProperty); }
+            set { SetValue(OrderListProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for OrderList.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty OrderListProperty =
+            DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
+
+        private void DataGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

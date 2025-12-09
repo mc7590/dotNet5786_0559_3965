@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Order"
         mc:Ignorable="d"
-        Title="OrderListWindow" Height="640" Width="800">
+        Title="OrderListWindow" Height="640" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+    
     <!--External Grid-->
     <Grid>
         <Grid.RowDefinitions>
@@ -20,9 +22,11 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="176,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
+            <ComboBox ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
+                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" />
         </Grid>
-        <DataGrid Grid.Row="1" d:ItemsSource="{d:SampleData ItemCount=5}"/>
+        <DataGrid Grid.Row="1" ItemsSource="{Binding Path=OrderList}" SelectionChanged="DataGrid_SelectionChanged"/>
+
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
 
     </Grid>
