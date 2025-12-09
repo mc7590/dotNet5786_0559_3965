@@ -25,5 +25,19 @@ namespace PL.Courier
         {
             InitializeComponent();
         }
+
+
+        public IEnumerable<BO.CourierInList> CourierList
+        {   
+            get { return (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty); }
+            set { SetValue(CourierListProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for CourierList.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty CourierListProperty =
+            DependencyProperty.Register("CourierList", typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(null));
+
+
+
     }
 }
