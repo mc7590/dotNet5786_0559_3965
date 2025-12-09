@@ -5,7 +5,9 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="850"
-        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}">
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="MainWindow_Loaded"
+        Closed="MainWindow_Closed">
 
 
     <Grid Margin="10">
@@ -109,20 +111,28 @@
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
 
+            <!--Reset Database-->
             <Button Grid.Column="0"
                     Content="Reset Database"
+                    Click="BtnResetDB_Click"
                     Margin="10" Height="45"/>
 
+            <!--Initialize Database-->
             <Button Grid.Column="1"
                     Content="Initialize Database"
+                    Click="BtnInitializeDB_Click"
                     Margin="10" Height="45"/>
 
+            <!--Handle Couriers list-->
             <Button Grid.Column="2"
                     Content="Handle Couriers"
+                    Click="BtnCouriers_Click"
                     Margin="10" Height="45"/>
 
+            <!--Handle Orders list-->
             <Button Grid.Column="3"
                     Content="Handle Orders"
+                    Click="BtnOrders_Click"
                     Margin="10" Height="45"/>
         </Grid>
 

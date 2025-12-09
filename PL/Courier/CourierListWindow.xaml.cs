@@ -19,6 +19,8 @@ namespace PL.Courier
     /// </summary>
     public partial class CourierListWindow : Window
     {
+        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+
         public CourierListWindow()
         {
             InitializeComponent();
