@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Order;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -76,12 +77,25 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void Window_Closed(object sender, EventArgs e) => s_bl.Courier.RemoveObserver(courierListObserver);
 
-    private void CourierListGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    public object? SelectedCourier { get; set; }
+
+    /// <summary>
+    /// Take care of double click on a DataGrid row
+    /// dg = data grid
+    /// </summary>
+    private void dgCourierList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
-        if (sender is DataGrid grid && grid.SelectedItem is BO.CourierInList selectedCourier)
+        //check if the double click was not on an empty area in the DataGrid
+        if (sender is DataGrid dg && dg.SelectedItem != null)
         {
-            new CourierWindow(selectedCourier.Id).ShowDialog();
-            RefreshCourierList();
+            object SelectedCourier = dg.SelectedItem; //access to the selected object from DataGrid
+
+            if (SelectedCourier != null)
+            {
+                // open the CourierWindow for the selected courier
+                CourierWindow detailsWindow = new CourierWindow((SelectedCourier as BO.Courier)?.Id ?? 0);
+                detailsWindow.Show();
+            }
         }
     }
 }

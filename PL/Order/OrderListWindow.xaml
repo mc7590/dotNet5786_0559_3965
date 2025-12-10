@@ -25,13 +25,36 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="176,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
                       SelectedValue="{Binding OrderStatus, Mode=TwoWay}"
                       SelectionChanged="FilterCombo_SelectionChanged"
-                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                      />
         </Grid>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding OrderList}"/>
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding OrderList}"
+                  IsReadOnly ="True"
+                  AutoGenerateColumns="False"
+                  EnableRowVirtualization="True"
+                  RowDetailsVisibilityMode="VisibleWhenSelected"
+                  MouseDoubleClick="dgOrderList_MouseDoubleClick"
+                  SelectedItem="{Binding SelectedOrder}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding CourierId}" Header="Courier ID" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding OrderId}" Header="Order ID" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding OrderType}" Header="Order Type" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding AerialDistance}" Header="Aerial Distance" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding OrderStatus}" Header="Order Status" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding ScheduleStatus}" Header="Schedule Status" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding RemainingTime}" Header="Remaining Time" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalDeliveryTime}" Header="Total DeliveryTime" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalDeliveries}" Header="Total Deliveries" Width="Auto"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
 
     </Grid>
 </Window>
+

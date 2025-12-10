@@ -40,6 +40,7 @@ public partial class OrderListWindow : Window
         DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
 
     public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
+
     /// <summary>
     /// Filter the list when the selection in the ComboBox changes
     /// </summary>
@@ -77,5 +78,27 @@ public partial class OrderListWindow : Window
     /// Remove the observer when the window is closed
     /// </summary>
     private void Window_Closed(object sender, EventArgs e) => s_bl.Order.RemoveObserver(orderListObserver);
+
+    public object? SelectedOrder { get; set; }
+
+    /// <summary>
+    /// Take care of double click on a DataGrid row
+    /// dg = data grid
+    /// </summary>
+    private void dgOrderList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
+    {
+        //check if the double click was not on an empty area in the DataGrid
+        if (sender is DataGrid dg && dg.SelectedItem != null)
+        {
+            object selectedOrder = dg.SelectedItem; //access to the selected object from DataGrid
+
+            if (selectedOrder != null)
+            {
+                // open the OrderWindow for the selected order
+                OrderWindow detailsWindow = new OrderWindow((selectedOrder as BO.Order)?.Id ?? 0);
+                detailsWindow.Show();
+            }
+        }
+    }
 
 }

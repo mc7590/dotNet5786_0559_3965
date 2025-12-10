@@ -31,12 +31,32 @@
         </Grid>
         <DataGrid Grid.Row="1" 
           ItemsSource="{Binding CourierList}"
+          IsReadOnly ="True"
           AutoGenerateColumns="False" 
-          IsReadOnly="True" 
-          SelectionMode="Single"
-          MouseDoubleClick="CourierListGrid_MouseDoubleClick" 
-          Margin="10">
+          EnableRowVirtualization="True"
+          RowDetailsVisibilityMode="VisibleWhenSelected"
+          MouseDoubleClick="dgCourierList_MouseDoubleClick"
+          SelectedItem="{Binding SelectedCourier}">
+
+            <DataGrid.Columns>
+                <DataGridTextColumn Binding="{Binding Id}" Header="Courier ID" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding Name}" Header="Courier Name" Width="Auto"/>
+                <DataGridTemplateColumn Header="Is Active" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <CheckBox IsEnabled="False" IsChecked="{Binding Active}" />
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+                <DataGridTextColumn Binding="{Binding DeliveryMethod}" Header="Delivery Method" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding StartedWorking}" Header="Started Working" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalOnTimeDeliveries}" Header="Total On Time Deliveries" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding TotalLateDeliveries}" Header="Total Late Deliveries" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding OrdersInProgressId}" Header="Orders In Progress Id" Width="Auto"/>
+            </DataGrid.Columns>
+            
         </DataGrid>
+        
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
     </Grid>
 </Window>
