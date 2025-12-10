@@ -29,7 +29,14 @@
                       SelectionChanged="FilterCombo_SelectionChanged"
                       Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
         </Grid>
-        <DataGrid Grid.Row="1" ItemsSource="{Binding CourierList}"/>
+        <DataGrid Grid.Row="1" 
+          ItemsSource="{Binding CourierList}"
+          AutoGenerateColumns="False" 
+          IsReadOnly="True" 
+          SelectionMode="Single"
+          MouseDoubleClick="CourierListGrid_MouseDoubleClick" 
+          Margin="10">
+        </DataGrid>
         <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100"/>
     </Grid>
 </Window>

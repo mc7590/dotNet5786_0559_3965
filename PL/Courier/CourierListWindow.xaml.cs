@@ -75,4 +75,13 @@ public partial class CourierListWindow : Window
     /// Remove the observer when the window is closed
     /// </summary>
     private void Window_Closed(object sender, EventArgs e) => s_bl.Courier.RemoveObserver(courierListObserver);
+
+    private void CourierListGrid_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+    {
+        if (sender is DataGrid grid && grid.SelectedItem is BO.CourierInList selectedCourier)
+        {
+            new CourierWindow(selectedCourier.Id).ShowDialog();
+            RefreshCourierList();
+        }
+    }
 }
