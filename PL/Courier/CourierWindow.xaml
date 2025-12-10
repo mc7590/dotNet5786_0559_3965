@@ -5,8 +5,92 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Courier"
         mc:Ignorable="d"
-        Title="CourierWindow" Height="450" Width="800">
-    <Grid>
-        
+        Title="Courier Window" Height="550" Width="400"
+        WindowStartupLocation="CenterScreen"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed">
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <Label Grid.Row="0" Grid.Column="0" Content="ID:"/>
+        <TextBox Grid.Row="0" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.Id, Mode=TwoWay}" 
+                 Background="#F0F0F0"
+                 IsReadOnly="{Binding ButtonText, Converter={StaticResource ModeToReadOnlyConverter}}"/>
+
+        <Label Grid.Row="1" Grid.Column="0" Content="Name:"/>
+        <TextBox Grid.Row="1" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.Name, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+
+        <Label Grid.Row="2" Grid.Column="0" Content="Phone:"/>
+        <TextBox Grid.Row="2" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.CourierPhone, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+
+        <Label Grid.Row="3" Grid.Column="0" Content="Email:"/>
+        <TextBox Grid.Row="3" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.Email, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+
+        <Label Grid.Row="4" Grid.Column="0" Content="Password:"/>
+        <TextBox Grid.Row="4" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.Password, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+
+        <Label Grid.Row="5" Grid.Column="0" Content="Active:"/>
+        <CheckBox Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="5"
+                  IsChecked="{Binding CurrentCourier.Active, Mode=TwoWay}"/>
+
+        <Label Grid.Row="6" Grid.Column="0" Content="Delivery Method:"/>
+        <ComboBox Grid.Row="6" Grid.Column="1"
+                  ItemsSource="{Binding Source={StaticResource DeliveryMethodCollectionKey}}"
+                  SelectedItem="{Binding CurrentCourier.DeliveryMethod, Mode=TwoWay}"/>
+
+        <Label Grid.Row="7" Grid.Column="0" Content="Started Working:"/>
+        <DatePicker Grid.Row="7" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                    SelectedDate="{Binding CurrentCourier.StartedWorking, Mode=TwoWay}" 
+                    IsEnabled="False"/>
+
+        <Label Grid.Row="8" Grid.Column="0" Content="Max Distance:"/>
+        <TextBox Grid.Row="8" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.MaxPersonalDistance, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
+
+        <Label Grid.Row="9" Grid.Column="0" Content="On Time Deliveries:"
+               Visibility="{Binding ButtonText, Converter={StaticResource ModeToVisibilityConverter}}"/>
+        <TextBox Grid.Row="9" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.TotalOnTimeDeliveries, Mode=OneWay}" 
+                 IsReadOnly="True" Background="#F0F0F0"
+                 Visibility="{Binding ButtonText, Converter={StaticResource ModeToVisibilityConverter}}"/>
+
+        <Label Grid.Row="10" Grid.Column="0" Content="Late Deliveries:"
+               Visibility="{Binding ButtonText, Converter={StaticResource ModeToVisibilityConverter}}"/>
+        <TextBox Grid.Row="10" Grid.Column="1" 
+                 Text="{Binding CurrentCourier.TotalLateDeliveries, Mode=OneWay}" 
+                 IsReadOnly="True" Background="#F0F0F0"
+                 Visibility="{Binding ButtonText, Converter={StaticResource ModeToVisibilityConverter}}"/>
+
+        <Button Grid.Row="12" Grid.ColumnSpan="2" 
+                Content="{Binding ButtonText, FallbackValue='Add / Update'}" 
+                Height="40" Margin="0,20,0,0"
+                Click="btnAddUpdate_Click"/>
+
     </Grid>
 </Window>

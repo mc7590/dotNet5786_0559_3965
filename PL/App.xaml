@@ -6,5 +6,25 @@
     <Application.Resources>
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
+        <local:ConvertModeToReadOnly x:Key="ModeToReadOnlyConverter" />
+        <local:ConvertModeToVisibility x:Key="ModeToVisibilityConverter" />
+
+        <Style TargetType="Label">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="25"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+            <Setter Property="Height" Value="25"/>
+        </Style>
     </Application.Resources>
 </Application>
