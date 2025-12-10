@@ -62,8 +62,20 @@ public partial class OrderListWindow : Window
     }
 
     /// <summary>
-    /// Refresh the order list when the window is loaded
+    /// List observer to refresh the order list when there are changes
     /// </summary>
-    private void Window_Loaded(object sender, RoutedEventArgs e) => RefreshOrderList();
-  
+    private void orderListObserver()
+    => RefreshOrderList();
+
+
+    /// <summary>
+    /// Add the observer when the window is loaded
+    /// </summary>
+    private void Window_Loaded(object sender, RoutedEventArgs e) => s_bl.Order.AddObserver(orderListObserver);
+
+    /// <summary>
+    /// Remove the observer when the window is closed
+    /// </summary>
+    private void Window_Closed(object sender, EventArgs e) => s_bl.Order.RemoveObserver(orderListObserver);
+
 }

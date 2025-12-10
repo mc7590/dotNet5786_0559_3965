@@ -60,7 +60,19 @@ public partial class CourierListWindow : Window
     }
 
     /// <summary>
-    /// Load the courier list when the window is loaded 
+    /// List observer to refresh the courier list when there are changes
     /// </summary>
-    private void Window_Loaded(object sender, RoutedEventArgs e) => RefreshCourierList();
+    private void courierListObserver()
+    => RefreshCourierList();
+
+
+    /// <summary>
+    /// Add the observer when the window is loaded
+    /// </summary>
+    private void Window_Loaded(object sender, RoutedEventArgs e) => s_bl.Courier.AddObserver(courierListObserver);
+
+    /// <summary>
+    /// Remove the observer when the window is closed
+    /// </summary>
+    private void Window_Closed(object sender, EventArgs e) => s_bl.Courier.RemoveObserver(courierListObserver);
 }
