@@ -117,7 +117,7 @@ internal static class CourierManager
             throw new BO.BlDoesNotExistException($"Courier with ID={boCourier.Id} does Not exist");
         //check if password is strong enough
         if (!Tools.IsStrongPassword(boCourier.Password!))
-            throw new BO.BlInvalidInputException("Password is not strong enough");
+            throw new BO.BlInvalidInputException($"Password {boCourier.Password} is not strong enough");
 
         DO.Courier doCourier = CourierBoToDo(boCourier)!;
         s_dal.Courier.Update(doCourier);
