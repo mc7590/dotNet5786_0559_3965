@@ -22,11 +22,13 @@ public partial class CourierListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
 
+    /// <summary>
+    /// Constructor
+    /// </summary>
     public CourierListWindow()
     {
         InitializeComponent();
     }
-
 
     public IEnumerable<BO.CourierInList> CourierList
     {
@@ -63,8 +65,7 @@ public partial class CourierListWindow : Window
     /// <summary>
     /// List observer to refresh the courier list when there are changes
     /// </summary>
-    private void courierListObserver()
-    => RefreshCourierList();
+    private void courierListObserver()  => RefreshCourierList();
 
 
     /// <summary>
@@ -77,6 +78,9 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void Window_Closed(object sender, EventArgs e) => s_bl.Courier.RemoveObserver(courierListObserver);
 
+    /// <summary>
+    /// The selected courier in the DataGrid
+    /// </summary>
     public object? SelectedCourier { get; set; }
 
     /// <summary>
@@ -97,10 +101,42 @@ public partial class CourierListWindow : Window
         }
     }
 
+    /// <summary>
+    /// Add a new courier
+    /// </summary>
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
         CourierWindow win = new CourierWindow(0);  
         win.ShowDialog();
         RefreshCourierList();
+    }
+
+    /// <summary>
+    /// Delete the selected courier
+    /// </summary>
+    private void DeleteCourier_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is Button btn && btn.CommandParameter is int courierId)
+        {
+            int managerId = s_bl?.Admin.GetConfig().ManagerId ?? 0;
+            var res = MessageBox.Show(
+                      $"Are you sure you want to delete courier with Id {courierId}?",
+                      "Confirm delete",
+                      MessageBoxButton.YesNo,
+                      MessageBoxImage.Warning);
+            if (res != MessageBoxResult.Yes)
+                return;
+            try
+            {
+                s_bl!.Courier.Delete(managerId, courierId);
+                MessageBox.Show("Courier deleted successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+                RefreshCourierList();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Could not delete courier: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
     }
 }

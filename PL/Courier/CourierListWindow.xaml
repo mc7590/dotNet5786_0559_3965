@@ -53,6 +53,16 @@
                 <DataGridTextColumn Binding="{Binding TotalOnTimeDeliveries}" Header="Total On Time Deliveries" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TotalLateDeliveries}" Header="Total Late Deliveries" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding OrdersInProgressId}" Header="Orders In Progress Id" Width="Auto"/>
+                <DataGridTemplateColumn Header="Actions" Width="Auto">
+                <DataGridTemplateColumn.CellTemplate>
+                      <DataTemplate>
+                          <Button Content="Delete"
+                    CommandParameter="{Binding Id}" 
+                    Click="DeleteCourier_Click"
+                    Padding="6,2"/>
+                      </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
             
         </DataGrid>
