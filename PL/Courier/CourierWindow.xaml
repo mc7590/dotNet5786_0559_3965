@@ -61,7 +61,7 @@
 
         <Label Grid.Row="6" Grid.Column="0" Content="Delivery Method:"/>
         <ComboBox Grid.Row="6" Grid.Column="1"
-                  ItemsSource="{Binding Source={StaticResource DeliveryMethodCollectionKey}}"
+                  ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
                   SelectedItem="{Binding CurrentCourier.DeliveryMethod, Mode=TwoWay}"/>
 
         <Label Grid.Row="7" Grid.Column="0" Content="Started Working:"/>

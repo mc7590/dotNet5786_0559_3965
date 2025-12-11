@@ -4,7 +4,6 @@ using System.Windows;
 using System.Windows.Data;
 
 namespace PL;
-
 /// <summary>
 /// Converts "Update" string to boolean true (for IsReadOnly property).
 /// </summary>

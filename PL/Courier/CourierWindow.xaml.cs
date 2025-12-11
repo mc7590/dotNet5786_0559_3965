@@ -1,20 +1,10 @@
-﻿using Helpers;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 
 namespace PL.Courier;
-
 /// <summary>
 /// Interaction logic for CourierWindow.xaml
 /// </summary>
@@ -67,6 +57,7 @@ public partial class CourierWindow : Window
         // Set button text before InitializeComponent
         ButtonText = id == 0 ? "Add" : "Update";
 
+        //InitializeComponent();
         InitializeComponent();
         try
         {
