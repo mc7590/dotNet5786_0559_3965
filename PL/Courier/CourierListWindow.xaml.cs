@@ -86,16 +86,21 @@ public partial class CourierListWindow : Window
     private void dgCourierList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
         //check if the double click was not on an empty area in the DataGrid
-        if (sender is DataGrid dg && dg.SelectedItem != null)
+        if (sender is DataGrid dg && dg.SelectedItem is BO.CourierInList selected)
         {
-            object SelectedCourier = dg.SelectedItem; //access to the selected object from DataGrid
+            BO.Courier fullCourier = s_bl.Courier.Read(selected.Id, selected.Id)!;
 
-            if (SelectedCourier != null)
-            {
-                // open the CourierWindow for the selected courier
-                CourierWindow detailsWindow = new CourierWindow((SelectedCourier as BO.Courier)?.Id ?? 0);
-                detailsWindow.Show();
-            }
+            CourierWindow win = new CourierWindow(fullCourier.Id);
+            win.ShowDialog();
+
+            RefreshCourierList();
         }
+    }
+
+    private void BtnAdd_Click(object sender, RoutedEventArgs e)
+    {
+        CourierWindow win = new CourierWindow(0);  
+        win.ShowDialog();
+        RefreshCourierList();
     }
 }
