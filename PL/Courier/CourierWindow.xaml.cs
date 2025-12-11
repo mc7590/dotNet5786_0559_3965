@@ -51,7 +51,7 @@ public partial class CourierWindow : Window
     }
 
     public static readonly DependencyProperty CurrentCourierProperty =
-        DependencyProperty.Register("CurrentCourier", typeof(BO.Courier), typeof(CourierWindow));
+        DependencyProperty.Register("CurrentCourier", typeof(BO.Courier), typeof(CourierWindow), new PropertyMetadata(null));
     public CourierWindow(int id = 0)
     {
         // Set button text before InitializeComponent
@@ -82,7 +82,7 @@ public partial class CourierWindow : Window
             CurrentCourier = new BO.Courier { Id = 0, StartedWorking = DateTime.Now };
         }
         // Bind all XAML elements to this object (Window)
-        DataContext = this;
+        //DataContext = this;
     }
 
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
@@ -92,7 +92,7 @@ public partial class CourierWindow : Window
         // Add or Update logic
         try
         {
-            if (CurrentCourier.Id == 0)
+            if (ButtonText == "Add")
                 bl.Courier.Create(id, CurrentCourier);
             else
                 bl.Courier.Update(id, CurrentCourier);
