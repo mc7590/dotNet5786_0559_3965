@@ -33,6 +33,8 @@ public partial class CourierWindow : Window
         get { return (BO.Courier?)GetValue(CurrentCourierProperty)!; }
         set { SetValue(CurrentCourierProperty, value); }
     }
+    public static readonly DependencyProperty CurrentCourierProperty =
+    DependencyProperty.Register("CurrentCourier", typeof(BO.Courier), typeof(CourierWindow), new PropertyMetadata(null));
 
     private void CourierObserver()
     {
@@ -50,8 +52,7 @@ public partial class CourierWindow : Window
         });
     }
 
-    public static readonly DependencyProperty CurrentCourierProperty =
-        DependencyProperty.Register("CurrentCourier", typeof(BO.Courier), typeof(CourierWindow), new PropertyMetadata(null));
+
     public CourierWindow(int id = 0)
     {
         // Set button text before InitializeComponent
@@ -67,7 +68,7 @@ public partial class CourierWindow : Window
                 CurrentCourier = new BO.Courier
                 {
                     Id = 0,
-                    StartedWorking = DateTime.Now
+                    StartedWorking = s_bl.Admin.GetClock()
                 };
             }
             else
