@@ -650,4 +650,17 @@
     <Weight>4.25</Weight>
     <Fragile>false</Fragile>
   </Order>
+  <Order>
+    <Id>1050</Id>
+    <OrderType>Regular</OrderType>
+    <Description>kjsfhkjshfkjshfkjsdhk</Description>
+    <Address>levin 3 petack tikva</Address>
+    <Latitude>0</Latitude>
+    <Longitude>0</Longitude>
+    <CustomerName>hirshi</CustomerName>
+    <CustomerPhone>0547777777</CustomerPhone>
+    <OrderCreationTime>2025-12-10T21:01:33</OrderCreationTime>
+    <Weight xsi:nil="true" />
+    <Fragile xsi:nil="true" />
+  </Order>
 </ArrayOfOrder>

@@ -5,6 +5,7 @@
              StartupUri="MainWindow.xaml">
     <Application.Resources>
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
+        <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
         <local:ConvertModeToReadOnly x:Key="ModeToReadOnlyConverter" />
         <local:ConvertModeToVisibility x:Key="ModeToVisibilityConverter" />

@@ -90,6 +90,18 @@ public partial class OrderWindow : Window
             CurrentOrder = new BO.Order { Id = 0, CreationTime = s_bl.Admin.GetClock() };
         }
     }
+
+    public IEnumerable<BO.DeliveryPerOrderInList> DeliveryPerOrderInList
+    {
+        get { return (IEnumerable<BO.DeliveryPerOrderInList>)GetValue(DeliveryPerOrderInListProperty); }
+        set { SetValue(DeliveryPerOrderInListProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for DeliveryPerOrderInList.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty DeliveryPerOrderInListProperty =
+        DependencyProperty.Register("DeliveryPerOrderInList", typeof(IEnumerable<BO.DeliveryPerOrderInList>), typeof(OrderWindow), new PropertyMetadata(null));
+
+
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         var bl = BlApi.Factory.Get();

@@ -1,4 +1,5 @@
 ﻿using BO;
+using PL.Courier;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -101,4 +102,13 @@ public partial class OrderListWindow : Window
         }
     }
 
+    /// <summary>
+    /// Add a new order
+    /// </summary>
+    private void BtnAdd_Click(object sender, RoutedEventArgs e)
+    {
+        OrderWindow window = new OrderWindow(0);
+        window.ShowDialog();
+        RefreshOrderList();
+    }
 }

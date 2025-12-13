@@ -16,15 +16,24 @@ public class MethodDeliveryCollection : IEnumerable<BO.EnumDeliveryMethod>
 }
 
 /// <summary>
+/// for binding EnumOrderType in UI (ComboBox)
+/// </summary>
+public class OrderTypeCollection : IEnumerable<BO.EnumOrderType>
+{
+    static readonly IEnumerable<BO.EnumOrderType> s_enums =
+        (IEnumerable<BO.EnumOrderType>)Enum.GetValues(typeof(BO.EnumOrderType));
+    public IEnumerator<BO.EnumOrderType> GetEnumerator() => s_enums.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+/// <summary>
 /// for binding EnumOrderStatus in UI (ComboBox)
 /// </summary>
 public class OrderStatusCollection : IEnumerable<BO.EnumOrderStatus>
 {
     static readonly IEnumerable<BO.EnumOrderStatus> s_enums =
         (IEnumerable<BO.EnumOrderStatus>)Enum.GetValues(typeof(BO.EnumOrderStatus));
-
     public IEnumerator<BO.EnumOrderStatus> GetEnumerator() => s_enums.GetEnumerator();
-
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 
