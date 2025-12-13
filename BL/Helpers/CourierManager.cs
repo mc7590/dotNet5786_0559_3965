@@ -124,7 +124,7 @@ internal static class CourierManager
 
         Observers.NotifyItemUpdated(id); //stage 5
         Observers.NotifyListUpdated();  //stage 5
-    }
+    } 
     internal static void DeleteCourier(int id, int courierId)
     {
         Tools.IsManager(id);
