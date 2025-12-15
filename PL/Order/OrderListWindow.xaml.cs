@@ -89,16 +89,14 @@ public partial class OrderListWindow : Window
     private void dgOrderList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
         //check if the double click was not on an empty area in the DataGrid
-        if (sender is DataGrid dg && dg.SelectedItem != null)
+        if (sender is DataGrid dg && dg.SelectedItem is BO.OrderInList selected)
         {
-            object selectedOrder = dg.SelectedItem; //access to the selected object from DataGrid
+            BO.Order fullOrder = s_bl.Order.Read(s_bl.Admin.GetConfig().ManagerId, selected.OrderId)!;
 
-            if (selectedOrder != null)
-            {
-                // open the OrderWindow for the selected order
-                OrderWindow detailsWindow = new OrderWindow((selectedOrder as BO.Order)?.Id ?? 0);
-                detailsWindow.Show();
-            }
+            OrderWindow win = new OrderWindow(fullOrder.Id);
+            win.ShowDialog();
+
+            RefreshOrderList();
         }
     }
 

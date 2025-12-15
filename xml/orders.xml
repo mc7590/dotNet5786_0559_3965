@@ -443,19 +443,6 @@
     <Fragile>false</Fragile>
   </Order>
   <Order>
-    <Id>1034</Id>
-    <OrderType>Express</OrderType>
-    <Description>VIP customer – monthly order</Description>
-    <Address>David Ben Gurion 65, Bnei Brak</Address>
-    <Latitude>32.08691883312563</Latitude>
-    <Longitude>34.82261950496387</Longitude>
-    <CustomerName>Yoni Levi</CustomerName>
-    <CustomerPhone>0549998887</CustomerPhone>
-    <OrderCreationTime>2025-12-10T20:34:33</OrderCreationTime>
-    <Weight>1.94</Weight>
-    <Fragile>false</Fragile>
-  </Order>
-  <Order>
     <Id>1035</Id>
     <OrderType>Regular</OrderType>
     <Description>Lunch break order for two</Description>
@@ -662,5 +649,18 @@
     <OrderCreationTime>2025-12-10T21:01:33</OrderCreationTime>
     <Weight xsi:nil="true" />
     <Fragile xsi:nil="true" />
+  </Order>
+  <Order>
+    <Id>1034</Id>
+    <OrderType>Express</OrderType>
+    <Description>VIP customer – monthly order</Description>
+    <Address>David Ben Gurion 65, Bnei Brak</Address>
+    <Latitude>32.08691883312563</Latitude>
+    <Longitude>34.82261950496387</Longitude>
+    <CustomerName>Yoni Levi</CustomerName>
+    <CustomerPhone>0549998887</CustomerPhone>
+    <OrderCreationTime>2025-12-10T20:34:33</OrderCreationTime>
+    <Weight>1.94</Weight>
+    <Fragile>true</Fragile>
   </Order>
 </ArrayOfOrder>
