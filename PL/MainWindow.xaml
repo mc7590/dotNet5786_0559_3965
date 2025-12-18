@@ -8,7 +8,11 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded"
         Closed="MainWindow_Closed">
-
+    <Window.Background>
+        <ImageBrush ImageSource="Resources/logo.jpg"
+                Stretch="UniformToFill"
+                Opacity="0.5"/>
+    </Window.Background>
 
     <Grid Margin="10">
         <Grid.RowDefinitions>
@@ -35,23 +39,23 @@
 
             <!-- System clock display -->
             <Border Grid.Column="1"
-                    Background="#00BFFF"
-                    Padding="10"
-                    CornerRadius="6"
+                    Background="#ED1C24"
+                    Padding="12"
+                    CornerRadius="18"
                     HorizontalAlignment="Center">
                 <Label Content="{Binding CurrentTime}"
-                    FontSize="26"
+                    FontSize="25"
                        FontWeight="Bold"
                        Foreground="White"/>
             </Border>
 
             <!-- Time adjustment buttons -->
-            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
-                <Button Content="Add One Minute" Margin="3" Click="BtnAddOneMinute_Click"/>
-                <Button Content="Add One Hour" Margin="3" Click="BtnAddOneHour_Click"/>
-                <Button Content="Add One Day" Margin="3" Click="BtnAddOneDay_Click"/>
-                <Button Content="Add One Month" Margin="3" Click="BtnAddOneMonth_Click"/>
-                <Button Content="Add One Year" Margin="3" Click="BtnAddOneYear_Click"/>
+            <StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10,0,0" Width="150">
+                <Button Content="Add 1 Minute" Margin="3" Click="BtnAddOneMinute_Click"/>
+                <Button Content="Add 1 Hour" Margin="3" Click="BtnAddOneHour_Click"/>
+                <Button Content="Add 1 Day" Margin="3" Click="BtnAddOneDay_Click"/>
+                <Button Content="Add 1 Month" Margin="3" Click="BtnAddOneMonth_Click"/>
+                <Button Content="Add 1 Year" Margin="3" Click="BtnAddOneYear_Click"/>
             </StackPanel>
         </Grid>
 
