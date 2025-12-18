@@ -93,7 +93,7 @@ internal class OrderImplementation : IOrder
                 return;
             }
         }
-        throw new DalDoesNotExistException($"Courier with ID={id} doesn't exist");
+        throw new DalDoesNotExistException($"Order with ID={id} doesn't exist");
     }
 
     /// <summary>

@@ -130,7 +130,7 @@ internal static class DeliveryManager
             {
                 DeliveryId = delivery.Id,
                 CourierId = delivery.CourierId,
-                CourierName = s_dal.Courier.Read(delivery.CourierId)!.Name,
+                CourierName = s_dal.Courier.Read(delivery.CourierId)?.Name ?? null,
                 DeliveryMethod = (BO.EnumDeliveryMethod)delivery.DeliveryMethod,
                 DelCreationTime = delivery.DeliveryStartTime,
                 EndDeliveryStatus = (BO.EnumEndDeliveryStatus?)delivery.EndDeliveryStatus,

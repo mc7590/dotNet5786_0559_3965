@@ -1,5 +1,4 @@
-﻿using BO;
-using PL.Courier;
+﻿using PL.Courier;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,12 +23,13 @@ public partial class OrderListWindow : Window
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
 
+    /// <summary>
+    /// constructor
+    /// </summary>
     public OrderListWindow()
     {
         InitializeComponent();
     }
-
-
 
     public IEnumerable<BO.OrderInList> OrderList
     {
@@ -41,13 +41,27 @@ public partial class OrderListWindow : Window
     public static readonly DependencyProperty OrderListProperty =
         DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
 
-    public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
+    //public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
 
-    /// <summary>
-    /// Filter the list when the selection in the ComboBox changes
-    /// </summary>
-    private void FilterCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) => RefreshOrderList();
+    public BO.EnumOrderStatus OrderStatus
+    {
+        get => (BO.EnumOrderStatus)GetValue(OrderStatusProperty);
+        set => SetValue(OrderStatusProperty, value);
+    }
 
+    public static readonly DependencyProperty OrderStatusProperty =
+        DependencyProperty.Register(
+            nameof(OrderStatus),
+            typeof(BO.EnumOrderStatus),
+            typeof(OrderListWindow),
+            new PropertyMetadata(BO.EnumOrderStatus.None, OnOrderStatusChanged)
+        );
+    private static void OnOrderStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {
+        if (d is OrderListWindow win)
+            win.RefreshOrderList();
+    }
+ 
     /// <summary>
     /// Refresh the order list according to the selected filter
     /// </summary>
@@ -66,38 +80,49 @@ public partial class OrderListWindow : Window
     /// <summary>
     /// List observer to refresh the order list when there are changes
     /// </summary>
-    private void orderListObserver()
-    => RefreshOrderList();
-
+    private void orderListObserver() => RefreshOrderList();
 
     /// <summary>
     /// Add the observer when the window is loaded
     /// </summary>
-    private void Window_Loaded(object sender, RoutedEventArgs e) => s_bl.Order.AddObserver(orderListObserver);
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+    {
+        s_bl.Order.AddObserver(orderListObserver);
+        RefreshOrderList();
+    }
 
     /// <summary>
     /// Remove the observer when the window is closed
     /// </summary>
     private void Window_Closed(object sender, EventArgs e) => s_bl.Order.RemoveObserver(orderListObserver);
 
-    public object? SelectedOrder { get; set; }
+    public BO.OrderInList? SelectedOrder
+    {
+        get => (BO.OrderInList?)GetValue(SelectedOrderProperty);
+        set => SetValue(SelectedOrderProperty, value);
+    }
+
+    public static readonly DependencyProperty SelectedOrderProperty =
+        DependencyProperty.Register(
+            nameof(SelectedOrder),
+            typeof(BO.OrderInList),
+            typeof(OrderListWindow),
+            new PropertyMetadata(null)
+        );
 
     /// <summary>
     /// Take care of double click on a DataGrid row
     /// dg = data grid
     /// </summary>
-    private void dgOrderList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
+    private void dgOrderList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        //check if the double click was not on an empty area in the DataGrid
-        if (sender is DataGrid dg && dg.SelectedItem is BO.OrderInList selected)
-        {
-            BO.Order fullOrder = s_bl.Order.Read(ManagerId, selected.OrderId)!;
+        if (SelectedOrder == null)
+            return;
 
-            OrderWindow win = new OrderWindow(fullOrder.Id);
-            win.ShowDialog();
+        BO.Order fullOrder =
+            s_bl.Order.Read(ManagerId, SelectedOrder.OrderId)!;
 
-            RefreshOrderList();
-        }
+        new OrderWindow(fullOrder.Id).ShowDialog();
     }
 
     /// <summary>
@@ -108,5 +133,21 @@ public partial class OrderListWindow : Window
         OrderWindow window = new OrderWindow(0);
         window.ShowDialog();
         RefreshOrderList();
+    }
+
+    private void DeleteOrder_Click(object sender, RoutedEventArgs e)
+    {
+        if (SelectedOrder == null)
+            return;
+        try
+        {
+            s_bl.Order.Delete(ManagerId, SelectedOrder.OrderId);
+            MessageBox.Show("Order deleted successfully");
+            RefreshOrderList();
+        }
+        catch
+        {
+            MessageBox.Show("Failed to delete order");
+        }
     }
 }

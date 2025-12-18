@@ -25,11 +25,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="176,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
-                      ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
-                      SelectedValue="{Binding OrderStatus, Mode=TwoWay}"
-                      SelectionChanged="FilterCombo_SelectionChanged"
-                      />
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"      
+                      ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}" 
+                      SelectedItem="{Binding OrderStatus, Mode=TwoWay}" />
         </Grid>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding OrderList}"
@@ -50,6 +48,15 @@
                 <DataGridTextColumn Binding="{Binding RemainingTime}" Header="Remaining Time" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TotalDeliveryTime}" Header="Total DeliveryTime" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TotalDeliveries}" Header="Total Deliveries" Width="Auto"/>
+                <DataGridTemplateColumn Header="Actions" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Button Content="Delete"
+                                    Click="DeleteOrder_Click"
+                                    Padding="6,2"/>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 

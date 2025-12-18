@@ -24,10 +24,9 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Center"/>
-            <ComboBox ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
-                      SelectedValue="{Binding MethodDelivery, Mode=TwoWay}"
-                      SelectionChanged="FilterCombo_SelectionChanged"
-                      Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+            <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
+                      ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
+                      SelectedItem="{Binding MethodDelivery, Mode=TwoWay}"/>
         </Grid>
         <DataGrid Grid.Row="1" 
           ItemsSource="{Binding CourierList}"
@@ -57,9 +56,8 @@
                 <DataGridTemplateColumn.CellTemplate>
                       <DataTemplate>
                           <Button Content="Delete"
-                    CommandParameter="{Binding Id}" 
-                    Click="DeleteCourier_Click"
-                    Padding="6,2"/>
+                                  Click="DeleteCourier_Click"
+                                  Padding="6,2"/>
                       </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

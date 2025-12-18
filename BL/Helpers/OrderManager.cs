@@ -109,7 +109,7 @@ internal static class OrderManager
     internal static void DeleteOrder(int id, int orderId)
     {
         Tools.IsManager(id);
-        throw new BO.BlInvalidOperationException("Orders cannot be deleted");
+        s_dal.Order.Delete(orderId);
     }
 
     /// <summary>

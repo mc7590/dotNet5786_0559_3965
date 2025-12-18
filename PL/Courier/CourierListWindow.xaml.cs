@@ -41,11 +41,23 @@ public partial class CourierListWindow : Window
     public static readonly DependencyProperty CourierListProperty =
         DependencyProperty.Register("CourierList", typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(null));
 
-    public BO.EnumDeliveryMethod MethodDelivery { get; set; } = BO.EnumDeliveryMethod.None;
-    /// <summary>
-    /// Filter the list when the selection in the ComboBox changes
-    /// </summary>
-    private void FilterCombo_SelectionChanged(object sender, SelectionChangedEventArgs e) => RefreshCourierList();
+    public BO.EnumDeliveryMethod MethodDelivery
+    {
+         get => (BO.EnumDeliveryMethod)GetValue(MethodDeliveryProperty);
+        set => SetValue(MethodDeliveryProperty, value);
+    }
+    public static readonly DependencyProperty MethodDeliveryProperty =
+        DependencyProperty.Register(
+            nameof(MethodDelivery),
+            typeof(BO.EnumDeliveryMethod),
+            typeof(CourierListWindow),
+            new PropertyMetadata(BO.EnumDeliveryMethod.None, OnMethodDeliveryChanged)
+        );
+    private static void OnMethodDeliveryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    {         
+        if (d is CourierListWindow win)
+            win.RefreshCourierList();
+    }
     
     /// <summary>
     /// Refresh the courier list according to the selected filter
@@ -71,7 +83,11 @@ public partial class CourierListWindow : Window
     /// <summary>
     /// Add the observer when the window is loaded
     /// </summary>
-    private void Window_Loaded(object sender, RoutedEventArgs e) => s_bl.Courier.AddObserver(courierListObserver);
+    private void Window_Loaded(object sender, RoutedEventArgs e) 
+    {
+        s_bl.Courier.AddObserver(courierListObserver);
+        RefreshCourierList();
+    }
 
     /// <summary>
     /// Remove the observer when the window is closed
@@ -81,7 +97,20 @@ public partial class CourierListWindow : Window
     /// <summary>
     /// The selected courier in the DataGrid
     /// </summary>
-    public object? SelectedCourier { get; set; }
+    public BO.CourierInList? SelectedCourier
+    { 
+        get => (BO.CourierInList?)GetValue(SelectedCourierProperty);
+        set => SetValue(SelectedCourierProperty, value);
+    }
+     
+    public static readonly DependencyProperty SelectedCourierProperty =
+        DependencyProperty.Register(
+            nameof(SelectedCourier),
+            typeof(BO.CourierInList),
+            typeof(CourierListWindow),
+            new PropertyMetadata(null)
+        );
+
 
     /// <summary>
     /// Take care of double click on a DataGrid row
@@ -90,15 +119,10 @@ public partial class CourierListWindow : Window
     private void dgCourierList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
         //check if the double click was not on an empty area in the DataGrid
-        if (sender is DataGrid dg && dg.SelectedItem is BO.CourierInList selected)
-        {
-            BO.Courier fullCourier = s_bl.Courier.Read(selected.Id, selected.Id)!;
-
-            CourierWindow win = new CourierWindow(fullCourier.Id);
-            win.ShowDialog();
-
-            RefreshCourierList();
-        }
+        if (SelectedCourier == null)
+            return;
+        BO.Courier fullCourier = s_bl.Courier.Read(ManagerId, ((BO.CourierInList)SelectedCourier).Id)!;
+        new CourierWindow(fullCourier.Id).ShowDialog();
     }
 
     /// <summary>
@@ -116,26 +140,16 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void DeleteCourier_Click(object sender, RoutedEventArgs e)
     {
-        if (sender is Button btn && btn.CommandParameter is int courierId)
+        if (SelectedCourier == null)
+            return;
+        try
         {
-            var res = MessageBox.Show(
-                      $"Are you sure you want to delete courier with Id {courierId}?",
-                      "Confirm delete",
-                      MessageBoxButton.YesNo,
-                      MessageBoxImage.Warning);
-            if (res != MessageBoxResult.Yes)
-                return;
-            try
-            {
-                s_bl!.Courier.Delete(ManagerId, courierId);
-                MessageBox.Show("Courier deleted successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
-                RefreshCourierList();
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show($"Could not delete courier: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            }
+            s_bl.Courier.Delete(ManagerId, SelectedCourier.Id);
+            MessageBox.Show("Courier deleted successfully");
         }
-
+        catch
+        {
+            MessageBox.Show("Failed to delete courier");
+        }
     }
 }
