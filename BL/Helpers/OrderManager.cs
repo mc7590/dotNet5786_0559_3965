@@ -356,6 +356,9 @@ internal static class OrderManager
     private static TimeSpan GetRemainingTime(DO.Order doOrder)
     {
         DateTime maxDeliveryTime = doOrder.OrderCreationTime + AdminManager.GetConfig().GetMaxDeliveryTime;
+        TimeSpan remainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime);
+        if (remainingTime <= TimeSpan.Zero)
+            return TimeSpan.Zero;
         return Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime);
     }
     private static TimeSpan CalculateExpectedDeliveryTime(int orderId)

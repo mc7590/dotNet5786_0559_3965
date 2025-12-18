@@ -1,8 +1,10 @@
-﻿using BO;
-using System.Collections;
+﻿using System.Collections;
 using System.Reflection;
-using System.Text;
 namespace Helpers;
+using System;
+using System.Net.Http;
+using System.Threading.Tasks;
+using System.Text.Json;
 
 public static class Tools
 {
@@ -132,9 +134,50 @@ public static class Tools
     /// </summary>
     public static double CalculateDistanceInKm(double longitude, double latitude)
     {
-        double aerialDistance = CalculateAerialDistance(longitude, latitude);
-        const double roadFactor = 1.25;
-        return Math.Round(aerialDistance * roadFactor, 2);
+        double? originLat = AdminManager.GetConfig().Latitude;
+        double? originLon = AdminManager.GetConfig().Longitude;
+        if (originLat == null || originLon == null)
+        {
+            return 0;
+        }
+        return GetDrivingDistanceFromApi(originLat.Value, originLon.Value, latitude, longitude);
+    }
+    private static readonly HttpClient client = new HttpClient();
+    private static double GetDrivingDistanceFromApi(double originLat, double originLon, double destLat, double destLon)
+    {
+        try
+        {
+            string coordinates = $"{originLon},{originLat};{destLon},{destLat}";
+            string url = $"http://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
+
+            // ביצוע הקריאה ב-Thread נפרד למניעת Deadlock
+            var response = Task.Run(() => client.GetAsync(url)).Result;
+
+            if (response.IsSuccessStatusCode)
+            {
+                var content = response.Content.ReadAsStringAsync().Result;
+
+                using (JsonDocument doc = JsonDocument.Parse(content))
+                {
+                    var root = doc.RootElement;
+                    if (root.TryGetProperty("routes", out JsonElement routes) && routes.GetArrayLength() > 0)
+                    {
+                        if (routes[0].TryGetProperty("distance", out JsonElement distanceElement))
+                        {
+                            // המרחק מתקבל במטרים, מחלקים ב-1000 לקבלת ק"מ
+                            return distanceElement.GetDouble() / 1000.0;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            // במקרה של שגיאה (למשל אין אינטרנט), נחזיר 0
+            Console.WriteLine($"Error fetching distance: {ex.Message}");
+        }
+
+        return 0;
     }
     /// <summary>
     /// Calculates the aerial distance in kilometers between the company location and the given coordinates using the Haversine formula.
@@ -144,20 +187,27 @@ public static class Tools
         double? companyLat = AdminManager.GetConfig().Latitude;
         double? companyLon = AdminManager.GetConfig().Longitude;
         if (companyLat == null || companyLon == null)
-            throw new BO.BlInvalidInputException("Company coordinates are not defined in Config");
-        const double earthRadiusKm = 6371;
-        double dLat = ToRadians(latitude - companyLat.Value);
-        double dLon = ToRadians(longitude - companyLon.Value);
-        double lat1 = ToRadians(companyLat.Value);
-        double lat2 = ToRadians(latitude);
-        double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
-                   Math.Sin(dLon / 2) * Math.Sin(dLon / 2) * Math.Cos(lat1) * Math.Cos(lat2);
-        double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-        return Math.Round(earthRadiusKm * c, 2);
+        {
+            return 0; 
+        }
+        return GetAerialDistance(companyLat.Value, companyLon.Value, latitude, longitude);
     }
-    private static double ToRadians(double angle)
+    private static double GetAerialDistance(double lat1, double lon1, double lat2, double lon2)
     {
-        return angle * Math.PI / 180;
+        double rlat1 = Math.PI * lat1 / 180;
+        double rlat2 = Math.PI * lat2 / 180;
+        double theta = lon1 - lon2;
+        double rtheta = Math.PI * theta / 180;
+
+        double dist =
+            Math.Sin(rlat1) * Math.Sin(rlat2) + Math.Cos(rlat1) *
+            Math.Cos(rlat2) * Math.Cos(rtheta);
+
+        dist = Math.Acos(dist);
+        dist = dist * 180 / Math.PI;
+        dist = dist * 60 * 1.1515;
+
+        return dist * 1.609344;  
     }
     public static TimeSpan CalculateTimeDifference(DateTime start, DateTime end)
     {
