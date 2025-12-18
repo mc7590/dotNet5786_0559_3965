@@ -21,6 +21,7 @@ namespace PL.Courier;
 public partial class CourierListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
 
     /// <summary>
     /// Constructor
@@ -51,14 +52,13 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void RefreshCourierList()    
     {
-        int managerId = s_bl?.Admin.GetConfig().ManagerId ?? 0;
         if (MethodDelivery == BO.EnumDeliveryMethod.None)
         {
-            CourierList = s_bl?.Courier.GetCouriersInList(managerId)!;
+            CourierList = s_bl?.Courier.GetCouriersInList(ManagerId)!;
         }
         else
         {
-            CourierList = s_bl?.Courier.GetCouriersInList(managerId, null, null, BO.EnumCourierFieldFilter.DeliveryMethod, MethodDelivery)!;
+            CourierList = s_bl?.Courier.GetCouriersInList(ManagerId, null, null, BO.EnumCourierFieldFilter.DeliveryMethod, MethodDelivery)!;
         }
     }
 
@@ -118,7 +118,6 @@ public partial class CourierListWindow : Window
     {
         if (sender is Button btn && btn.CommandParameter is int courierId)
         {
-            int managerId = s_bl?.Admin.GetConfig().ManagerId ?? 0;
             var res = MessageBox.Show(
                       $"Are you sure you want to delete courier with Id {courierId}?",
                       "Confirm delete",
@@ -128,7 +127,7 @@ public partial class CourierListWindow : Window
                 return;
             try
             {
-                s_bl!.Courier.Delete(managerId, courierId);
+                s_bl!.Courier.Delete(ManagerId, courierId);
                 MessageBox.Show("Courier deleted successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
                 RefreshCourierList();
             }

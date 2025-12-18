@@ -22,6 +22,7 @@ namespace PL.Order;
 public partial class OrderListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
 
     public OrderListWindow()
     {
@@ -52,14 +53,13 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void RefreshOrderList()
     {
-        int managerId = s_bl?.Admin.GetConfig().ManagerId ?? 0;
         if (OrderStatus == BO.EnumOrderStatus.None)
         {
-            OrderList = s_bl?.Order.GetOrderInList(managerId)!;
+            OrderList = s_bl?.Order.GetOrderInList(ManagerId)!;
         }
         else
         {
-            OrderList = s_bl?.Order.GetOrderInList(managerId, BO.EnumOrderFieldSort.OrderStatus, OrderStatus)!;
+            OrderList = s_bl?.Order.GetOrderInList(ManagerId, BO.EnumOrderFieldSort.OrderStatus, OrderStatus)!;
         }
     }
 
@@ -91,7 +91,7 @@ public partial class OrderListWindow : Window
         //check if the double click was not on an empty area in the DataGrid
         if (sender is DataGrid dg && dg.SelectedItem is BO.OrderInList selected)
         {
-            BO.Order fullOrder = s_bl.Order.Read(s_bl.Admin.GetConfig().ManagerId, selected.OrderId)!;
+            BO.Order fullOrder = s_bl.Order.Read(ManagerId, selected.OrderId)!;
 
             OrderWindow win = new OrderWindow(fullOrder.Id);
             win.ShowDialog();

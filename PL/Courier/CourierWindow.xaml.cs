@@ -11,6 +11,7 @@ namespace PL.Courier;
 public partial class CourierWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
 
     // DependencyProperty for the Add/Update button text
     public static readonly DependencyProperty ButtonTextProperty =
@@ -89,14 +90,13 @@ public partial class CourierWindow : Window
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         var bl = BlApi.Factory.Get();
-        int id = s_bl?.Admin.GetConfig().ManagerId ?? 0;
         // Add or Update logic
         try
         {
             if (ButtonText == "Add")
-                bl.Courier.Create(id, CurrentCourier);
+                bl.Courier.Create(ManagerId, CurrentCourier);
             else
-                bl.Courier.Update(id, CurrentCourier);
+                bl.Courier.Update(ManagerId, CurrentCourier);
 
             MessageBox.Show("Saved successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();

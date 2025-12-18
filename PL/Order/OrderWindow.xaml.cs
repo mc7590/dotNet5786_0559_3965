@@ -21,6 +21,7 @@ namespace PL.Order;
 public partial class OrderWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
 
     // DependencyProperty for the Add/Update button text
     public static readonly DependencyProperty ButtonTextProperty =
@@ -80,7 +81,7 @@ public partial class OrderWindow : Window
             }
             else
             {
-                CurrentOrder = BlApi.Factory.Get().Order.Read(s_bl.Admin.GetConfig().ManagerId, orderId)!; //gotten the manager id!
+                CurrentOrder = BlApi.Factory.Get().Order.Read(ManagerId, orderId)!; //gotten the manager id!
             }
 
         }
@@ -105,14 +106,13 @@ public partial class OrderWindow : Window
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         var bl = BlApi.Factory.Get();
-        int id = s_bl?.Admin.GetConfig().ManagerId ?? 0;
         // Add or Update logic
         try
         {
             if (ButtonText == "Add")
-                bl.Order.Create(id, CurrentOrder);
+                bl.Order.Create(ManagerId, CurrentOrder);
             else
-                bl.Order.Update(id, CurrentOrder);
+                bl.Order.Update(ManagerId, CurrentOrder);
 
             MessageBox.Show("Saved successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();
