@@ -18,16 +18,57 @@
             <Setter Property="Background" Value="#FF5757"/>
         </Style>
 
+        <!--textBox-->
         <Style TargetType="TextBox">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
-            <Setter Property="Height" Value="25"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Width" Value="250"/>
+            <Setter Property="MaxWidth" Value="400"/>
         </Style>
 
         <Style TargetType="ComboBox">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
             <Setter Property="Height" Value="25"/>
+        </Style>
+
+        <!--color of app-->
+        <!--<Style TargetType="Foreground">
+            <Setter Property="color"
+        </Style>-->
+        
+        <!--app text-->
+        <Style TargetType="Control">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <Style TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="Segoe UI" />
+            <Setter Property="Foreground" Value="Black" />
+            <Setter Property="FontSize" Value="14" />
+        </Style>
+
+        <!--button-->
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF7F7F"/>
+            <Setter Property="Padding" Value="5,5"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}"
+                            CornerRadius="10"
+                            BorderThickness="0">
+                            <ContentPresenter HorizontalAlignment="Center" 
+                                          VerticalAlignment="Center"
+                                          Margin="{TemplateBinding Padding}"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Application.Resources>
 </Application>
