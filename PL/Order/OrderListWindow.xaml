@@ -4,12 +4,17 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Order"
+        xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
         Title="OrderListWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
 
+    <Window.Resources>
+        <pl:ConvertOrderStatusToBrush x:Key="OrderStatusToBrush"/>
+        <pl:ConvertOrderTypeToBrush x:Key="OrderTypeToBrush"/>
+    </Window.Resources>
 
     <!--External Grid-->
     <Grid>
@@ -41,9 +46,44 @@
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding CourierId}" Header="Courier ID" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding OrderId}" Header="Order ID" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding OrderType}" Header="Order Type" Width="Auto"/>
+
+                <DataGridTemplateColumn Header="Order Type" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding OrderType, Converter={StaticResource OrderTypeToBrush}}"
+                    CornerRadius="14"
+                    Padding="10,2"
+                    Margin="5"
+                    HorizontalAlignment="Center"
+                    MinWidth="100">
+                                <TextBlock Text="{Binding OrderType}"
+                           FontWeight="Light"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
                 <DataGridTextColumn Binding="{Binding AerialDistance}" Header="Aerial Distance" Width="Auto"/>
-                <DataGridTextColumn Binding="{Binding OrderStatus}" Header="Order Status" Width="Auto"/>
+
+                <DataGridTemplateColumn Header="Order Status" Width="Auto">
+                    <DataGridTemplateColumn.CellTemplate>
+                        <DataTemplate>
+                            <Border Background="{Binding OrderStatus, Converter={StaticResource OrderStatusToBrush}}"
+                                    CornerRadius="14"
+                                    Padding="10,2"
+                                    Margin="5"
+                                    HorizontalAlignment="Center"
+                                    MinWidth="100">
+                                <TextBlock Text="{Binding OrderStatus}"
+                                           FontWeight="Light"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
+                            </Border>
+                        </DataTemplate>
+                    </DataGridTemplateColumn.CellTemplate>
+                </DataGridTemplateColumn>
+
                 <DataGridTextColumn Binding="{Binding ScheduleStatus}" Header="Schedule Status" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding RemainingTime}" Header="Remaining Time" Width="Auto"/>
                 <DataGridTextColumn Binding="{Binding TotalDeliveryTime}" Header="Total DeliveryTime" Width="Auto"/>

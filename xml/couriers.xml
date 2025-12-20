@@ -56,17 +56,6 @@
     <MaxPersonalDistance>1</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>315940634</Id>
-    <Name>Shira Israelof</Name>
-    <CourierPhone>0580805824</CourierPhone>
-    <Email>shiraisraelof@gmail.com</Email>
-    <Password>password634</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Car</DeliveryMethod>
-    <StartedWorking>2025-06-10T21:01:33</StartedWorking>
-    <MaxPersonalDistance>18</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>286477714</Id>
     <Name>Gigi Sadin</Name>
     <CourierPhone>0510975300</CourierPhone>
@@ -76,17 +65,6 @@
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2024-12-02T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>338485809</Id>
-    <Name>Noa Tishbi</Name>
-    <CourierPhone>0556772744</CourierPhone>
-    <Email>noatishbi@gmail.com</Email>
-    <Password>password5809</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Car</DeliveryMethod>
-    <StartedWorking>2025-08-18T21:01:33</StartedWorking>
-    <MaxPersonalDistance>10</MaxPersonalDistance>
   </Courier>
   <Courier>
     <Id>222538651</Id>
@@ -230,5 +208,27 @@
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2024-06-12T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>315940634</Id>
+    <Name>Shira Israelof</Name>
+    <CourierPhone>0580805824</CourierPhone>
+    <Email>shiraisraelof@gmail.com</Email>
+    <Password>Password634!</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Motorcycle</DeliveryMethod>
+    <StartedWorking>2025-06-10T21:01:33</StartedWorking>
+    <MaxPersonalDistance>18</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>338485809</Id>
+    <Name>Noa Tishbi</Name>
+    <CourierPhone>0556772744</CourierPhone>
+    <Email>noatishbi@gmail.com</Email>
+    <Password>Pass5809!</Password>
+    <Active>true</Active>
+    <DeliveryMethod>4</DeliveryMethod>
+    <StartedWorking>2025-08-18T21:01:33</StartedWorking>
+    <MaxPersonalDistance>10</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

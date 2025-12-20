@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.Windows;
 using System.Windows.Data;
+using System.Windows.Media;
 
 namespace PL;
 /// <summary>
@@ -45,3 +46,101 @@ public class ConvertModeToVisibility : IValueConverter
         throw new NotImplementedException();
     }
 }
+
+/// <summary>
+/// Converts EnumDeliveryMethod to a specific SolidColorBrush.
+/// </summary>
+public class ConvertDelMethodToBrush : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.EnumDeliveryMethod method)
+        {
+            return method switch
+            {
+                BO.EnumDeliveryMethod.Foot => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB0B0")),
+                BO.EnumDeliveryMethod.Bicycle => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F08B8B")),
+                BO.EnumDeliveryMethod.Motorcycle => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF9A9A")),
+                BO.EnumDeliveryMethod.Car => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6F6F")),
+                _ => Brushes.Transparent
+            };
+        }
+        return Brushes.Transparent;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException(); 
+    }
+}
+
+/// <summary>
+/// Converts EnumOrderStatus to a specific SolidColorBrush.
+/// </summary>
+public class ConvertOrderStatusToBrush : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.EnumOrderStatus method)
+        {
+            return method switch
+            {
+                BO.EnumOrderStatus.Open => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FFB0B0")),
+                BO.EnumOrderStatus.InProgress => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F08B8B")),
+                BO.EnumOrderStatus.Delivered => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF9A9A")),
+                BO.EnumOrderStatus.CustomerRefused => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#FF6F6F")),
+                BO.EnumOrderStatus.Canceled => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#F06060")),
+                _ => Brushes.Transparent
+            };
+        }
+        return Brushes.Transparent;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+/// <summary>
+/// Converts EnumOrderType to a specific SolidColorBrush.
+/// </summary>
+public class ConvertOrderTypeToBrush : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is BO.EnumOrderType method)
+        {
+            return method switch
+            {
+                BO.EnumOrderType.Regular => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E2E2E2")),
+                BO.EnumOrderType.Express => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D9D9D9")),
+                BO.EnumOrderType.Overnight => new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E5E0D8")),
+                _ => Brushes.Transparent
+            };
+        }
+        return Brushes.Transparent;
+    }
+
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
+public class ConvertIsActiveToBrush : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        if (value is bool isActive)
+        {
+            return isActive ? new SolidColorBrush((Color)ColorConverter.ConvertFromString("#E2E2E2")) : new SolidColorBrush((Color)ColorConverter.ConvertFromString("#D9D9D9"));
+        }
+        return Brushes.Transparent;
+    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}
+
