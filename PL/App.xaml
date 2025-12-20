@@ -54,7 +54,7 @@
 
         <!--button-->
         <Style TargetType="Button">
-            <!--<Setter Property="Background" Value="#FF7F7F"/>-->
+            <Setter Property="Background" Value="#FF7F7F"/>
             <Setter Property="Padding" Value="5,5"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -69,11 +69,24 @@
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
-            <Setter Property="Background" Value="#ED1C24"/>
             <Style.Triggers>
+                
+                <!--Property Trigger-->
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Background" Value="#FF7F7F"/>
+                    <Setter Property="Background" Value="#CC6565"/>
+                    <Setter Property="Cursor" Value="Hand"/>
                 </Trigger>
+
+                <!--Property Trigger-->
+                <Trigger Property="IsMouseCaptured" Value="True">
+                    <Setter Property="RenderTransform">
+                        <Setter.Value>
+                            <ScaleTransform ScaleX="0.95" ScaleY="0.95"/>
+                        </Setter.Value>
+                    </Setter>
+                    <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+                </Trigger>
+
             </Style.Triggers>
         </Style>
     </Application.Resources>

@@ -40,6 +40,7 @@
           IsReadOnly ="True"
           AutoGenerateColumns="False" 
           EnableRowVirtualization="True"
+          GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray"
           RowDetailsVisibilityMode="VisibleWhenSelected"
           MouseDoubleClick="dgCourierList_MouseDoubleClick"
           SelectedItem="{Binding SelectedCourier}">
@@ -51,21 +52,32 @@
                 <DataGridTemplateColumn Header="Is Active" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
-                            <!--<CheckBox IsEnabled="False" IsChecked="{Binding Active}" />-->
-                            <Border Background="{Binding Active, Converter={StaticResource IsActiveToBrush}}"
-                                    Padding="10,2" 
-                                    Margin="5"
-                                    HorizontalAlignment="Center">
+                            <Border Padding="10,2" Margin="5" HorizontalAlignment="Center" CornerRadius="12">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="{Binding Active, Converter={StaticResource IsActiveToBrush}}"/>
+                                        <Setter Property="Opacity" Value="1.0"/>
+                                        <Setter Property="ToolTip" Value="An active courier in this program"/>
+                                        <Setter Property="BorderThickness" Value="1"/>
+                                        <Style.Triggers>
+                                            <!--Data Trigger-->
+                                            <DataTrigger Binding="{Binding Active}" Value="False">
+                                                <Setter Property="ToolTip" Value="Not active courier in the program anymore"/>
+                                                <Setter Property="Opacity" Value="0.8"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
 
-                                <CheckBox IsEnabled="False"
-                                          IsChecked="{Binding Active}"
+                                <CheckBox IsChecked="{Binding Active}"
+                                          IsHitTestVisible="False"
                                           VerticalAlignment="Center"
                                           HorizontalAlignment="Center"/>
                             </Border>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                
+
                 <DataGridTemplateColumn Header="Delivery Method" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>

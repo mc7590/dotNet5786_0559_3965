@@ -39,6 +39,7 @@
                   IsReadOnly ="True"
                   AutoGenerateColumns="False"
                   EnableRowVirtualization="True"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray"
                   RowDetailsVisibilityMode="VisibleWhenSelected"
                   MouseDoubleClick="dgOrderList_MouseDoubleClick"
                   SelectedItem="{Binding SelectedOrder}">

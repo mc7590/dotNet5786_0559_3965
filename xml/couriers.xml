@@ -1,39 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCourier>
   <Courier>
-    <Id>288810803</Id>
-    <Name>Dani Levy</Name>
-    <CourierPhone>0575705577</CourierPhone>
-    <Email>danilevy@gmail.com</Email>
-    <Password>password803</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <StartedWorking>2025-08-01T21:01:33</StartedWorking>
-    <MaxPersonalDistance>2</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>385855827</Id>
-    <Name>Eli Amar</Name>
-    <CourierPhone>0592572810</CourierPhone>
-    <Email>eliamar@gmail.com</Email>
-    <Password>password5827</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Motorcycle</DeliveryMethod>
-    <StartedWorking>2024-10-18T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>219357184</Id>
-    <Name>Yair Cohen</Name>
-    <CourierPhone>0592682117</CourierPhone>
-    <Email>yaircohen@gmail.com</Email>
-    <Password>password7184</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2025-11-01T21:01:33</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>312745431</Id>
     <Name>Ariela Levin</Name>
     <CourierPhone>0514195725</CourierPhone>
@@ -56,28 +23,6 @@
     <MaxPersonalDistance>1</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>286477714</Id>
-    <Name>Gigi Sadin</Name>
-    <CourierPhone>0510975300</CourierPhone>
-    <Email>gigisadin@gmail.com</Email>
-    <Password>password7714</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2024-12-02T21:01:33</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>222538651</Id>
-    <Name>Shimi Avner</Name>
-    <CourierPhone>0539769649</CourierPhone>
-    <Email>shimiavner@gmail.com</Email>
-    <Password>password8651</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <StartedWorking>2024-12-13T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>366102777</Id>
     <Name>Neli Buhbot</Name>
     <CourierPhone>0541205709</CourierPhone>
@@ -87,17 +32,6 @@
     <DeliveryMethod>Car</DeliveryMethod>
     <StartedWorking>2024-07-19T21:01:33</StartedWorking>
     <MaxPersonalDistance>6</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>221515017</Id>
-    <Name>Avi Tirmon</Name>
-    <CourierPhone>0599881050</CourierPhone>
-    <Email>avitirmon@gmail.com</Email>
-    <Password>password5017</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Motorcycle</DeliveryMethod>
-    <StartedWorking>2025-10-05T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
   </Courier>
   <Courier>
     <Id>391588416</Id>
@@ -111,17 +45,6 @@
     <MaxPersonalDistance>1</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>213107698</Id>
-    <Name>Mimi Asulin</Name>
-    <CourierPhone>0572740830</CourierPhone>
-    <Email>mimiasulin@gmail.com</Email>
-    <Password>password7698</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Car</DeliveryMethod>
-    <StartedWorking>2025-03-01T21:01:33</StartedWorking>
-    <MaxPersonalDistance>13</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>296904396</Id>
     <Name>Shimshon Gibor</Name>
     <CourierPhone>0577085922</CourierPhone>
@@ -133,50 +56,6 @@
     <MaxPersonalDistance>8</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>384925979</Id>
-    <Name>Tirza Cohen</Name>
-    <CourierPhone>0579818425</CourierPhone>
-    <Email>tirzacohen@gmail.com</Email>
-    <Password>password5979</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Motorcycle</DeliveryMethod>
-    <StartedWorking>2025-01-22T21:01:33</StartedWorking>
-    <MaxPersonalDistance>4</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>286559178</Id>
-    <Name>Malca Bek</Name>
-    <CourierPhone>0555208276</CourierPhone>
-    <Email>malcabek@gmail.com</Email>
-    <Password>password9178</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2025-08-14T21:01:33</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>203044903</Id>
-    <Name>Yael Lulu</Name>
-    <CourierPhone>0519111326</CourierPhone>
-    <Email>yaellulu@gmail.com</Email>
-    <Password>password4903</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Car</DeliveryMethod>
-    <StartedWorking>2024-03-21T21:01:33</StartedWorking>
-    <MaxPersonalDistance>13</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>343943026</Id>
-    <Name>Erez G</Name>
-    <CourierPhone>0598056688</CourierPhone>
-    <Email>erezg@gmail.com</Email>
-    <Password>password3026</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <StartedWorking>2024-03-22T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>395899207</Id>
     <Name>Gabi Gabot</Name>
     <CourierPhone>0594569422</CourierPhone>
@@ -186,17 +65,6 @@
     <DeliveryMethod>Bicycle</DeliveryMethod>
     <StartedWorking>2023-07-31T21:01:33</StartedWorking>
     <MaxPersonalDistance>2</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>347161340</Id>
-    <Name>Dana Frider</Name>
-    <CourierPhone>0554469655</CourierPhone>
-    <Email>danafrider@gmail.com</Email>
-    <Password>password1340</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Motorcycle</DeliveryMethod>
-    <StartedWorking>2025-09-22T21:01:33</StartedWorking>
-    <MaxPersonalDistance>4</MaxPersonalDistance>
   </Courier>
   <Courier>
     <Id>285500504</Id>
@@ -221,14 +89,146 @@
     <MaxPersonalDistance>18</MaxPersonalDistance>
   </Courier>
   <Courier>
+    <Id>288810803</Id>
+    <Name>Dani Levy</Name>
+    <CourierPhone>0575705577</CourierPhone>
+    <Email>danilevy@gmail.com</Email>
+    <Password>password803</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2025-08-01T21:01:33</StartedWorking>
+    <MaxPersonalDistance>2</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>385855827</Id>
+    <Name>Eli Amar</Name>
+    <CourierPhone>0592572810</CourierPhone>
+    <Email>eliamar@gmail.com</Email>
+    <Password>password5827</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Motorcycle</DeliveryMethod>
+    <StartedWorking>2024-10-18T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>219357184</Id>
+    <Name>Yair Cohen</Name>
+    <CourierPhone>0592682117</CourierPhone>
+    <Email>yaircohen@gmail.com</Email>
+    <Password>password7184</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2025-11-01T21:01:33</StartedWorking>
+    <MaxPersonalDistance>1</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>286477714</Id>
+    <Name>Gigi Sadin</Name>
+    <CourierPhone>0510975300</CourierPhone>
+    <Email>gigisadin@gmail.com</Email>
+    <Password>password7714</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2024-12-02T21:01:33</StartedWorking>
+    <MaxPersonalDistance>1</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>222538651</Id>
+    <Name>Shimi Avner</Name>
+    <CourierPhone>0539769649</CourierPhone>
+    <Email>shimiavner@gmail.com</Email>
+    <Password>password8651</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2024-12-13T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>221515017</Id>
+    <Name>Avi Tirmon</Name>
+    <CourierPhone>0599881050</CourierPhone>
+    <Email>avitirmon@gmail.com</Email>
+    <Password>password5017</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Motorcycle</DeliveryMethod>
+    <StartedWorking>2025-10-05T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>213107698</Id>
+    <Name>Mimi Asulin</Name>
+    <CourierPhone>0572740830</CourierPhone>
+    <Email>mimiasulin@gmail.com</Email>
+    <Password>password7698</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Car</DeliveryMethod>
+    <StartedWorking>2025-03-01T21:01:33</StartedWorking>
+    <MaxPersonalDistance>13</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>286559178</Id>
+    <Name>Malca Bek</Name>
+    <CourierPhone>0555208276</CourierPhone>
+    <Email>malcabek@gmail.com</Email>
+    <Password>password9178</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2025-08-14T21:01:33</StartedWorking>
+    <MaxPersonalDistance>1</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>203044903</Id>
+    <Name>Yael Lulu</Name>
+    <CourierPhone>0519111326</CourierPhone>
+    <Email>yaellulu@gmail.com</Email>
+    <Password>password4903</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Car</DeliveryMethod>
+    <StartedWorking>2024-03-21T21:01:33</StartedWorking>
+    <MaxPersonalDistance>13</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>343943026</Id>
+    <Name>Erez G</Name>
+    <CourierPhone>0598056688</CourierPhone>
+    <Email>erezg@gmail.com</Email>
+    <Password>password3026</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2024-03-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>347161340</Id>
+    <Name>Dana Frider</Name>
+    <CourierPhone>0554469655</CourierPhone>
+    <Email>danafrider@gmail.com</Email>
+    <Password>password1340</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Motorcycle</DeliveryMethod>
+    <StartedWorking>2025-09-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>4</MaxPersonalDistance>
+  </Courier>
+  <Courier>
     <Id>338485809</Id>
     <Name>Noa Tishbi</Name>
     <CourierPhone>0556772744</CourierPhone>
     <Email>noatishbi@gmail.com</Email>
     <Password>Pass5809!</Password>
-    <Active>true</Active>
+    <Active>false</Active>
     <DeliveryMethod>4</DeliveryMethod>
     <StartedWorking>2025-08-18T21:01:33</StartedWorking>
     <MaxPersonalDistance>10</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>384925979</Id>
+    <Name>Tirza Cohen</Name>
+    <CourierPhone>0579818425</CourierPhone>
+    <Email>tirzacohen@gmail.com</Email>
+    <Password>Password5979!</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Motorcycle</DeliveryMethod>
+    <StartedWorking>2025-01-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>4</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>
