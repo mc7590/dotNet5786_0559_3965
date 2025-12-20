@@ -17,8 +17,8 @@
         <pl:ConvertModeToReadOnly x:Key="ModeToReadOnly"/>
         <pl:ConvertModeToVisibility x:Key="ModeToVisibility"/>
     </Window.Resources>
-
-    <Grid Margin="20">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
@@ -125,4 +125,5 @@
                 Click="btnAddUpdate_Click"/>
 
     </Grid>
+    </ScrollViewer>
 </Window>
