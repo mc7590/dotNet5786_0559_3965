@@ -2,9 +2,8 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:local="clr-namespace:PL"
-             StartupUri="MainWindow.xaml">
-    <!--StartupUri="Login/LoginWindow.xaml">-->
-    
+             StartupUri="Login/LoginWindow.xaml">
+
     <Application.Resources>
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
         <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
@@ -121,6 +120,13 @@
                         </Storyboard>
                     </BeginStoryboard>
                 </EventTrigger>
+                
+                <!-- Property Trigger when the button is IsEnable-->
+                <Trigger Property="IsEnabled" Value="False">
+                    <Setter Property="Background" Value="#FFCCCCCC"/>
+                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Cursor" Value="Arrow"/>
+                </Trigger>
 
             </Style.Triggers>
         </Style>
