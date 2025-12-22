@@ -32,7 +32,8 @@
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="185,0,0,0" VerticalAlignment="Center"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
-                      SelectedItem="{Binding MethodDelivery, Mode=TwoWay}"/>
+                      SelectedItem="{Binding MethodDelivery, Mode=TwoWay}"
+                      SelectionChanged="ComboBox_SelectionChanged"/>
         </Grid>
         
         <DataGrid Grid.Row="1" 

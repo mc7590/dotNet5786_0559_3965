@@ -22,52 +22,59 @@ namespace PL.Courier;
 public partial class CourierListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
+    readonly int UserId;
 
     /// <summary>
     /// Constructor
     /// </summary>
-    public CourierListWindow()
+    public CourierListWindow(int ThisUserID)
     {
+        UserId = ThisUserID;
         InitializeComponent();
+
+        this.Loaded += Window_Loaded;
+        this.Closed += Window_Closed;
+        
     }
     /// <summary>
     /// Dependency property for the courier list
     /// </summary>
-    public ObservableCollection<BO.CourierInList> CourierList
+    public IEnumerable<BO.CourierInList> CourierList
     {
-        get => (ObservableCollection<BO.CourierInList>)GetValue(CourierListProperty);
+        get => (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty);
         set => SetValue(CourierListProperty, value);
     }
 
     public static readonly DependencyProperty CourierListProperty =
         DependencyProperty.Register(
             nameof(CourierList),
-            typeof(ObservableCollection<BO.CourierInList>),
+            typeof(IEnumerable<BO.CourierInList>),
             typeof(CourierListWindow),
             new PropertyMetadata(null));
 
+
     /// <summary>
-    /// Selected delivery method filter
+    /// Property for the list filter
     /// </summary>
-    public BO.EnumDeliveryMethod MethodDelivery
-    {
-        get => (BO.EnumDeliveryMethod)GetValue(MethodDeliveryProperty);
-        set => SetValue(MethodDeliveryProperty, value);
-    }
+    public bool? Active { get; set; } = null;
 
-    public static readonly DependencyProperty MethodDeliveryProperty =
-        DependencyProperty.Register(
-            nameof(MethodDelivery),
-            typeof(BO.EnumDeliveryMethod),
-            typeof(CourierListWindow),
-            new PropertyMetadata(BO.EnumDeliveryMethod.None, OnMethodDeliveryChanged));
+    /// <summary>
+    /// Property for the list filter
+    /// </summary>
+    public BO.EnumDeliveryMethod FilterByMethod { get; set; } = BO.EnumDeliveryMethod.None;
 
-    private static void OnMethodDeliveryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    {         
-        if (d is CourierListWindow win)
-            win.RefreshCourierList();
-    }
+    /// <summary>
+    /// Property for the list sort
+    /// </summary>
+    public BO.EnumCourierFieldSort SortByCourierFields { get; set; } = BO.EnumCourierFieldSort.Name;
+
+
+    // NO USE!
+    //private static void OnMethodDeliveryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    //{         
+    //    if (d is CourierListWindow win)
+    //        win.RefreshCourierList();
+    //}
 
     /// <summary>
     /// The selected courier in the DataGrid
@@ -91,35 +98,7 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void RefreshCourierList()
     {
-
-
-        try
-        {
-            IEnumerable<BO.CourierInList>? list =
-                MethodDelivery == BO.EnumDeliveryMethod.None
-                ? s_bl.Courier.GetCouriersInList(ManagerId)
-                : s_bl.Courier.GetCouriersInList(
-                    ManagerId,
-                    null,
-                    null,
-                    BO.EnumCourierFieldFilter.DeliveryMethod,
-                    MethodDelivery);
-
-            CourierList.Clear();
-            if (list == null)
-                return;
-
-            foreach (var courier in list)
-                CourierList.Add(courier);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(
-                $"Error loading data: {ex.Message}",
-                "Data Error",
-                MessageBoxButton.OK,
-                MessageBoxImage.Error);
-        }
+        CourierList = s_bl.Courier.GetCouriersInList(UserId, Active, SortByCourierFields);
     }
 
 
@@ -127,31 +106,20 @@ public partial class CourierListWindow : Window
     /// List observer to refresh the courier list when there are changes
     /// </summary>
     private void courierListObserver()
-    {
-        RefreshCourierList();
-    }
+        => RefreshCourierList();
 
     /// <summary>
     /// Add the observer when the window is loaded
     /// </summary>
     private void Window_Loaded(object sender, RoutedEventArgs e) 
-    {
-        try
-        {
-            CourierList = new ObservableCollection<BO.CourierInList>();
-            RefreshCourierList();
-            s_bl.Courier.AddObserver(courierListObserver);
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show($"Initialization error: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-    }
+        =>s_bl.Courier.AddObserver(courierListObserver);
+    
 
     /// <summary>
     /// Remove the observer when the window is closed
     /// </summary>
-    private void Window_Closed(object sender, EventArgs e) => s_bl.Courier.RemoveObserver(courierListObserver);
+    private void Window_Closed(object sender, EventArgs e) 
+        => s_bl.Courier.RemoveObserver(courierListObserver);
 
 
     /// <summary>
@@ -164,6 +132,12 @@ public partial class CourierListWindow : Window
         if (SelectedCourier == null)
             return;
         new CourierWindow(SelectedCourier.Id).ShowDialog();
+    }
+
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        CourierList = s_bl.Courier.GetCouriersInList(UserId, Active, SortByCourierFields, FilterByMethod);
+
     }
 
     /// <summary>
@@ -191,7 +165,7 @@ public partial class CourierListWindow : Window
         {
             try
             {
-                s_bl.Courier.Delete(ManagerId, SelectedCourier.Id);
+                s_bl.Courier.Delete(UserId, SelectedCourier.Id);
             }
             catch (Exception ex)
             {

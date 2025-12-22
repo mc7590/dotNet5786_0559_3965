@@ -21,13 +21,14 @@ namespace PL.Order;
 public partial class OrderListWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
+    readonly int UserId;
 
     /// <summary>
     /// constructor
     /// </summary>
-    public OrderListWindow()
+    public OrderListWindow(int thisUserId)
     {
+        UserId = thisUserId;
         InitializeComponent();
     }
 
@@ -69,11 +70,11 @@ public partial class OrderListWindow : Window
     {
         if (OrderStatus == BO.EnumOrderStatus.None)
         {
-            OrderList = s_bl?.Order.GetOrderInList(ManagerId)!;
+            OrderList = s_bl?.Order.GetOrderInList(UserId)!;
         }
         else
         {
-            OrderList = s_bl?.Order.GetOrderInList(ManagerId, BO.EnumOrderFieldSort.OrderStatus, OrderStatus)!;
+            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderField.OrderStatus, OrderStatus)!;
         }
     }
 
@@ -120,7 +121,7 @@ public partial class OrderListWindow : Window
             return;
 
         BO.Order fullOrder =
-            s_bl.Order.Read(ManagerId, SelectedOrder.OrderId)!;
+            s_bl.Order.Read(UserId, SelectedOrder.OrderId)!;
 
         new OrderWindow(fullOrder.Id).ShowDialog();
     }
@@ -141,7 +142,7 @@ public partial class OrderListWindow : Window
             return;
         try
         {
-            s_bl.Order.Delete(ManagerId, SelectedOrder.OrderId);
+            s_bl.Order.Delete(UserId, SelectedOrder.OrderId);
             MessageBox.Show("Order deleted successfully");
             RefreshOrderList();
         }

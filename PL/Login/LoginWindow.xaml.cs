@@ -80,7 +80,7 @@ public partial class LoginWindow : Window, INotifyPropertyChanged // Implement I
                 if (result == MessageBoxResult.Yes)
                 {                
                     // Open Main Window
-                    new MainWindow().Show();
+                    new MainWindow(userId).Show();
                     this.Close();
                 }
                 else

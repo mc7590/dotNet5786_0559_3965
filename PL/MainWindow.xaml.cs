@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using PL.Courier;
+using PL.Login;
 using PL.Order;
 using System.Text;
 using System.Windows;
@@ -20,11 +21,12 @@ namespace PL;
 /// </summary>
 public partial class MainWindow : Window
 {
-    private static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    readonly int UserId;
 
-
-    public MainWindow()
+    public MainWindow(int thisUserId)
     {
+        UserId=thisUserId;
         InitializeComponent();
     }
 
@@ -135,7 +137,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void BtnOrders_Click(object sender, RoutedEventArgs e)
     {
-        new OrderListWindow().Show();
+        new OrderListWindow(UserId).Show();
     }
 
     /// <summary>
@@ -143,7 +145,7 @@ public partial class MainWindow : Window
     /// </summary>
     private void BtnCouriers_Click(object sender, RoutedEventArgs e)
     {
-        new CourierListWindow().Show();
+        new CourierListWindow(UserId).Show();
     }
 
     /// <summary>

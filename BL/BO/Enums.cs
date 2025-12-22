@@ -1,11 +1,18 @@
-﻿namespace BO;
+﻿global using EnumCourierFieldFilter = BO.EnumDeliveryMethod;
+
+namespace BO;
+
 
 /// <summary>
 /// DeliveryMethod represents the method of delivery used by the courier.
 /// </summary>
 public enum EnumDeliveryMethod
 {
-    None, Car, Motorcycle, Bicycle, Foot
+    None,
+    Car,
+    Motorcycle, 
+    Bicycle, 
+    Foot
 };
 
 /// <summary>
@@ -13,7 +20,9 @@ public enum EnumDeliveryMethod
 /// </summary>
 public enum EnumOrderType
 {
-    Regular, Express, Overnight
+    Regular,
+    Express,
+    Overnight
 };
 
 /// <summary>
@@ -44,7 +53,12 @@ public enum EnumScheduleStatus
 /// </summary>
 public enum EnumEndDeliveryStatus
 {
-    Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed, Unknown
+    Delivered,
+    RefusedToReceive,
+    Canceled,
+    CustomerNotFound,
+    Failed, 
+    Unknown
 }
 
 /// <summary>
@@ -59,16 +73,11 @@ public enum EnumCourierFieldSort
     TotalLateDeliveries,
     MaxPersonalDistance
 }
-public enum EnumCourierFieldFilter
-{
-    Active,
-    DeliveryMethod,
-    MaxPersonalDistance
-}
+
 /// <summary>
-/// Specifies the fields by which order data can be sorted
+/// Specifies the fields by which order data can be filtered/sorted
 /// </summary>
-public enum EnumOrderFieldSort
+public enum EnumOrderField
 {
     Id,
     OrderType,
@@ -77,10 +86,8 @@ public enum EnumOrderFieldSort
     Weight,
     Fragile,
     CreationTime,
-    ExpectedDeliveryTime,
     MaxDeliveryTime,
-    OrderStatus,
-    ScheduleStatus
+    OrderStatus
 }
 
 /// <summary> 
@@ -103,6 +110,17 @@ public enum EnumTimeUnit
     Month,
     Year
 }
+
+public enum EnumOpenOrderInListField
+{
+    CourierId,
+    OrderId,
+    OrderType,
+    Address,
+    DistanceInKm,
+    RemainingTime,
+}
+
 /// <summary>
 /// represents the fields by which close delivery data can be filtered
 /// </summary>
@@ -114,22 +132,9 @@ public enum EnumClosedDeliveryInListField
     Address,
     DeliveryMethod,
     DistanceInKm,
-    TotalDeliveryTime,
-    //EndDeliveryStatus - unnecessary, because it's the difault sorting field (all deliveries here are closed)
+    TotalDeliveryTime
 }
-/// <summary>
-/// represent the fields by which open order data can be filtered
-/// </summary>
-public enum EnumOpenOrderInListField
-{
-    OrderId,
-    OrderType,
-    Weight,
-    AerialDistance,
-    MaxDeliveryTime,
-    RemainingTime,
-    ScheduleStatus
-}
+
 
 public enum MainMenuOption
 {

@@ -20,7 +20,7 @@ internal class OrderImplementation : IOrder
     {
         OrderManager.DeleteOrder(id, orderId);
     }
-    public IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldSort? sort = null, object? value = null, BO.EnumOrderFieldSort? filter = null)
+    public IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? sort = null, object? value = null, BO.EnumOrderField? filter = null)
     {
         return OrderManager.GetOrderInList(id, sort, value, filter);
     }

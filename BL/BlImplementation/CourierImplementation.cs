@@ -14,7 +14,7 @@ internal class CourierImplementation : ICourier
     {
         return CourierManager.GetCourierById(id,courierId);
     }
-    public IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, BO.EnumCourierFieldFilter? filter = null, object? value = null)
+    public IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, EnumCourierFieldFilter? filter = null, object? value = null)
     {
         return CourierManager.GetCouriersInList(id, active, sort, filter, value);
     }

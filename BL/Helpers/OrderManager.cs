@@ -119,7 +119,7 @@ internal static class OrderManager
     /// <param name="filter">if null, no filter, else: filter by: if(enumFilter == value)</param>
     /// <param name="value">the value to use for filter, if null, sort by OrderStatus </param>
     /// <param name="sort">if (value!=null), sort by the Enum option for sort</param>
-    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldSort? filter = null, object? value = null, BO.EnumOrderFieldSort? sort = null)
+    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filter = null, object? value = null, BO.EnumOrderField? sort = null)
     {
         Tools.IsManager(id);
 
@@ -136,15 +136,18 @@ internal static class OrderManager
 
                 return filter switch
                 {
-                    BO.EnumOrderFieldSort.Id => order.Id.Equals(Convert.ToInt32(value)),
-                    BO.EnumOrderFieldSort.OrderType => order.OrderType.Equals(value),
-                    BO.EnumOrderFieldSort.AerialDistance => order.AerialDistance.Equals(Convert.ToDouble(value)),
-                    BO.EnumOrderFieldSort.CustomerName => order.CustomerName != null && order.CustomerName.Contains(value.ToString()!, StringComparison.OrdinalIgnoreCase),
-                    BO.EnumOrderFieldSort.Weight => order.Weight.Equals(Convert.ToDouble(value)),
-                    BO.EnumOrderFieldSort.Fragile => order.Fragile.Equals(Convert.ToBoolean(value)),
-                    BO.EnumOrderFieldSort.CreationTime => order.CreationTime.Date.Equals(Convert.ToDateTime(value).Date),
-                    BO.EnumOrderFieldSort.OrderStatus => order.OrderStatus.Equals(value),
-                    BO.EnumOrderFieldSort.ScheduleStatus => order.ScheduleStatus.Equals(value),
+                    BO.EnumOrderField.Id => int.TryParse(value?.ToString(), out int id) && order.Id == id,
+                    BO.EnumOrderField.OrderType => order.OrderType.Equals(value),
+                    BO.EnumOrderField.AerialDistance => double.TryParse(value?.ToString(), out double dist) && order.AerialDistance == dist,
+                    BO.EnumOrderField.CustomerName => order.CustomerName?.Contains(value?.ToString() ?? "", StringComparison.OrdinalIgnoreCase) ?? false,
+                    BO.EnumOrderField.Weight => double.TryParse(value?.ToString(), out double w) && order.Weight == w,
+                    BO.EnumOrderField.Fragile => bool.TryParse(value?.ToString(), out bool f) && order.Fragile == f,
+                    BO.EnumOrderField.CreationTime => DateTime.TryParse(value?.ToString(), out DateTime ct) && order.CreationTime.Date == ct.Date,
+                    BO.EnumOrderField.MaxDeliveryTime => order.MaxDeliveryTime.HasValue &&
+                                                        DateTime.TryParse(value?.ToString(), out DateTime mdt) &&
+                                                        order.MaxDeliveryTime.Value.Date == mdt.Date,
+                    BO.EnumOrderField.OrderStatus => order.OrderStatus.Equals(value),
+
                     _ => true //otherwise no filter
                 };
             });
@@ -159,15 +162,15 @@ internal static class OrderManager
         {
             query = sort switch
             {
-                BO.EnumOrderFieldSort.Id => query.OrderBy(o => o.Id),
-                BO.EnumOrderFieldSort.OrderType => query.OrderBy(o => o.OrderType),
-                BO.EnumOrderFieldSort.AerialDistance => query.OrderBy(o => o.AerialDistance),
-                BO.EnumOrderFieldSort.CustomerName => query.OrderBy(o => o.CustomerName),
-                BO.EnumOrderFieldSort.Weight => query.OrderBy(o => o.Weight),
-                BO.EnumOrderFieldSort.Fragile => query.OrderBy(o => o.Fragile),
-                BO.EnumOrderFieldSort.CreationTime => query.OrderBy(o => o.CreationTime),
-                BO.EnumOrderFieldSort.ExpectedDeliveryTime => query.OrderBy(o => o.ExpectedDeliveryTime),
-                BO.EnumOrderFieldSort.OrderStatus => query.OrderBy(o => o.OrderStatus),
+                BO.EnumOrderField.Id => query.OrderBy(o => o.Id),
+                BO.EnumOrderField.OrderType => query.OrderBy(o => o.OrderType),
+                BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
+                BO.EnumOrderField.CustomerName => query.OrderBy(o => o.CustomerName),
+                BO.EnumOrderField.Weight => query.OrderBy(o => o.Weight),
+                BO.EnumOrderField.Fragile => query.OrderBy(o => o.Fragile),
+                BO.EnumOrderField.CreationTime => query.OrderBy(o => o.CreationTime),
+                BO.EnumOrderField.MaxDeliveryTime => query.OrderBy(o => o.MaxDeliveryTime),
+                BO.EnumOrderField.OrderStatus => query.OrderBy(o => o.OrderStatus),
                 _ => query.OrderBy(o => o.OrderStatus) //default
             };
         }
@@ -340,13 +343,12 @@ internal static class OrderManager
         result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
             : sortBy switch
             {
+                BO.EnumOpenOrderInListField.CourierId => result.OrderBy(r => r.CourierId),
                 BO.EnumOpenOrderInListField.OrderId => result.OrderBy(r => r.OrderId),
                 BO.EnumOpenOrderInListField.OrderType => result.OrderBy(r => r.OrderType),
-                BO.EnumOpenOrderInListField.Weight => result.OrderBy(r => r.Weight),
-                BO.EnumOpenOrderInListField.AerialDistance => result.OrderBy(r => r.AerialDistance),
-                BO.EnumOpenOrderInListField.MaxDeliveryTime => result.OrderBy(r => r.MaxDeliveryTime),
+                BO.EnumOpenOrderInListField.Address => result.OrderBy(r => r.Adrress),
+                BO.EnumOpenOrderInListField.DistanceInKm => result.OrderBy(r => r.DistanceInKm),
                 BO.EnumOpenOrderInListField.RemainingTime => result.OrderBy(r => r.RemainingTime),
-                BO.EnumOpenOrderInListField.ScheduleStatus => result.OrderBy(r => r.ScheduleStatus),
                 _ => result
             };
 
