@@ -7,7 +7,8 @@
         Title="MainWindow" Height="500" Width="850"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded"
-        Closed="MainWindow_Closed">
+        Closed="MainWindow_Closed"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Window.Resources>
         <!--this window's texbox style-->
