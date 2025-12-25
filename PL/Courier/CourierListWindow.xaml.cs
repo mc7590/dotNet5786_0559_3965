@@ -95,6 +95,7 @@ public partial class CourierListWindow : Window
 
     /// <summary>
     /// Refresh the courier list according to the selected filter
+    /// also known as query
     /// </summary>
     private void RefreshCourierList()
     {
