@@ -20,7 +20,8 @@ namespace PL;
 /// Interaction logic for MainWindow.xaml
 /// </summary>
 public partial class MainWindow : Window
-{
+{    
+    public static MainWindow? Instance { get; private set; }
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     readonly int UserId;
 
@@ -28,6 +29,8 @@ public partial class MainWindow : Window
     {
         UserId=thisUserId;
         InitializeComponent();
+        Instance = this;
+        this.Closed += (s, e) => Instance = null;
     }
 
     /// <summary>

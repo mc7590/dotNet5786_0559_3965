@@ -19,26 +19,27 @@
     </Window.Resources>
     <ScrollViewer VerticalScrollBarVisibility="Auto">
         <Grid Margin="20">
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
         <!-- ID -->
         <Label Grid.Row="0" Grid.Column="0" Content="ID:"/>
@@ -124,6 +125,28 @@
                 Height="40" Margin="0,20,0,0"
                 Click="btnAddUpdate_Click"/>
 
-    </Grid>
+            <!--Select order and deliveries history-->
+            <Grid x:Name="ManagerCourierPanel" Grid.Row="13" Grid.ColumnSpan="2"
+                  Margin="0,20,0,0" Visibility="Collapsed">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <Button x:Name="btnSelectOrder" Content="Select an Order"
+            Width="150" Height="40"
+            HorizontalAlignment="Left"
+            Grid.Column="0"
+            Click="BtnSelectOrder_Click"/>
+
+                <Button x:Name="btnDeliveriesHistory" Content="Deliveries History"
+            Width="150" Height="40"
+            HorizontalAlignment="Right"
+            Grid.Column="1"
+            Click="BtnDeliveriesHistory_Click"/>
+            </Grid>
+
+        </Grid>
+        
     </ScrollViewer>
 </Window>

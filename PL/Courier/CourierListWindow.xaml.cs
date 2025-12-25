@@ -156,7 +156,11 @@ public partial class CourierListWindow : Window
     {
         if (SelectedCourier == null)
             return;
-
+        if(SelectedCourier.OrdersInProgressId != 0)
+        {
+            MessageBox.Show("Cannot delete a courier with orders in progress.", "Operation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
         MessageBoxResult result = MessageBox.Show(
             $"Are you sure you want to delete courier {SelectedCourier.Name}?", "Delete Confirmation",
             MessageBoxButton.YesNo,

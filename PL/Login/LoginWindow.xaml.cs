@@ -1,5 +1,7 @@
-﻿using System;
+﻿using PL.Courier;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +13,6 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
-using System.ComponentModel;
 namespace PL.Login;
 
 /// <summary>
@@ -56,61 +57,94 @@ public partial class LoginWindow : Window, INotifyPropertyChanged // Implement I
     }
     private void BtnLogin_Click(object sender, RoutedEventArgs e)
     {
-        //check inputs validity
-        if (!int.TryParse(txtId.Text, out int userId))  
+        if (!int.TryParse(txtId.Text, out int userId))
         {
-            MessageBox.Show("Invalid ID format. Please enter a numeric ID.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show("Invalid ID format.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
             return;
         }
+
         string password = txtPassword.Password;
-        try {
+        try
+        {
             int managerId = s_bl.Admin.GetConfig().ManagerId;
 
+            // MANAGER
             if (userId == managerId)
             {
-                // Validate Manager Password
                 if (password != s_bl.Admin.GetConfig().ManagerPassword)
                 {
-                    MessageBox.Show("Incorrect password for Manager.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Incorrect password for Manager.", "Login Error");
                     return;
                 }
 
-                // Confirmation Message Box
-                MessageBoxResult result = MessageBox.Show("Hello Manager! Do you want to proceed to the Admin Panel?", "Manager Login", MessageBoxButton.YesNo, MessageBoxImage.Question);
-                if (result == MessageBoxResult.Yes)
-                {                
-                    // Open Main Window
-                    new MainWindow(userId).Show();
-                    this.Close();
+                // check if the manager is also a courier
+                BO.Courier? courier = null;
+                try
+                {
+                    courier = s_bl.Courier.Read(userId, userId);
+                }
+                catch (Exception)
+                {
+                    // Courier not found, proceed as manager only
+                }
+                if (courier != null)
+                {
+                    MessageBoxResult result = MessageBox.Show(
+                        "Hello Manager!\nYou are registered also as a courier.\nDo you want to go to the Admin Panel?\nYes – Admin Panel\nNo – Courier Panel",
+                        "Manager Courier Login",
+                        MessageBoxButton.YesNo,
+                        MessageBoxImage.Question);
+
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        // Check if MainWindow is already open  
+                        if (MainWindow.Instance != null)
+                        {
+                            MessageBox.Show("Admin Panel is already open.", "Info");
+                            MainWindow.Instance.Activate();  
+                            return;
+                        }
+                        // Open Main Window
+                        new MainWindow(userId).Show();
+                    }
+                    else
+                    {
+                        var newCourierWindow = new Courier.CourierWindow(userId);
+                        newCourierWindow.IsCourierUser = true;
+                        newCourierWindow.Show();
+                    }
+                    
                 }
                 else
                 {
-                    MessageBox.Show("Login cancelled. You can enter a different ID or close the application.", "Login Cancelled", MessageBoxButton.OK, MessageBoxImage.Information);
+                    // Check if MainWindow is already open  
+                    if (MainWindow.Instance != null)
+                    {
+                        MessageBox.Show("Admin Panel is already open.", "Info");
+                        MainWindow.Instance.Activate();
+                        return;
+                    }
+                    // Open Main Window
+                    MessageBox.Show("Welcome, Manager!", "Login Successful");
+                    new MainWindow(userId).Show();
                 }
+                return;
             }
-            else
+            // COURIER
+            BO.Courier? courierUser = s_bl.Courier.Read(userId, userId);
+            if (courierUser!.Password != password)
             {
-                // Check if the courier exists
-                BO.Courier? courier = s_bl.Courier.Read(userId, userId);
-                if (courier == null)
-                {
-                    MessageBox.Show("Courier not found.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                // Validate Courier Password
-                if (courier!.Password != password)
-                {
-                    MessageBox.Show("Incorrect password for Courier.", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    return;
-                }
-                // Open Courier Window
-                new Courier.CourierWindow(userId).Show();
-                this.Close();
+                MessageBox.Show("Incorrect password for Courier.", "Login Error");
+                return;
             }
+            MessageBox.Show($"Welcome, {courierUser.Name}!", "Login Successful");
+            var courierWindow = new Courier.CourierWindow(userId);
+            courierWindow.IsCourierUser = true;
+            courierWindow.Show();
         }
         catch (Exception ex)
         {
-            MessageBox.Show($"Login failed: {ex.Message}", "Login Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            MessageBox.Show($"Login failed: {ex.Message}", "Login Error");
         }
     }
 

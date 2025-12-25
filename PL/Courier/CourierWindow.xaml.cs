@@ -12,6 +12,7 @@ public partial class CourierWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
+    public bool IsCourierUser { get; set; } = false;
 
     // DependencyProperty for the Add/Update button text
     public static readonly DependencyProperty ButtonTextProperty =
@@ -113,6 +114,10 @@ public partial class CourierWindow : Window
         {
             s_bl.Courier.AddObserver(CurrentCourier.Id, CourierObserver);
         }
+        if (IsCourierUser)
+            ManagerCourierPanel.Visibility = Visibility.Visible;
+        else
+            ManagerCourierPanel.Visibility = Visibility.Collapsed;
     }
 
     private void Window_Closed(object sender, EventArgs e)
@@ -121,5 +126,15 @@ public partial class CourierWindow : Window
         {
             s_bl.Courier.RemoveObserver(CurrentCourier.Id, CourierObserver);
         }
+    }
+
+    private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
+    {
+        new Order.SelectOrderWindow().ShowDialog();
+    }
+
+    private void BtnDeliveriesHistory_Click(object sender, RoutedEventArgs e)
+    {
+        new Order.OrderListWindow(CurrentCourier.Id).ShowDialog();
     }
 }
