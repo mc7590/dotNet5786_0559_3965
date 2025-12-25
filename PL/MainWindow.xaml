@@ -7,7 +7,8 @@
         Title="MainWindow" Height="500" Width="850"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded"
-        Closed="MainWindow_Closed">
+        Closed="MainWindow_Closed"
+        xmlns:materialDesign="http://materialdesigninxaml.net/winfx/xaml/themes">
 
     <Window.Resources>
         <!--this window's texbox style-->
@@ -120,6 +121,9 @@
 
                 <Label Grid.Row="6" Grid.Column="0" Content="Inactivity Threshold:" Margin="5"/>
                 <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Configuration.InactivityThreshold, UpdateSourceTrigger=PropertyChanged}"/>
+
+                <Label Grid.Row="6" Grid.Column="0" Content="Manager Password:" Margin="5"/>
+                <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Configuration.ManagerPassword, UpdateSourceTrigger=PropertyChanged}"/>
 
                 <Button Grid.Row="7" Grid.Column="1" Margin="5" Content="Update" Click="SaveConfigurationCommand" Width="100"/>
             </Grid>
