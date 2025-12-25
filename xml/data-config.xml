@@ -10,7 +10,7 @@
   <Longitude>34.843018231340615</Longitude>
   <MaxDeliveryDistance>3</MaxDeliveryDistance>
   <AveCarSpeedKmH>60</AveCarSpeedKmH>
-  <AveMotorcycleSpeedKmH>60</AveMotorcycleSpeedKmH>
+  <AveMotorcycleSpeedKmH>58</AveMotorcycleSpeedKmH>
   <AveBicycleSpeedKmH>15</AveBicycleSpeedKmH>
   <AveWalkingSpeedKmH>15</AveWalkingSpeedKmH>
   <GetMaxDeliveryTime>2</GetMaxDeliveryTime>
