@@ -56,6 +56,8 @@ internal static class OrderManager
         ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
         RemainingTime = GetRemainingTime(doOrder),
         OrderDelivHist = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id)
+
+        //OrderDelivHist = null // DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id)
     };
 
 
@@ -176,7 +178,8 @@ internal static class OrderManager
         }
 
         //return
-        return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder)).ToList();
+        return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder));
+        //return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder)).ToList();
 
     }
 

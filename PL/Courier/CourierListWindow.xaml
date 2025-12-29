@@ -33,7 +33,7 @@
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"
                       ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
                       SelectedItem="{Binding FilterByMethod, Mode=TwoWay}"
-                      SelectionChanged="ComboBox_SelectionChanged"/>
+                      SelectionChanged="ComboBoxFilter_SelectionChanged"/>
         </Grid>
         
         <DataGrid Grid.Row="1"

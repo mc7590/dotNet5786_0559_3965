@@ -75,11 +75,11 @@ public partial class CourierListWindow : Window
     /// </summary>
     public BO.EnumCourierFieldSort SortByCourierFields { get; set; } = BO.EnumCourierFieldSort.Name;
 
-    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         //if(FilterByMethod == BO.EnumDeliveryMethod.None)
-        CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name/*, FilterByMethod*/);
-
+        //CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name/*, FilterByMethod*/);
+        RefreshCourierList();
     }
 
     // NO USE!
@@ -115,7 +115,7 @@ public partial class CourierListWindow : Window
         if (FilterByMethod == BO.EnumDeliveryMethod.None)
             CourierList = s_bl.Courier.GetCouriersInList(UserId);
         else
-            CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name);
+            CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name, FilterByMethod, FilterByMethod);
 
     }
 

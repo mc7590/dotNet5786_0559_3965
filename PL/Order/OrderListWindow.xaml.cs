@@ -42,27 +42,31 @@ public partial class OrderListWindow : Window
     public static readonly DependencyProperty OrderListProperty =
         DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
 
-    //public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
+    public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
 
-    public BO.EnumOrderStatus OrderStatus
-    {
-        get => (BO.EnumOrderStatus)GetValue(OrderStatusProperty);
-        set => SetValue(OrderStatusProperty, value);
-    }
+    //public BO.EnumOrderStatus OrderStatus
+    //{
+    //    get => (BO.EnumOrderStatus)GetValue(OrderStatusProperty);
+    //    set => SetValue(OrderStatusProperty, value);
+    //}
 
-    public static readonly DependencyProperty OrderStatusProperty =
-        DependencyProperty.Register(
-            nameof(OrderStatus),
-            typeof(BO.EnumOrderStatus),
-            typeof(OrderListWindow),
-            new PropertyMetadata(BO.EnumOrderStatus.None, OnOrderStatusChanged)
-        );
-    private static void OnOrderStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    //public static readonly DependencyProperty OrderStatusProperty =
+    //    DependencyProperty.Register(
+    //        nameof(OrderStatus),
+    //        typeof(BO.EnumOrderStatus),
+    //        typeof(OrderListWindow),
+    //        new PropertyMetadata(BO.EnumOrderStatus.None, OnOrderStatusChanged)
+    //    );
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (d is OrderListWindow win)
-            win.RefreshOrderList();
+        RefreshOrderList();
     }
- 
+    //private static void OnOrderStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+    //{
+    //    if (d is OrderListWindow win)
+    //        win.RefreshOrderList();
+    //}
+
     /// <summary>
     /// Refresh the order list according to the selected filter
     /// </summary>
@@ -89,7 +93,7 @@ public partial class OrderListWindow : Window
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Order.AddObserver(orderListObserver);
-        RefreshOrderList();
+        //RefreshOrderList();
     }
 
     /// <summary>
@@ -151,4 +155,6 @@ public partial class OrderListWindow : Window
             MessageBox.Show("Failed to delete order");
         }
     }
+
+
 }

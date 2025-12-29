@@ -32,7 +32,7 @@
             <Label Grid.Column="0" Content="Filter By:" HorizontalAlignment="Left" Margin="176,0,0,0" VerticalAlignment="Center"/>
             <ComboBox Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"      
                       ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}" 
-                      SelectedItem="{Binding OrderStatus, Mode=TwoWay}" />
+                      SelectedItem="{Binding OrderStatus, Mode=TwoWay}" SelectionChanged="ComboBox_SelectionChanged" />
         </Grid>
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding OrderList}"
