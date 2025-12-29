@@ -12,30 +12,33 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Order
+namespace PL.Delivery
 {
     /// <summary>
-    /// Interaction logic for SelectOrderWindow.xaml
+    /// Interaction logic for DeliveryHistory.xaml
     /// </summary>
-    public partial class SelectOrderWindow : Window
+    public partial class DeliveryHistory : Window
     {
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public SelectOrderWindow()
+        public DeliveryHistory()
         {
             InitializeComponent();
         }
-
-        private void dgOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        private void Window_Loaded(object sender, RoutedEventArgs e)
         {
 
         }
 
-        private void BtnSelect_Click(object sender, RoutedEventArgs e)
+        private void Window_Closed(object sender, EventArgs e)
         {
 
         }
 
-        private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
+        private void BtnClearFilter_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void CmbStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
 
         }

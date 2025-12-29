@@ -36,4 +36,13 @@ public class OrderStatusCollection : IEnumerable<BO.EnumOrderStatus>
     public IEnumerator<BO.EnumOrderStatus> GetEnumerator() => s_enums.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
-
+/// <summary>
+/// for binding EnumEndDeliveryStatus in UI (ComboBox)
+/// </summary>
+public class EndStatusCollection : IEnumerable<BO.EnumEndDeliveryStatus>
+{
+    static readonly IEnumerable<BO.EnumEndDeliveryStatus> s_enums =
+        (IEnumerable<BO.EnumEndDeliveryStatus>)Enum.GetValues(typeof(BO.EnumEndDeliveryStatus));
+    public IEnumerator<BO.EnumEndDeliveryStatus> GetEnumerator() => s_enums.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}

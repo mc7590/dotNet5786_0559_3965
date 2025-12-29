@@ -14,13 +14,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Delivery\**" />
-    <EmbeddedResource Remove="Delivery\**" />
-    <None Remove="Delivery\**" />
-    <Page Remove="Delivery\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <None Remove="Resources\food_spread_in_black_background.jpg" />
     <None Remove="Resources\logo.jpg" />
   </ItemGroup>
