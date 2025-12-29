@@ -32,8 +32,8 @@ public partial class CourierListWindow : Window
         UserId = ThisUserID;
         InitializeComponent();
 
-        this.Loaded += Window_Loaded;
-        this.Closed += Window_Closed;
+        //this.Loaded += Window_Loaded;
+        //this.Closed += Window_Closed;
         
     }
     /// <summary>
@@ -68,6 +68,12 @@ public partial class CourierListWindow : Window
     /// </summary>
     public BO.EnumCourierFieldSort SortByCourierFields { get; set; } = BO.EnumCourierFieldSort.Name;
 
+    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
+    {
+        //if(FilterByMethod == BO.EnumDeliveryMethod.None)
+        CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name/*, FilterByMethod*/);
+
+    }
 
     // NO USE!
     //private static void OnMethodDeliveryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
@@ -99,7 +105,11 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void RefreshCourierList()
     {
-        CourierList = s_bl.Courier.GetCouriersInList(UserId, Active, SortByCourierFields);
+        if (FilterByMethod == BO.EnumDeliveryMethod.None)
+            CourierList = s_bl.Courier.GetCouriersInList(UserId);
+        else
+            CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name);
+
     }
 
 
@@ -130,23 +140,29 @@ public partial class CourierListWindow : Window
     private void dgCourierList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
         //check if the double click was not on an empty area in the DataGrid
-        if (SelectedCourier == null)
-            return;
-        new CourierWindow(SelectedCourier.Id).ShowDialog();
+        //if (SelectedCourier == null)
+        //    return;
+        //new CourierWindow(SelectedCourier.Id).Show();
+        if (SelectedCourier != null)
+        {
+            //creat new courier window with the selected courier id
+            CourierWindow courierWindow = new CourierWindow(SelectedCourier.Id);
+
+            // while the window is closed, refresh the list
+            courierWindow.Closed += (s, args) => RefreshCourierList();
+
+            // show the window
+            courierWindow.Show();
+        }
     }
 
-    private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
-    {
-        CourierList = s_bl.Courier.GetCouriersInList(UserId, Active, SortByCourierFields, FilterByMethod);
-
-    }
 
     /// <summary>
     /// Add a new courier
     /// </summary>
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
-        new CourierWindow(0).ShowDialog();
+        new CourierWindow(0).Show();
     }
 
     /// <summary>
