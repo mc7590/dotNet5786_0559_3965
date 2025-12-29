@@ -126,24 +126,27 @@
                 Click="btnAddUpdate_Click"/>
 
             <!--Select order and deliveries history-->
-            <Grid x:Name="ManagerCourierPanel" Grid.Row="13" Grid.ColumnSpan="2"
-                  Margin="0,20,0,0" Visibility="Collapsed">
+            <Grid Grid.Row="13" Grid.ColumnSpan="2"
+                  Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
-                <Button x:Name="btnSelectOrder" Content="Select an Order"
-            Width="150" Height="40"
-            HorizontalAlignment="Left"
-            Grid.Column="0"
-            Click="BtnSelectOrder_Click"/>
+                <!--select order button-->
+                <Button Content="Select an Order"
+                        Width="150" Height="40"
+                        HorizontalAlignment="Center"
+                        Grid.Column="0"
+                        Click="BtnSelectOrder_Click"/>
 
-                <Button x:Name="btnDeliveriesHistory" Content="Deliveries History"
-            Width="150" Height="40"
-            HorizontalAlignment="Right"
-            Grid.Column="1"
-            Click="BtnDeliveriesHistory_Click"/>
+                <!--select deliveries-history button-->
+                <Button Content="Deliveries History"
+                        Width="150" Height="40"
+                        HorizontalAlignment="Center"
+                        Grid.Column="1"
+                        Click="BtnDeliveriesHistory_Click"
+                        Visibility="{Binding HistoryVisibility}"/>
             </Grid>
 
         </Grid>

@@ -146,7 +146,7 @@ public partial class CourierListWindow : Window
         if (SelectedCourier != null)
         {
             //creat new courier window with the selected courier id
-            CourierWindow courierWindow = new CourierWindow(SelectedCourier.Id);
+            CourierWindow courierWindow = new CourierWindow(UserId, SelectedCourier.Id);
 
             // while the window is closed, refresh the list
             courierWindow.Closed += (s, args) => RefreshCourierList();
@@ -162,7 +162,7 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
-        new CourierWindow(0).Show();
+        new CourierWindow(UserId, 0).Show();
     }
 
     /// <summary>

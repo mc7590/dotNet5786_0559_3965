@@ -1,17 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ArrayOfCourier>
   <Courier>
-    <Id>312745431</Id>
-    <Name>Ariela Levin</Name>
-    <CourierPhone>0514195725</CourierPhone>
-    <Email>arielalevin@gmail.com</Email>
-    <Password>password5431</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2024-12-22T21:01:33</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>371892813</Id>
     <Name>Dina Klein</Name>
     <CourierPhone>0535274928</CourierPhone>
@@ -230,5 +219,16 @@
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2025-01-22T21:01:33</StartedWorking>
     <MaxPersonalDistance>4</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>312745431</Id>
+    <Name>Ariela Levin</Name>
+    <CourierPhone>0514195725</CourierPhone>
+    <Email>arielalevin@gmail.com</Email>
+    <Password>Password5431_</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2024-12-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>2</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

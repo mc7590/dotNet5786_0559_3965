@@ -19,7 +19,7 @@ namespace PL.Delivery
     /// </summary>
     public partial class DeliveryHistory : Window
     {
-        public DeliveryHistory()
+        public DeliveryHistory(int thisUserId, int currentCourierId)
         {
             InitializeComponent();
         }
