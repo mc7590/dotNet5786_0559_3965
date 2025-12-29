@@ -51,7 +51,6 @@
             <Label Grid.Row="0" Grid.Column="0" Content="ID:"/>
             <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding CurrentOrder.Id, Mode=TwoWay}"
-                     Background="LightGreen"
                  IsReadOnly="{Binding ElementName=btnAddUpdate,
                                       Path=Content,
                                       Converter={StaticResource ModeToReadOnly}}"/>
@@ -189,7 +188,7 @@
             <Button x:Name="btnAddUpdate"
                     Grid.Row="17" Grid.ColumnSpan="2" 
                     Content="{Binding ButtonText, FallbackValue='Add / Update'}"
-                    Height="40" Margin="0,20,0,0"
+                    Height="40" Width="305" Margin="0,20,0,0"
                     Click="btnAddUpdate_Click"/>
         </Grid>
     </ScrollViewer>

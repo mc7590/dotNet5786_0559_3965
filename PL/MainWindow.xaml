@@ -83,12 +83,11 @@
             Orientation="Horizontal"
             HorizontalAlignment="Center">
 
-                <Button Content="Add 1 Minute" Margin="3" Click="BtnAddOneMinute_Click"/>
-                <Button Content="Add 1 Hour" Margin="3" Click="BtnAddOneHour_Click"/>
-                <Button Content="Add 1 Day" Margin="3" Click="BtnAddOneDay_Click"/>
-                <Button Content="Add 1 Month" Margin="3" Click="BtnAddOneMonth_Click"/>
-                <Button Content="Add 1 Year" Margin="3" Click="BtnAddOneYear_Click"/>
-
+                <Button Content="+1 Minute" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneMinute_Click"/>
+                <Button Content="+1 Hour" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneHour_Click"/>
+                <Button Content="+1 Day" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneDay_Click"/>
+                <Button Content="+1 Month" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneMonth_Click"/>
+                <Button Content="+1 Year" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneYear_Click"/>
             </StackPanel>
         </Grid>
 
@@ -160,25 +159,25 @@
             <Button Grid.Column="0"
                     Content="Reset Database"
                     Click="BtnResetDB_Click"
-                    Margin="10" Height="45"/>
+                    Margin="10" Height="45" MinWidth="170"/>
 
             <!--Initialize Database-->
             <Button Grid.Column="1"
                     Content="Initialize Database"
                     Click="BtnInitializeDB_Click"
-                    Margin="10" Height="45"/>
+                    Margin="10" Height="45"  MinWidth="170"/>
 
             <!--Handle Couriers list-->
             <Button Grid.Column="2"
                     Content="Handle Couriers"
                     Click="BtnCouriers_Click"
-                    Margin="10" Height="45"/>
+                    Margin="10" Height="45" MinWidth="170"/>
 
             <!--Handle Orders list-->
             <Button Grid.Column="3"
                     Content="Handle Orders"
                     Click="BtnOrders_Click"
-                    Margin="10" Height="45"/>
+                    Margin="10" Height="45" MinWidth="170"/>
         </Grid>
 
     </Grid>

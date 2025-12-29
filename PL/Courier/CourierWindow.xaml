@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL.Courier"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Courier Window" Height="450" Width="800"
+        Title="Courier Window" Height="550" Width="800"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"
@@ -122,7 +122,7 @@
         <Button x:Name="btnAddUpdate"
                 Grid.Row="12" Grid.ColumnSpan="2" 
                 Content="{Binding ButtonText, FallbackValue='Add / Update'}" 
-                Height="40" Margin="0,20,0,0"
+                Height="40" Width="305" Margin="0,20,0,0"
                 Click="btnAddUpdate_Click"/>
 
             <!--Select order and deliveries history-->
@@ -130,21 +130,22 @@
                   Margin="0,20,0,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="5" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
 
                 <!--select order button-->
                 <Button Content="Select an Order"
-                        Width="150" Height="40"
-                        HorizontalAlignment="Center"
+                        Width="150" Height="30"
+                        HorizontalAlignment="Right"
                         Grid.Column="0"
                         Click="BtnSelectOrder_Click"/>
 
                 <!--select deliveries-history button-->
                 <Button Content="Deliveries History"
-                        Width="150" Height="40"
-                        HorizontalAlignment="Center"
-                        Grid.Column="1"
+                        Width="150" Height="30"
+                        HorizontalAlignment="Left"
+                        Grid.Column="2"
                         Click="BtnDeliveriesHistory_Click"
                         Visibility="{Binding HistoryVisibility}"/>
             </Grid>

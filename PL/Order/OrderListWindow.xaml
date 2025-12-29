@@ -39,10 +39,23 @@
                   IsReadOnly ="True"
                   AutoGenerateColumns="False"
                   EnableRowVirtualization="True"
+                  RowHeight="40"
                   GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray"
                   RowDetailsVisibilityMode="VisibleWhenSelected"
                   MouseDoubleClick="dgOrderList_MouseDoubleClick"
                   SelectedItem="{Binding SelectedOrder}">
+
+            <DataGrid.RowStyle>
+                <!--property trigger-->
+                <Style TargetType="DataGridRow">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background" Value="#FFECEC" />
+                            <Setter Property="BorderBrush" Value="#FFECEC" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
 
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding CourierId}" Header="Courier ID" Width="Auto"/>
@@ -94,14 +107,14 @@
                         <DataTemplate>
                             <Button Content="Delete"
                                     Click="DeleteOrder_Click"
-                                    Padding="6,2"/>
+                                    Padding="6,2" Height="28" Width="70"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
             </DataGrid.Columns>
         </DataGrid>
 
-        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="100" Click="BtnAdd_Click" />
+        <Button Content="Add" Grid.Row="2" HorizontalAlignment="Center" Height="50" Width="150" Click="BtnAdd_Click" />
 
     </Grid>
 </Window>
