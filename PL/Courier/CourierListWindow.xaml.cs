@@ -39,11 +39,18 @@ public partial class CourierListWindow : Window
     /// <summary>
     /// Dependency property for the courier list
     /// </summary>
-    public IEnumerable<BO.CourierInList> CourierList
+    public IEnumerable<BO.CourierInList>? CourierList
     {
-        get => (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty);
+        get => (IEnumerable<BO.CourierInList>?)GetValue(CourierListProperty);
         set => SetValue(CourierListProperty, value);
     }
+
+
+    //public IEnumerable<BO.CourierInList> CourierList
+    //{
+    //    get => (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty);
+    //    set => SetValue(CourierListProperty, value);
+    //}
 
     public static readonly DependencyProperty CourierListProperty =
         DependencyProperty.Register(
