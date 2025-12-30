@@ -22,7 +22,7 @@ public class OpenOrderInList
     public EnumOrderType OrderType { get; init; }
     public double? Weight { get; init; }
     public bool? Fragile { get; init; }
-    public string? Adrress { get; init; }
+    public string? Address { get; init; }
     public double AerialDistance { get; init; }
     public double? DistanceInKm { get; init; }
     public TimeSpan EstimatedArrivalTime { get; init; }

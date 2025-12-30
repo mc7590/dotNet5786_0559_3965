@@ -373,7 +373,7 @@ internal static class OrderManager
                 OrderType = (BO.EnumOrderType)o.OrderType,
                 Weight = o.Weight,
                 Fragile = o.Fragile,
-                Adrress = o.Address,
+                Address = o.Address,
                 AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
                 DistanceInKm = distance,
                 EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
@@ -387,7 +387,7 @@ internal static class OrderManager
                 BO.EnumOpenOrderInListField.CourierId => result.OrderBy(r => r.CourierId),
                 BO.EnumOpenOrderInListField.OrderId => result.OrderBy(r => r.OrderId),
                 BO.EnumOpenOrderInListField.OrderType => result.OrderBy(r => r.OrderType),
-                BO.EnumOpenOrderInListField.Address => result.OrderBy(r => r.Adrress),
+                BO.EnumOpenOrderInListField.Address => result.OrderBy(r => r.Address),
                 BO.EnumOpenOrderInListField.DistanceInKm => result.OrderBy(r => r.DistanceInKm),
                 BO.EnumOpenOrderInListField.RemainingTime => result.OrderBy(r => r.RemainingTime),
                 _ => result

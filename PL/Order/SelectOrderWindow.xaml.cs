@@ -20,19 +20,14 @@ namespace PL.Order
     public partial class SelectOrderWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        public SelectOrderWindow()
+        readonly int UserId;
+        IEnumerable<BO.OpenOrderInList> orders;
+        public SelectOrderWindow(int userId)
         {
             InitializeComponent();
-        }
-
-        private void dgOrders_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-
-        }
-
-        private void BtnSelect_Click(object sender, RoutedEventArgs e)
-        {
-
+            UserId = userId;
+            orders = s_bl.Order.GetListOfOpenOrderToChoose(userId, userId);
+            dgOrders.ItemsSource = orders;
         }
 
         private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
