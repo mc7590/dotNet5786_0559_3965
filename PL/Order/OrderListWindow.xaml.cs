@@ -37,35 +37,22 @@ public partial class OrderListWindow : Window
         get { return (IEnumerable<BO.OrderInList>)GetValue(OrderListProperty); }
         set { SetValue(OrderListProperty, value); }
     }
-
     // Using a DependencyProperty as the backing store for OrderList.  This enables animation, styling, binding, etc...
     public static readonly DependencyProperty OrderListProperty =
         DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
 
+    /// <summary>
+    /// Gets or sets the current status of the order to filter/sort
+    /// </summary>
     public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
 
-    //public BO.EnumOrderStatus OrderStatus
-    //{
-    //    get => (BO.EnumOrderStatus)GetValue(OrderStatusProperty);
-    //    set => SetValue(OrderStatusProperty, value);
-    //}
-
-    //public static readonly DependencyProperty OrderStatusProperty =
-    //    DependencyProperty.Register(
-    //        nameof(OrderStatus),
-    //        typeof(BO.EnumOrderStatus),
-    //        typeof(OrderListWindow),
-    //        new PropertyMetadata(BO.EnumOrderStatus.None, OnOrderStatusChanged)
-    //    );
+    /// <summary>
+    /// function to handle selection change in the combo box
+    /// </summary>
     private void ComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
         RefreshOrderList();
     }
-    //private static void OnOrderStatusChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    //{
-    //    if (d is OrderListWindow win)
-    //        win.RefreshOrderList();
-    //}
 
     /// <summary>
     /// Refresh the order list according to the selected filter
@@ -93,13 +80,13 @@ public partial class OrderListWindow : Window
     private void Window_Loaded(object sender, RoutedEventArgs e)
     {
         s_bl.Order.AddObserver(orderListObserver);
-        //RefreshOrderList();
     }
 
     /// <summary>
     /// Remove the observer when the window is closed
     /// </summary>
-    private void Window_Closed(object sender, EventArgs e) => s_bl.Order.RemoveObserver(orderListObserver);
+    private void Window_Closed(object sender, EventArgs e) 
+        => s_bl.Order.RemoveObserver(orderListObserver);
 
     public BO.OrderInList? SelectedOrder
     {

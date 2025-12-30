@@ -127,7 +127,7 @@ internal static class OrderManager
 
         var query = s_dal.Order.ReadAll()
             .Select(doOrder => DoOrderToBoOrder(doOrder))
-            .Distinct();
+            .Distinct(); //no double orders
 
         //filter
         if (filter != null)
@@ -177,11 +177,49 @@ internal static class OrderManager
             };
         }
 
-        //return
         return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder));
-        //return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder)).ToList();
-
     }
+    //internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filter = null, object? value = null, BO.EnumOrderField? sort = null)
+    //{
+    //    Tools.IsManager(id);
+
+    //    // 1. קבלת הנתונים הגולמיים (ללא המרה עדיין)
+    //    var rawOrders = s_dal.Order.ReadAll();
+
+    //    // 2. סינון - הכנת ה-value מראש כדי למנוע parsing בלולאה
+    //    if (filter != null && value != null)
+    //    {
+    //        string valStr = value.ToString() ?? "";
+
+    //        rawOrders = filter switch
+    //        {
+    //            BO.EnumOrderField.Id => int.TryParse(valStr, out int vid) ? rawOrders.Where(o => o.Id == vid) : rawOrders,
+    //            BO.EnumOrderField.CustomerName => rawOrders.Where(o => o.CustomerName?.Contains(valStr, StringComparison.OrdinalIgnoreCase) ?? false),
+    //            // המשך עבור שאר השדות... חשוב לסנן על ה-Data Object (DO)
+    //            _ => rawOrders
+    //        };
+    //    }
+
+    //    // 3. מיון - לפני ה-Mapping
+    //    if (sort != null || value == null)
+    //    {
+    //        var sortField = sort ?? BO.EnumOrderField.OrderStatus;
+    //        rawOrders = sortField switch
+    //        {
+    //            BO.EnumOrderField.Id => rawOrders.OrderBy(o => o.Id),
+    //            BO.EnumOrderField.OrderStatus => rawOrders.OrderBy(o => o.OrderType),
+    //            _ => rawOrders.OrderBy(o => o.Id)
+    //        };
+    //    }
+
+    //    // 4. המרה סופית רק למה שרלוונטי (Mapping)
+    //    return rawOrders
+    //        .DistinctBy(o => o.Id) // יעיל יותר מ-Distinct כללי
+    //        .Select(doOrder => {
+    //            var boOrder = DoOrderToBoOrder(doOrder);
+    //            return BoOrderToBoOrderInList(boOrder);
+    //        });
+    //}
 
     /// <summary>
     /// converts a BO Order to a BO OrderInList
@@ -355,7 +393,7 @@ internal static class OrderManager
                 _ => result
             };
 
-        return result.ToList();
+        return result/*.ToList()*/;
     }
 
     private static TimeSpan GetRemainingTime(DO.Order doOrder)

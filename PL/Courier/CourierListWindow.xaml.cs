@@ -31,9 +31,6 @@ public partial class CourierListWindow : Window
     {
         UserId = ThisUserID;
         InitializeComponent();
-
-        //this.Loaded += Window_Loaded;
-        //this.Closed += Window_Closed;
         
     }
     /// <summary>
@@ -44,14 +41,6 @@ public partial class CourierListWindow : Window
         get => (IEnumerable<BO.CourierInList>?)GetValue(CourierListProperty);
         set => SetValue(CourierListProperty, value);
     }
-
-
-    //public IEnumerable<BO.CourierInList> CourierList
-    //{
-    //    get => (IEnumerable<BO.CourierInList>)GetValue(CourierListProperty);
-    //    set => SetValue(CourierListProperty, value);
-    //}
-
     public static readonly DependencyProperty CourierListProperty =
         DependencyProperty.Register(
             nameof(CourierList),
@@ -77,17 +66,8 @@ public partial class CourierListWindow : Window
 
     private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //if(FilterByMethod == BO.EnumDeliveryMethod.None)
-        //CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name/*, FilterByMethod*/);
         RefreshCourierList();
     }
-
-    // NO USE!
-    //private static void OnMethodDeliveryChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-    //{         
-    //    if (d is CourierListWindow win)
-    //        win.RefreshCourierList();
-    //}
 
     /// <summary>
     /// The selected courier in the DataGrid
@@ -97,7 +77,6 @@ public partial class CourierListWindow : Window
         get => (BO.CourierInList?)GetValue(SelectedCourierProperty);
         set => SetValue(SelectedCourierProperty, value);
     }
-
     public static readonly DependencyProperty SelectedCourierProperty =
         DependencyProperty.Register(
             nameof(SelectedCourier),
@@ -130,7 +109,7 @@ public partial class CourierListWindow : Window
     /// Add the observer when the window is loaded
     /// </summary>
     private void Window_Loaded(object sender, RoutedEventArgs e) 
-        =>s_bl.Courier.AddObserver(courierListObserver);
+        => s_bl.Courier.AddObserver(courierListObserver);
     
 
     /// <summary>

@@ -203,7 +203,6 @@ internal static class CourierManager
     /// <summary>
     /// functions to update time
     /// </summary>
-
     public static void PeriodicCouriersUpdates(DateTime oldClock, DateTime newClock)
     {
         DateTime now = newClock;
