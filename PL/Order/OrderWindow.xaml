@@ -19,103 +19,102 @@
     </Window.Resources>
 
     <ScrollViewer Margin="0,10,0,10" VerticalScrollBarVisibility="Auto">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-        <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="*"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <!-- ID -->
-            <Label Grid.Row="0" Grid.Column="0" Content="ID:"/>
-            <TextBox Grid.Row="0" Grid.Column="1"
+                <!-- ID -->
+                <Label Grid.Row="0" Grid.Column="0" Content="ID:"/>
+                <TextBox Grid.Row="0" Grid.Column="1"
                      Text="{Binding CurrentOrder.Id, Mode=TwoWay}"
                  IsReadOnly="{Binding ElementName=btnAddUpdate,
                                       Path=Content,
                                       Converter={StaticResource ModeToReadOnly}}"/>
-            
-            <!-- Order Type -->
-            <Label Grid.Row="1" Grid.Column="0" Content="Order Type:"/>
-            <ComboBox Grid.Row="1" Grid.Column="1"
+
+                <!-- Order Type -->
+                <Label Grid.Row="1" Grid.Column="0" Content="Order Type:"/>
+                <ComboBox Grid.Row="1" Grid.Column="1"
                       ItemsSource="{Binding Source={StaticResource OrderTypeCollectionKey}}"
                       SelectedItem="{Binding CurrentOrder.OrderType, Mode=TwoWay}"/>
 
-            <!-- Description -->
-            <Label Grid.Row="2" Grid.Column="0" Content="Description:" />
-            <TextBox Grid.Row="2" Grid.Column="1"
+                <!-- Description -->
+                <Label Grid.Row="2" Grid.Column="0" Content="Description:" />
+                <TextBox Grid.Row="2" Grid.Column="1"
                      Text="{Binding CurrentOrder.Description, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-            <!-- Address -->
-            <Label Grid.Row="3" Grid.Column="0" Content="Address:"/>
-            <TextBox Grid.Row="3" Grid.Column="1"
+                <!-- Address -->
+                <Label Grid.Row="3" Grid.Column="0" Content="Address:"/>
+                <TextBox Grid.Row="3" Grid.Column="1"
                      Text="{Binding CurrentOrder.Address, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-            <!--AerialDistance-->
-            <Label Grid.Row="4" Grid.Column="0" Content="Aerial Distance:"
+                <!--AerialDistance-->
+                <Label Grid.Row="4" Grid.Column="0" Content="Aerial Distance:"
                    Visibility="{Binding ElementName=btnAddUpdate,
                    Path=Content,
                    Converter={StaticResource ModeToVisibility}}"/>
-            <TextBox Grid.Row="4" Grid.Column="1"
+                <TextBox Grid.Row="4" Grid.Column="1"
                      Text="{Binding CurrentOrder.AerialDistance, Mode=OneWay}"
                      IsReadOnly="True" Background="#F0F0F0"
                      Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            
-            <!-- Customer Name -->
-            <Label Grid.Row="5" Grid.Column="0" Content="Customer Name:"/>
-            <TextBox Grid.Row="5" Grid.Column="1"
+
+                <!-- Customer Name -->
+                <Label Grid.Row="5" Grid.Column="0" Content="Customer Name:"/>
+                <TextBox Grid.Row="5" Grid.Column="1"
                      Text="{Binding CurrentOrder.CustomerName, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-            <!-- Customer Phone -->
-            <Label Grid.Row="6" Grid.Column="0" Content="Customer Phone:"/>
-            <TextBox Grid.Row="6" Grid.Column="1"
+                <!-- Customer Phone -->
+                <Label Grid.Row="6" Grid.Column="0" Content="Customer Phone:"/>
+                <TextBox Grid.Row="6" Grid.Column="1"
                      Text="{Binding CurrentOrder.CustomerPhone, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-            <!-- Weight -->
-            <Label Grid.Row="7" Grid.Column="0" Content="Weight:"/>
-            <TextBox Grid.Row="7" Grid.Column="1"
+                <!-- Weight -->
+                <Label Grid.Row="7" Grid.Column="0" Content="Weight:"/>
+                <TextBox Grid.Row="7" Grid.Column="1"
                      Text="{Binding CurrentOrder.Weight, Mode=TwoWay, NotifyOnValidationError=True, ValidatesOnExceptions=True}"/>
 
-            <!-- Fragile -->
-            <Label Grid.Row="8" Grid.Column="0" Content="Fragile:"/>
-            <CheckBox Grid.Row="8" Grid.Column="1"
+                <!-- Fragile -->
+                <Label Grid.Row="8" Grid.Column="0" Content="Fragile:"/>
+                <CheckBox Grid.Row="8" Grid.Column="1"
                       IsChecked="{Binding CurrentOrder.Fragile, Mode=TwoWay}"/>
 
-            <!-- Creation Time -->
-            <Label Grid.Row="9" Grid.Column="0" Content="CreationTime:"/>
-            <DatePicker Grid.Row="9" Grid.Column="1" Height="NaN" Margin="5" VerticalAlignment="Center"
+                <!-- Creation Time -->
+                <Label Grid.Row="9" Grid.Column="0" Content="CreationTime:"/>
+                <DatePicker Grid.Row="9" Grid.Column="1" Height="NaN" Margin="5" VerticalAlignment="Center"
                         SelectedDate="{Binding CurrentOrder.CreationTime, Mode=TwoWay}"
                         IsEnabled="False"
                         Background="#F0F0F0"/>
 
-            <!--Expected Delivery Time-->
-            <Label Grid.Row="10" Grid.Column="0" Content="Expected Delivery Time:"
+                <!--Expected Delivery Time-->
+                <Label Grid.Row="10" Grid.Column="0" Content="Expected Delivery Time:"
             Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <DatePicker Grid.Row="10" Grid.Column="1" Margin="5" VerticalAlignment="Center"
+                <DatePicker Grid.Row="10" Grid.Column="1" Margin="5" VerticalAlignment="Center"
                         SelectedDate="{Binding CurrentOrder.ExpectedDeliveryTime, Mode=TwoWay}"
                         IsEnabled="False"
                         Background="#F0F0F0"
@@ -123,60 +122,60 @@
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
 
-            <!--Max Delivery Time-->
-            <Label Grid.Row="11" Grid.Column="0" Content="Max Delivery Time:"
+                <!--Max Delivery Time-->
+                <Label Grid.Row="11" Grid.Column="0" Content="Max Delivery Time:"
             Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <TextBox Grid.Row="11" Grid.Column="1"
+                <TextBox Grid.Row="11" Grid.Column="1"
                      Text="{Binding CurrentOrder.MaxDeliveryTime, Mode=OneWay}"
                      IsReadOnly="True" Background="#F0F0F0"
                      Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
 
-            <!--OrderStatus-->
-            <Label Grid.Row="12" Grid.Column="0" Content="OrderStatus:"
+                <!--OrderStatus-->
+                <Label Grid.Row="12" Grid.Column="0" Content="OrderStatus:"
                    Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <ComboBox Grid.Row="12" Grid.Column="1"
+                <ComboBox Grid.Row="12" Grid.Column="1"
                       ItemsSource="{Binding Source={StaticResource OrderStatusCollectionKey}}"
                       SelectedItem="{Binding CurrentOrder.OrderStatus, Mode=TwoWay}"
                       Visibility="{Binding ElementName=btnAddUpdate,
                       Path=Content,
                       Converter={StaticResource ModeToVisibility}}"/>
 
-            <!--Schedule Status-->
-            <Label Grid.Row="13" Grid.Column="0" Content="Schedule Status:"
+                <!--Schedule Status-->
+                <Label Grid.Row="13" Grid.Column="0" Content="Schedule Status:"
                    Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <TextBox Grid.Row="13" Grid.Column="1"
+                <TextBox Grid.Row="13" Grid.Column="1"
                      Text="{Binding CurrentOrder.ScheduleStatus, Mode=OneWay}"
                      IsReadOnly="True" Background="#F0F0F0"
                      Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
 
-            <!--Remaining Time-->
-            <Label Grid.Row="14" Grid.Column="0" Content="Remaining Time:"
+                <!--Remaining Time-->
+                <Label Grid.Row="14" Grid.Column="0" Content="Remaining Time:"
                    Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <TextBox Grid.Row="14" Grid.Column="1"
+                <TextBox Grid.Row="14" Grid.Column="1"
                      Text="{Binding CurrentOrder.RemainingTime, Mode=OneWay}"
                      IsReadOnly="True" Background="#F0F0F0"
                      Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
 
-            <!--Order Delivery History-->
-            <Label Grid.Row="15" Grid.Column="0" Content="Order Delivery History:"
+                <!--Order Delivery History-->
+                <Label Grid.Row="15" Grid.Column="0" Content="Order Delivery History:"
                    Visibility="{Binding ElementName=btnAddUpdate,
                     Path=Content,
                     Converter={StaticResource ModeToVisibility}}"/>
-            <ListBox Grid.Row="15" Grid.Column="1"
+                <ListBox Grid.Row="15" Grid.Column="1"
                       ItemsSource="{Binding DeliveryPerOrderInList}"
                       Background="#F0F0F0"
                       SelectedItem="{Binding CurrentOrder.OrderDelivHist, Mode=TwoWay}"
@@ -184,12 +183,12 @@
                       Path=Content,
                       Converter={StaticResource ModeToVisibility}}"/>
 
-            <!-- BUTTON -->
-            <Button x:Name="btnAddUpdate"
+                <!-- BUTTON -->
+                <Button x:Name="btnAddUpdate"
                     Grid.Row="17" Grid.ColumnSpan="2" 
                     Content="{Binding ButtonText, FallbackValue='Add / Update'}"
                     Height="40" Width="305" Margin="0,20,0,0"
                     Click="btnAddUpdate_Click"/>
-        </Grid>
+            </Grid>
     </ScrollViewer>
 </Window>

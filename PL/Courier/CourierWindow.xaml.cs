@@ -36,7 +36,7 @@ public partial class CourierWindow : Window
             }
             else
             {
-                CurrentCourier = BlApi.Factory.Get().Courier.Read(UserId, id)!;
+                CurrentCourier = BlApi.Factory.Get().Courier.Read(UserId, UserId)!;
             }
 
         }
@@ -141,11 +141,20 @@ public partial class CourierWindow : Window
 
     private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
     {
-        new Order.SelectOrderWindow().Show();
+        new Order.SelectOrderWindow(UserId).Show();
     }
 
     private void BtnDeliveriesHistory_Click(object sender, RoutedEventArgs e)
     {
         new Delivery.DeliveryHistory(UserId, CurrentCourier.Id).Show();
+    }
+
+    private void BtnViewOrder_Click(object sender, RoutedEventArgs e)
+    {
+        BO.OrderInProgress? orderInProgress = CurrentCourier.ActiveDeliveryOrder;
+        if (orderInProgress == null)
+            return;
+
+        new Order.OrderInProgressWindow(UserId, orderInProgress.OrderId).Show();
     }
 }

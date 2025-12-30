@@ -77,6 +77,7 @@ internal static class CourierManager
             doCouriers = doCouriers.Where(c => c.Active == active);
 
         IEnumerable<BO.CourierInList> boCouriers = from c in doCouriers
+                                                   let activeOrder = GetActiveDeliveryOrderForCourier(id, c.Id)
                                                    select new BO.CourierInList
                                                    {
                                                        Id = c.Id,
@@ -86,7 +87,9 @@ internal static class CourierManager
                                                        StartedWorking = c.StartedWorking,
                                                        TotalOnTimeDeliveries = DeliveryManager.GetDeliverierOnTimeForCourier(id, c.Id),
                                                        TotalLateDeliveries = DeliveryManager.GetDeliverierLateForCourier(id, c.Id),
-                                                       OrdersInProgressId = GetActiveDeliveryOrderForCourier(id, c.Id) != null ? GetActiveDeliveryOrderForCourier(id, c.Id)!.OrderId : -1
+                                                       OrdersInProgressId = activeOrder != null
+                                                                            ? activeOrder.OrderId
+                                                                            : 0
                                                    };
         if (sort != null)
         {
@@ -104,6 +107,7 @@ internal static class CourierManager
         {
             boCouriers = boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!);
         }
+
         return boCouriers;
     }
     /// <summary>

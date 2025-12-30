@@ -118,7 +118,18 @@
                                      Path=Content,
                                      Converter={StaticResource ModeToVisibility}}"/>
 
-        <!-- BUTTON -->
+            <!--ORDER IN PROGRESS BUTTON-->
+            <Button Content="View Order In Progress"
+        Grid.Row="11"
+        Grid.ColumnSpan="2"
+        Margin="0,20,0,0"
+        Width="220"
+        HorizontalAlignment="Center"
+        Click="BtnViewOrder_Click"
+        Visibility="{Binding CurrentCourier.ActiveDeliveryOrder,
+                             Converter={StaticResource NullToVisibility}}"/>
+
+            <!-- BUTTON -->
         <Button x:Name="btnAddUpdate"
                 Grid.Row="12" Grid.ColumnSpan="2" 
                 Content="{Binding ButtonText, FallbackValue='Add / Update'}" 
