@@ -118,108 +118,65 @@ internal static class OrderManager
     /// Return a list of orders in a summarized format, with optional sorting and filtering.
     /// </summary>
     /// <param name="id">id of the person asking the data</param>
-    /// <param name="filter">if null, no filter, else: filter by: if(enumFilter == value)</param>
-    /// <param name="value">the value to use for filter, if null, sort by OrderStatus </param>
-    /// <param name="sort">if (value!=null), sort by the Enum option for sort</param>
-    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filter = null, object? value = null, BO.EnumOrderField? sort = null)
+    /// <param name="filterBy">if null, no filter, else: filter by: if(enumFilter == filterValue)</param>
+    /// <param name="filterValue">the value to use for filter, if null, sort by OrderStatus </param>
+    /// <param name="sortBy">if (value!=null), sort by the Enum option for sort</param>
+    /// <param name="sortValue">if null, sort by OrderStatus</param>
+    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filterBy = null, object? filterValue = null, BO.EnumOrderField? sortBy = null, object? sortValue = null)
     {
         Tools.IsManager(id);
 
-        var query = s_dal.Order.ReadAll()
-            .Select(doOrder => DoOrderToBoOrder(doOrder))
-            .Distinct(); //no double orders
+        IEnumerable<BO.OrderInList> query = doOrderToBoOrderInList(s_dal.Order.ReadAll().Distinct()); //make list of BO.OrderInList
 
         //filter
-        if (filter != null)
+        if (filterBy != null && filterValue != null)
         {
-            query = query.Where(order =>
+            query = filterBy.Value switch /*Where(order =>*/
             {
-                if (value == null) return false;
-
-                return filter switch
-                {
-                    BO.EnumOrderField.Id => int.TryParse(value?.ToString(), out int id) && order.Id == id,
-                    BO.EnumOrderField.OrderType => order.OrderType.Equals(value),
-                    BO.EnumOrderField.AerialDistance => double.TryParse(value?.ToString(), out double dist) && order.AerialDistance == dist,
-                    BO.EnumOrderField.CustomerName => order.CustomerName?.Contains(value?.ToString() ?? "", StringComparison.OrdinalIgnoreCase) ?? false,
-                    BO.EnumOrderField.Weight => double.TryParse(value?.ToString(), out double w) && order.Weight == w,
-                    BO.EnumOrderField.Fragile => bool.TryParse(value?.ToString(), out bool f) && order.Fragile == f,
-                    BO.EnumOrderField.CreationTime => DateTime.TryParse(value?.ToString(), out DateTime ct) && order.CreationTime.Date == ct.Date,
-                    BO.EnumOrderField.MaxDeliveryTime => order.MaxDeliveryTime.HasValue &&
-                                                        DateTime.TryParse(value?.ToString(), out DateTime mdt) &&
-                                                        order.MaxDeliveryTime.Value.Date == mdt.Date,
-                    BO.EnumOrderField.OrderStatus => order.OrderStatus.Equals(value),
-
-                    _ => true //otherwise no filter
-                };
-            });
-        }
-
-        //sort
-        if (value == null)
-        {
-            query = query.OrderBy(order => order.OrderStatus);
-        }
-        else if (sort != null)
-        {
-            query = sort switch
-            {
-                BO.EnumOrderField.Id => query.OrderBy(o => o.Id),
-                BO.EnumOrderField.OrderType => query.OrderBy(o => o.OrderType),
-                BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
-                BO.EnumOrderField.CustomerName => query.OrderBy(o => o.CustomerName),
-                BO.EnumOrderField.Weight => query.OrderBy(o => o.Weight),
-                BO.EnumOrderField.Fragile => query.OrderBy(o => o.Fragile),
-                BO.EnumOrderField.CreationTime => query.OrderBy(o => o.CreationTime),
-                BO.EnumOrderField.MaxDeliveryTime => query.OrderBy(o => o.MaxDeliveryTime),
-                BO.EnumOrderField.OrderStatus => query.OrderBy(o => o.OrderStatus),
-                _ => query.OrderBy(o => o.OrderStatus) //default
+                BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderType => query.Where(o => o.OrderType.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                _ => query //otherwise no filter
             };
         }
 
-        return query.Select(BoOrder => BoOrderToBoOrderInList(BoOrder));
+        //sort
+        if (sortBy != null && sortValue != null)
+        {
+            query = sortBy.Value switch
+            {
+                BO.EnumOrderField.CourierId => query.OrderBy(o => o.CourierId),
+                BO.EnumOrderField.OrderId => query.OrderBy(o => o.OrderId),
+                BO.EnumOrderField.OrderType => query.OrderBy(o => o.OrderType),
+                BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
+                BO.EnumOrderField.OrderStatus => query.OrderBy(o => o.OrderStatus),
+                BO.EnumOrderField.ScheduleStatus => query.OrderBy(o => o.ScheduleStatus),
+                BO.EnumOrderField.RemainingTime => query.OrderBy(o => o.RemainingTime),
+                BO.EnumOrderField.TotalDeliveryTime => query.OrderBy(o => o.TotalDeliveryTime),
+                BO.EnumOrderField.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
+                _ => query.OrderBy(order => order.OrderStatus) //otherwise sort by orderStatus
+            };
+        }
+
+        return query; //return the final query
     }
-    //internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filter = null, object? value = null, BO.EnumOrderField? sort = null)
-    //{
-    //    Tools.IsManager(id);
 
-    //    // 1. קבלת הנתונים הגולמיים (ללא המרה עדיין)
-    //    var rawOrders = s_dal.Order.ReadAll();
-
-    //    // 2. סינון - הכנת ה-value מראש כדי למנוע parsing בלולאה
-    //    if (filter != null && value != null)
-    //    {
-    //        string valStr = value.ToString() ?? "";
-
-    //        rawOrders = filter switch
-    //        {
-    //            BO.EnumOrderField.Id => int.TryParse(valStr, out int vid) ? rawOrders.Where(o => o.Id == vid) : rawOrders,
-    //            BO.EnumOrderField.CustomerName => rawOrders.Where(o => o.CustomerName?.Contains(valStr, StringComparison.OrdinalIgnoreCase) ?? false),
-    //            // המשך עבור שאר השדות... חשוב לסנן על ה-Data Object (DO)
-    //            _ => rawOrders
-    //        };
-    //    }
-
-    //    // 3. מיון - לפני ה-Mapping
-    //    if (sort != null || value == null)
-    //    {
-    //        var sortField = sort ?? BO.EnumOrderField.OrderStatus;
-    //        rawOrders = sortField switch
-    //        {
-    //            BO.EnumOrderField.Id => rawOrders.OrderBy(o => o.Id),
-    //            BO.EnumOrderField.OrderStatus => rawOrders.OrderBy(o => o.OrderType),
-    //            _ => rawOrders.OrderBy(o => o.Id)
-    //        };
-    //    }
-
-    //    // 4. המרה סופית רק למה שרלוונטי (Mapping)
-    //    return rawOrders
-    //        .DistinctBy(o => o.Id) // יעיל יותר מ-Distinct כללי
-    //        .Select(doOrder => {
-    //            var boOrder = DoOrderToBoOrder(doOrder);
-    //            return BoOrderToBoOrderInList(boOrder);
-    //        });
-    //}
+    /// <summary>
+    /// helpers: converts a list of DO.Orders to a list of BO.OrderInList
+    /// </summary>
+    /// <param name="doOrders"></param>
+    /// <returns></returns>
+    internal static IEnumerable<BO.OrderInList> doOrderToBoOrderInList(IEnumerable<DO.Order> doOrders)
+    {
+        return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder))
+                       .Select(boOrder => BoOrderToBoOrderInList(boOrder));
+    }
 
     /// <summary>
     /// converts a BO Order to a BO OrderInList

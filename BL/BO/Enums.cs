@@ -79,15 +79,15 @@ public enum EnumCourierFieldSort
 /// </summary>
 public enum EnumOrderField
 {
-    Id,
-    OrderType,
-    AerialDistance,
-    CustomerName,
-    Weight,
-    Fragile,
-    CreationTime,
-    MaxDeliveryTime,
-    OrderStatus
+CourierId,
+OrderId,
+OrderType,
+AerialDistance,
+OrderStatus,
+ScheduleStatus,
+RemainingTime,
+TotalDeliveryTime,
+TotalDeliveries
 }
 
 /// <summary> 
