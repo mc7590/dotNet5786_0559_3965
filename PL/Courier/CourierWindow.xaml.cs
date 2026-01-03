@@ -36,7 +36,7 @@ public partial class CourierWindow : Window
             }
             else
             {
-                CurrentCourier = BlApi.Factory.Get().Courier.Read(UserId, UserId)!;
+                CurrentCourier = BlApi.Factory.Get().Courier.Read(UserId, id)!;
             }
 
         }
@@ -155,6 +155,6 @@ public partial class CourierWindow : Window
         if (orderInProgress == null)
             return;
 
-        new Order.OrderInProgressWindow(UserId, orderInProgress.OrderId).Show();
+        new Order.OrderInProgressWindow(CurrentCourier.Id, orderInProgress.OrderId).Show();
     }
 }
