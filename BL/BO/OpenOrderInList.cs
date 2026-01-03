@@ -1,7 +1,7 @@
 ﻿//Model OpenOrderInList.cs
 namespace BO;
 /// <summary>
-/// OpenOrderInList Entity represents a summary of a opem delivery
+/// OpenOrderInList Entity represents a summary of a open delivery
 /// </summary>
 /// <param name="CourierId">The unique ID of the courier</param>
 /// <param name="OrderId">The unique ID of the order</param>

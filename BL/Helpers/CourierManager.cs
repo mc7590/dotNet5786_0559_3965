@@ -70,8 +70,9 @@ internal static class CourierManager
     /// <summary>
     /// Gets list of couriers from DAL with optional filtering and sorting 
     /// </summary>
-    internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, bool? active, BO.EnumCourierFieldSort? sort, EnumCourierFieldFilter? filter, object? value)
+    internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, bool? active, BO.EnumCourierFieldSort? sort = null, EnumCourierFieldFilter? filter = null, object? value = null)
     {
+        Tools.IsManager(id);
         IEnumerable<DO.Courier> doCouriers = s_dal.Courier.ReadAll();
         if (active != null)
             doCouriers = doCouriers.Where(c => c.Active == active);

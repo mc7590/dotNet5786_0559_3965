@@ -86,6 +86,10 @@
             <!-- RemainingTime -->
             <Label Grid.Row="13" Grid.Column="0" Content="Remaining Time:" FontWeight="Bold"/>
             <TextBlock Grid.Row="13" Grid.Column="1" Text="{Binding RemainingTime}"/>
+
+            <Button Grid.Row="14" Grid.Column="0" Grid.ColumnSpan="2" 
+                    Content="Close Delivery" Width="100" Height="30" Margin="0,10,0,0" 
+                    HorizontalAlignment="Center" Click="BtnClose_Click"/>
         </Grid>
     </ScrollViewer>
 </Window>

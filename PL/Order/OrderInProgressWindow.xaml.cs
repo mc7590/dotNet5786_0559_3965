@@ -1,4 +1,6 @@
-﻿using System;
+﻿using BO;
+using PL.Courier;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,11 +22,21 @@ namespace PL.Order
     public partial class OrderInProgressWindow : Window
     {
         static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+        int CourierId;
+        BO.OrderInProgress? order;
         public OrderInProgressWindow(int courierId, int orderId)
         {
             BO.OrderInProgress? orderInProgress = s_bl.Courier?.Read(courierId, courierId)!.ActiveDeliveryOrder;
             InitializeComponent();
             this.DataContext = orderInProgress;
+            order = orderInProgress;
+            CourierId = courierId;
+        }
+
+        private void BtnClose_Click(object sender, RoutedEventArgs e)
+        {
+            s_bl.Order.EndOrderStatus(CourierId, CourierId, order!.DeliveryId);
+            Close();
         }
     }
 }
