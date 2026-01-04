@@ -167,3 +167,22 @@ public class InverseBooleanConverter : IValueConverter
         return true;
     }
 }
+
+public class CourierEnableConverter : IMultiValueConverter
+{
+    public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
+    {
+        // to check if courier is active and has no active order
+        if (values[0] is bool isActive)
+        {
+            var activeOrder = values[1];
+            return isActive && (activeOrder == null);
+        }
+        return false;
+    }
+
+    public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
+    {
+        throw new NotImplementedException();
+    }
+}

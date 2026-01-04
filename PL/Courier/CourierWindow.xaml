@@ -146,13 +146,19 @@
                 </Grid.ColumnDefinitions>
 
                 <!--select order button-->
-                <Button Content="Select an Order"
-                        Width="150" Height="30"
-                        HorizontalAlignment="Right"
+                <Button Content="Select an Order"        
+                        Width="150" Height="30"       
+                        HorizontalAlignment="Right"        
                         Grid.Column="0"
-                        Click="BtnSelectOrder_Click"/>
-
-                <!--select deliveries-history button-->
+                        Click="BtnSelectOrder_Click">
+                    <Button.IsEnabled>
+                        <MultiBinding Converter="{StaticResource CourierEnableConverterKey}">
+                            <Binding Path="CurrentCourier.Active" />
+                            <Binding Path="CurrentCourier.ActiveDeliveryOrder" />
+                        </MultiBinding>
+                    </Button.IsEnabled>
+                </Button>
+                <!--deliveries-history button-->
                 <Button Content="Deliveries History"
                         Width="150" Height="30"
                         HorizontalAlignment="Left"

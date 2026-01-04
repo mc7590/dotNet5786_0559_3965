@@ -8,10 +8,12 @@
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
         <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
+        <local:EndStatusCollection x:Key="EndStatusCollectionKey" />
         <local:ConvertModeToReadOnly x:Key="ModeToReadOnlyConverter" />
         <local:ConvertModeToVisibility x:Key="ModeToVisibilityConverter" />
         <local:NullToVisibilityConverter x:Key="NullToVisibility" />
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
+        <local:CourierEnableConverter x:Key="CourierEnableConverterKey" />
 
 
         <Style TargetType="Label">

@@ -141,7 +141,7 @@ public partial class CourierWindow : Window
 
     private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
     {
-        new Order.SelectOrderWindow(UserId).Show();
+        new Order.SelectOrderWindow(UserId,CurrentCourier.Id).Show();
     }
 
     private void BtnDeliveriesHistory_Click(object sender, RoutedEventArgs e)

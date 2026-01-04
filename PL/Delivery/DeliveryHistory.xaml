@@ -9,10 +9,10 @@
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
-    
-    <Window.Resources>
 
+    <Window.Resources>
     </Window.Resources>
+     
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" MinHeight="60"/>
@@ -27,7 +27,8 @@
 
             <StackPanel Orientation="Horizontal" Grid.Column="0">
                 <Label Content="Filter by End Status:" VerticalAlignment="Center" FontWeight="Bold"/>
-                <ComboBox Width="150" Margin="10,0"
+                <ComboBox x:Name="CmbStatusFilter" 
+                          Width="150" Margin="10,0"
                           ItemsSource="{Binding Source={StaticResource EndStatusCollectionKey}}"
                           SelectionChanged="CmbStatusFilter_SelectionChanged"/>
 
