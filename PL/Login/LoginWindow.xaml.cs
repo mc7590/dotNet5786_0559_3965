@@ -76,44 +76,45 @@ public partial class LoginWindow : Window, INotifyPropertyChanged // Implement I
                     return;
                 }
 
-                //check if the manager is ALSO a courier
-                BO.Courier? courier = null;
-                try
-                {
-                    courier = s_bl.Courier.Read(userId, userId);
-                }
-                catch (Exception)
-                {
-                    // Courier not found, proceed as manager only
-                }
-                if (courier != null)
-                {
-                    MessageBoxResult result = MessageBox.Show(
-                        "Hello Manager!\nYou are registered also as a courier.\nDo you want to go to the Admin Panel?\nYes – Admin Panel\nNo – Courier Panel",
-                        "Manager Courier Login",
-                        MessageBoxButton.YesNo,
-                        MessageBoxImage.Question);
+//check if the manager is ALSO a courier
+//UNNEDED COMPLEXITY
+                //BO.Courier? courier = null;
+                //try
+                //{
+                //    courier = s_bl.Courier.Read(userId, userId);
+                //}
+                //catch (Exception)
+                //{
+                //    // Courier not found, proceed as manager only
+                //}
+                //if (courier != null)
+                //{
+                //    MessageBoxResult result = MessageBox.Show(
+                //        "Hello Manager!\nYou are registered also as a courier.\nDo you want to go to the Admin Panel?\nYes – Admin Panel\nNo – Courier Panel",
+                //        "Manager Courier Login",
+                //        MessageBoxButton.YesNo,
+                //        MessageBoxImage.Question);
 
-                    if (result == MessageBoxResult.Yes)
-                    {
-                        // Check if MainWindow is already open  
-                        if (MainWindow.Instance != null)
-                        {
-                            MessageBox.Show("Admin Panel is already open.", "Info");
-                            MainWindow.Instance.Activate();
-                            return;
-                        }
-                        // Open Main Window
-                        new MainWindow(userId).Show();
-                    }
-                    else
-                    {
-                        var newCourierWindow = new Courier.CourierWindow(userId, userId);
-                        newCourierWindow.Show();
-                    }
+                //    if (result == MessageBoxResult.Yes)
+                //    {
+                //        // Check if MainWindow is already open  
+                //        if (MainWindow.Instance != null)
+                //        {
+                //            MessageBox.Show("Admin Panel is already open.", "Info");
+                //            MainWindow.Instance.Activate();
+                //            return;
+                //        }
+                //        // Open Main Window
+                //        new MainWindow(userId).Show();
+                //    }
+                //    else
+                //    {
+                //        var newCourierWindow = new Courier.CourierWindow(userId, userId);
+                //        newCourierWindow.Show();
+                //    }
 
-                }
-                else //manager
+                //}
+                //else //manager
                 {
                     // Check if MainWindow is already open  
                     if (MainWindow.Instance != null)

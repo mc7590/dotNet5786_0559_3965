@@ -131,17 +131,18 @@ internal static class OrderManager
         //filter
         if (filterBy != null && filterValue != null)
         {
-            query = filterBy.Value switch /*Where(order =>*/
+            string filterValString = filterValue.ToString()!; //cast filterValue once //won't be null bc after the 'if'
+            query = filterBy.Value switch
             {
-                BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderType => query.Where(o => o.OrderType.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains((string)filterValue, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderType => query.Where(o => o.OrderType.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
                 _ => query //otherwise no filter
             };
         }
@@ -354,7 +355,7 @@ internal static class OrderManager
                 _ => result
             };
 
-        return result/*.ToList()*/;
+        return result;
     }
 
     private static TimeSpan GetRemainingTime(DO.Order doOrder)

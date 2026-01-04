@@ -125,7 +125,7 @@ internal static class DeliveryManager
     /// </summary>
     internal static IEnumerable<BO.DeliveryPerOrderInList> GetListDeliveryPerOrderInList(int orderId)
     {
-        return s_dal.Delivery.ReadAll().Where(delivery => delivery.OrderId == orderId)
+        return s_dal.Delivery.ReadAll(d => d.OrderId == orderId)/*.Where(delivery => delivery.OrderId == orderId)*/
             .Select(delivery => new BO.DeliveryPerOrderInList()
             {
                 DeliveryId = delivery.Id,
@@ -135,8 +135,10 @@ internal static class DeliveryManager
                 DelCreationTime = delivery.DeliveryStartTime,
                 EndDeliveryStatus = (BO.EnumEndDeliveryStatus?)delivery.EndDeliveryStatus,
                 EndDeliveryTime = delivery.EndDeliveryTime
-            }).ToList();
+            }).ToList(); //leave the "tolist" because there in no use of foreach when func is called
     }
+
+
     /// <summary>
     /// get the schedule status of the given DO order
     /// </summary>
