@@ -42,9 +42,14 @@ public partial class OrderListWindow : Window
         DependencyProperty.Register("OrderList", typeof(IEnumerable<BO.OrderInList>), typeof(OrderListWindow), new PropertyMetadata(null));
 
     /// <summary>
-    /// Gets or sets the current status of the order to filter/sort
+    /// Gets or sets the current order filter
     /// </summary>
     public BO.EnumOrderStatus OrderStatus { get; set; } = BO.EnumOrderStatus.None;
+
+    /// <summary>
+    /// Gets or sets the current order sort type
+    /// </summary>
+    public BO.EnumOrderType OrderType { get; set; } = BO.EnumOrderType.None;
 
     /// <summary>
     /// function to handle selection change in the combo box
@@ -59,13 +64,21 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void RefreshOrderList()
     {
-        if (OrderStatus == BO.EnumOrderStatus.None)
+        if (OrderStatus == BO.EnumOrderStatus.None && OrderType == BO.EnumOrderType.None)
         {
             OrderList = s_bl?.Order.GetOrderInList(UserId)!;
         }
-        else
+        else if(OrderStatus != BO.EnumOrderStatus.None && OrderType == BO.EnumOrderType.None)
         {
             OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderField.OrderStatus, OrderStatus)!;
+        }
+        else if (OrderStatus == BO.EnumOrderStatus.None && OrderType != BO.EnumOrderType.None)
+        {
+            OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, BO.EnumOrderField.OrderType, OrderType)!;
+        }
+        else // both filter + sort are set
+        {
+            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderField.OrderStatus, OrderStatus, BO.EnumOrderField.OrderType, OrderType)!;
         }
     }
 

@@ -134,15 +134,15 @@ internal static class OrderManager
             string filterValString = filterValue.ToString()!; //cast filterValue once //won't be null bc after the 'if'
             query = filterBy.Value switch
             {
-                BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
                 BO.EnumOrderField.OrderType => query.Where(o => o.OrderType.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
                 BO.EnumOrderField.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                //BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
                 _ => query //otherwise no filter
             };
         }
@@ -152,15 +152,15 @@ internal static class OrderManager
         {
             query = sortBy.Value switch
             {
-                BO.EnumOrderField.CourierId => query.OrderBy(o => o.CourierId),
-                BO.EnumOrderField.OrderId => query.OrderBy(o => o.OrderId),
+                //BO.EnumOrderField.CourierId => query.OrderBy(o => o.CourierId),
+                //BO.EnumOrderField.OrderId => query.OrderBy(o => o.OrderId),
                 BO.EnumOrderField.OrderType => query.OrderBy(o => o.OrderType),
-                BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
+                //BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
                 BO.EnumOrderField.OrderStatus => query.OrderBy(o => o.OrderStatus),
-                BO.EnumOrderField.ScheduleStatus => query.OrderBy(o => o.ScheduleStatus),
-                BO.EnumOrderField.RemainingTime => query.OrderBy(o => o.RemainingTime),
-                BO.EnumOrderField.TotalDeliveryTime => query.OrderBy(o => o.TotalDeliveryTime),
-                BO.EnumOrderField.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
+                //BO.EnumOrderField.ScheduleStatus => query.OrderBy(o => o.ScheduleStatus),
+                //BO.EnumOrderField.RemainingTime => query.OrderBy(o => o.RemainingTime),
+                //BO.EnumOrderField.TotalDeliveryTime => query.OrderBy(o => o.TotalDeliveryTime),
+                //BO.EnumOrderField.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
                 _ => query.OrderBy(order => order.OrderStatus) //otherwise sort by orderStatus
             };
         }

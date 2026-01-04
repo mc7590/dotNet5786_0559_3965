@@ -20,6 +20,7 @@ public enum EnumDeliveryMethod
 /// </summary>
 public enum EnumOrderType
 {
+    None,
     Regular,
     Express,
     Overnight
@@ -53,12 +54,12 @@ public enum EnumScheduleStatus
 /// </summary>
 public enum EnumEndDeliveryStatus
 {
+    Unknown,
     Delivered,
     RefusedToReceive,
     Canceled,
     CustomerNotFound,
-    Failed, 
-    Unknown
+    Failed
 }
 
 /// <summary>
@@ -79,15 +80,15 @@ public enum EnumCourierFieldSort
 /// </summary>
 public enum EnumOrderField
 {
-CourierId,
-OrderId,
+//CourierId,
+//OrderId,
 OrderType,
-AerialDistance,
-OrderStatus,
-ScheduleStatus,
-RemainingTime,
-TotalDeliveryTime,
-TotalDeliveries
+//AerialDistance,
+OrderStatus //,
+//ScheduleStatus,
+//RemainingTime,
+//TotalDeliveryTime,
+//TotalDeliveries
 }
 
 /// <summary> 
