@@ -62,22 +62,31 @@ internal static class CourierManager
             DeliveryMethod = (BO.EnumDeliveryMethod)doCourier.DeliveryMethod,
             StartedWorking = doCourier.StartedWorking,
             MaxPersonalDistance = doCourier.MaxPersonalDistance,
-            TotalOnTimeDeliveries = DeliveryManager.GetDeliverierOnTimeForCourier(id, doCourier.Id),
-            TotalLateDeliveries = DeliveryManager.GetDeliverierLateForCourier(id, doCourier.Id),
+            TotalOnTimeDeliveries = DeliveryManager.GetDeliveriesOnTimeForCourier(id, doCourier.Id),
+            TotalLateDeliveries = DeliveryManager.GetDeliveriesLateForCourier(id, doCourier.Id),
             ActiveDeliveryOrder = GetActiveDeliveryOrderForCourier(id, doCourier.Id)
         };
     }
     /// <summary>
-    /// Gets list of couriers from DAL with optional filtering and sorting 
+    /// Gets list of couriers from DAL with optional filtering and sorting
+    /// <param name="id">id of the person asking the data</param>"
+    /// <param name="activeFilter">If not null, filters couriers by active status</param>
+    /// <param name="sortBy">If not null, sorts couriers by the specified field</param>
     /// </summary>
-    internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, bool? active, BO.EnumCourierFieldSort? sort = null, EnumCourierFieldFilter? filter = null, object? value = null)
+    internal static IEnumerable<BO.CourierInList> GetCouriersInList(int id, BO.EnumActiveCourier? activeFilter, BO.EnumCourierFieldSort? sortBy = null)
     {
         Tools.IsManager(id);
         IEnumerable<DO.Courier> doCouriers = s_dal.Courier.ReadAll();
-        if (active != null)
-            doCouriers = doCouriers.Where(c => c.Active == active);
 
-        IEnumerable<BO.CourierInList> boCouriers = from c in doCouriers
+        // FILTER by active status
+        if (activeFilter != null && activeFilter != BO.EnumActiveCourier.None)
+        {
+            bool active = activeFilter == BO.EnumActiveCourier.Active;
+            doCouriers = doCouriers.Where(c => c.Active == active);
+        }
+
+        // convert doCouriers to BO.CourierInList
+        IEnumerable<BO.CourierInList> boCouriersInList = from c in doCouriers
                                                    let activeOrder = GetActiveDeliveryOrderForCourier(id, c.Id)
                                                    select new BO.CourierInList
                                                    {
@@ -86,31 +95,29 @@ internal static class CourierManager
                                                        Active = c.Active,
                                                        DeliveryMethod = (BO.EnumDeliveryMethod)c.DeliveryMethod,
                                                        StartedWorking = c.StartedWorking,
-                                                       TotalOnTimeDeliveries = DeliveryManager.GetDeliverierOnTimeForCourier(id, c.Id),
-                                                       TotalLateDeliveries = DeliveryManager.GetDeliverierLateForCourier(id, c.Id),
-                                                       OrdersInProgressId = activeOrder != null
+                                                       TotalOnTimeDeliveries = DeliveryManager.GetDeliveriesOnTimeForCourier(id, c.Id),
+                                                       TotalLateDeliveries = DeliveryManager.GetDeliveriesLateForCourier(id, c.Id),
+                                                       OrderInProgressId = activeOrder != null
                                                                             ? activeOrder.OrderId
                                                                             : 0
                                                    };
-        if (sort != null)
+        // SORT
+        if (sortBy != null)
         {
-            boCouriers = sort switch
+            boCouriersInList = sortBy switch
             {
-                BO.EnumCourierFieldSort.Id => boCouriers.OrderBy(c => c.Id),
-                BO.EnumCourierFieldSort.Name => boCouriers.OrderBy(c => c.Name),
-                BO.EnumCourierFieldSort.StartedWorking => boCouriers.OrderBy(c => c.StartedWorking),
-                BO.EnumCourierFieldSort.TotalOnTimeDeliveries => boCouriers.OrderBy(c => c.TotalOnTimeDeliveries),
-                BO.EnumCourierFieldSort.TotalLateDeliveries => boCouriers.OrderBy(c => c.TotalLateDeliveries),
-                _ => boCouriers
+                BO.EnumCourierFieldSort.Id => boCouriersInList.OrderBy(c => c.Id),
+                BO.EnumCourierFieldSort.Name => boCouriersInList.OrderBy(c => c.Name),
+                BO.EnumCourierFieldSort.StartedWorking => boCouriersInList.OrderBy(c => c.StartedWorking),
+                BO.EnumCourierFieldSort.TotalOnTimeDeliveries => boCouriersInList.OrderBy(c => c.TotalOnTimeDeliveries),
+                BO.EnumCourierFieldSort.TotalLateDeliveries => boCouriersInList.OrderBy(c => c.TotalLateDeliveries),
+                _ => boCouriersInList
             };
         }
-        if (filter != null && value != null)
-        {
-            boCouriers = boCouriers.Where(c => c.DeliveryMethod == (BO.EnumDeliveryMethod)value!);
-        }
 
-        return boCouriers;
+        return boCouriersInList;
     }
+
     /// <summary>
     /// Updates a courier in DAL
     /// </summary>
@@ -180,6 +187,7 @@ internal static class CourierManager
     private static BO.OrderInProgress? GetActiveDeliveryOrderForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
+
         var activeDelivery = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime == null).FirstOrDefault();
         if (activeDelivery == null)
             return null;

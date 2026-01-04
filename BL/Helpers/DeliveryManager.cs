@@ -125,7 +125,7 @@ internal static class DeliveryManager
     /// </summary>
     internal static IEnumerable<BO.DeliveryPerOrderInList> GetListDeliveryPerOrderInList(int orderId)
     {
-        return s_dal.Delivery.ReadAll(d => d.OrderId == orderId)/*.Where(delivery => delivery.OrderId == orderId)*/
+        return s_dal.Delivery.ReadAll(d => d.OrderId == orderId)   /*.Where(delivery => delivery.OrderId == orderId)*/
             .Select(delivery => new BO.DeliveryPerOrderInList()
             {
                 DeliveryId = delivery.Id,
@@ -169,7 +169,7 @@ internal static class DeliveryManager
     /// <summary>
     /// gets the number of late deliveries for a specific courier
     /// </summary>
-    public static int GetDeliverierLateForCourier(int id, int courierId)
+    public static int GetDeliveriesLateForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
@@ -178,7 +178,7 @@ internal static class DeliveryManager
     /// <summary>
     /// gets the number of on-time deliveries for a specific courier
     /// </summary>
-    public static int GetDeliverierOnTimeForCourier(int id, int courierId)
+    public static int GetDeliveriesOnTimeForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
         IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);

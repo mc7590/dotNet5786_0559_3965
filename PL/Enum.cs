@@ -46,3 +46,25 @@ public class EndStatusCollection : IEnumerable<BO.EnumEndDeliveryStatus>
     public IEnumerator<BO.EnumEndDeliveryStatus> GetEnumerator() => s_enums.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
+
+/// <summary>
+/// for binding EnumActiveCourier in UI (ComboBox)
+/// </summary>
+public class ActiveCourierCollection : IEnumerable<BO.EnumActiveCourier>
+{
+    static readonly IEnumerable<BO.EnumActiveCourier> s_enums =
+        (IEnumerable<BO.EnumActiveCourier>)Enum.GetValues(typeof(BO.EnumActiveCourier));
+    public IEnumerator<BO.EnumActiveCourier> GetEnumerator() => s_enums.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}
+
+/// <summary>
+/// for binding EnumCourierFieldSort in UI (ComboBox)
+/// </summary>
+public class SortFieldCourierCollection : IEnumerable<BO.EnumCourierFieldSort>
+{
+    static readonly IEnumerable<BO.EnumCourierFieldSort> s_enums =
+        (IEnumerable<BO.EnumCourierFieldSort>)Enum.GetValues(typeof(BO.EnumCourierFieldSort));
+    public IEnumerator<BO.EnumCourierFieldSort> GetEnumerator() => s_enums.GetEnumerator();
+    IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
+}

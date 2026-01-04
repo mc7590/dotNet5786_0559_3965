@@ -26,6 +26,27 @@
         <!--Internal, Upper Grid-->
         <Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
             <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Column="0" Content="Filter By:" VerticalAlignment="Center" Margin="5,0,5,0"/>
+            <ComboBox Grid.Column="1" VerticalAlignment="Center"      
+              ItemsSource="{Binding Source={StaticResource ActiveCourierCollectionKey}}" 
+              SelectedItem="{Binding ActiveFilter, Mode=TwoWay}"
+              SelectionChanged="ComboBoxFilter_SelectionChanged" />
+
+            <Label Grid.Column="3" Content="Sort By:" VerticalAlignment="Center" Margin="5,0,5,0"/>
+            <ComboBox Grid.Column="4" VerticalAlignment="Center"
+              ItemsSource="{Binding Source={StaticResource SortFieldCourierCollectionKey}}"
+              SelectedItem="{Binding SortField, Mode=TwoWay}"
+              SelectionChanged="ComboBoxFilter_SelectionChanged" />
+
+        </Grid>
+        <!--<Grid HorizontalAlignment="Stretch" Height="auto" Grid.Row="0" VerticalAlignment="Stretch" Width="auto">
+            <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
@@ -34,7 +55,7 @@
                       ItemsSource="{Binding Source={StaticResource MethodDeliveryCollectionKey}}"
                       SelectedItem="{Binding FilterByMethod, Mode=TwoWay}"
                       SelectionChanged="ComboBoxFilter_SelectionChanged"/>
-        </Grid>
+        </Grid>-->
         
         <DataGrid Grid.Row="1"
                   ItemsSource="{Binding CourierList}"

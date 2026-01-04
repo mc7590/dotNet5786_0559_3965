@@ -16,9 +16,9 @@ public class CourierInList
     public int Id { get; init; }
     public string? Name { get; init; }
     public bool Active { get; init; }
-    public EnumDeliveryMethod DeliveryMethod { get; init; }
+    public BO.EnumDeliveryMethod DeliveryMethod { get; init; }
     public DateTime StartedWorking { get; init; }
     public int TotalOnTimeDeliveries { get; init; }
     public int TotalLateDeliveries { get; init; }
-    public int OrdersInProgressId { get; init; }
+    public int OrderInProgressId { get; init; }
 }

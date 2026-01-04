@@ -131,7 +131,7 @@ internal static class OrderManager
         //filter
         if (filterBy != null && filterValue != null)
         {
-            string filterValString = filterValue.ToString()!; //cast filterValue once //won't be null bc after the 'if'
+            string filterValString = filterValue.ToString()!; //convert filterValue once //won't be null bc after the 'if'
             query = filterBy.Value switch
             {
                 //BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),

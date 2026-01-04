@@ -14,9 +14,9 @@ internal class CourierImplementation : ICourier
     {
         return CourierManager.GetCourierById(id,courierId);
     }
-    public IEnumerable<BO.CourierInList>? GetCouriersInList(int id, bool? active = null, BO.EnumCourierFieldSort? sort = null, EnumCourierFieldFilter? filter = null, object? value = null)
+    public IEnumerable<BO.CourierInList>? GetCouriersInList(int id, BO.EnumActiveCourier? activeFilter = null, BO.EnumCourierFieldSort? sortBy = null)
     {
-        return CourierManager.GetCouriersInList(id, active, sort, filter, value);
+        return CourierManager.GetCouriersInList(id, activeFilter, sortBy);
     }
     public void Update(int id, BO.Courier boCourier)
     {
@@ -28,11 +28,11 @@ internal class CourierImplementation : ICourier
     }    
     public int GetNumOfDeliveryOnTimeForCourier(int id, int courierId)
     {
-        return DeliveryManager.GetDeliverierOnTimeForCourier(id, courierId);
+        return DeliveryManager.GetDeliveriesOnTimeForCourier(id, courierId);
     }
     public int GetNumOfDeliveryLateForCourier(int id, int courierId)
     {
-        return DeliveryManager.GetDeliverierLateForCourier(id, courierId);
+        return DeliveryManager.GetDeliveriesLateForCourier(id, courierId);
     }
     public void AssignOrderToCourier(int courierId, int orderId)
     {

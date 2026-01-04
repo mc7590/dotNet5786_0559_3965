@@ -6,7 +6,7 @@
     <CourierPhone>0535274928</CourierPhone>
     <Email>dinaklein@gmail.com</Email>
     <Password>password2813</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2025-10-11T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
@@ -17,7 +17,7 @@
     <CourierPhone>0541205709</CourierPhone>
     <Email>nelibuhbot@gmail.com</Email>
     <Password>password2777</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Car</DeliveryMethod>
     <StartedWorking>2024-07-19T21:01:33</StartedWorking>
     <MaxPersonalDistance>6</MaxPersonalDistance>
@@ -28,7 +28,7 @@
     <CourierPhone>0519061925</CourierPhone>
     <Email>kobimaoz@gmail.com</Email>
     <Password>password8416</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2023-04-23T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
@@ -39,7 +39,7 @@
     <CourierPhone>0577085922</CourierPhone>
     <Email>shimshongibor@gmail.com</Email>
     <Password>password4396</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2024-05-19T21:01:33</StartedWorking>
     <MaxPersonalDistance>8</MaxPersonalDistance>
@@ -50,21 +50,10 @@
     <CourierPhone>0594569422</CourierPhone>
     <Email>gabigabot@gmail.com</Email>
     <Password>password9207</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Bicycle</DeliveryMethod>
     <StartedWorking>2023-07-31T21:01:33</StartedWorking>
     <MaxPersonalDistance>2</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>285500504</Id>
-    <Name>Ana Zak</Name>
-    <CourierPhone>0560121495</CourierPhone>
-    <Email>anazak@gmail.com</Email>
-    <Password>password504</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2024-06-12T21:01:33</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
   </Courier>
   <Courier>
     <Id>315940634</Id>
@@ -72,7 +61,7 @@
     <CourierPhone>0580805824</CourierPhone>
     <Email>shiraisraelof@gmail.com</Email>
     <Password>Password634!</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2025-06-10T21:01:33</StartedWorking>
     <MaxPersonalDistance>18</MaxPersonalDistance>
@@ -83,7 +72,7 @@
     <CourierPhone>0575705577</CourierPhone>
     <Email>danilevy@gmail.com</Email>
     <Password>password803</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Bicycle</DeliveryMethod>
     <StartedWorking>2025-08-01T21:01:33</StartedWorking>
     <MaxPersonalDistance>2</MaxPersonalDistance>
@@ -94,7 +83,7 @@
     <CourierPhone>0592572810</CourierPhone>
     <Email>eliamar@gmail.com</Email>
     <Password>password5827</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2024-10-18T21:01:33</StartedWorking>
     <MaxPersonalDistance>3</MaxPersonalDistance>
@@ -105,7 +94,7 @@
     <CourierPhone>0592682117</CourierPhone>
     <Email>yaircohen@gmail.com</Email>
     <Password>password7184</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2025-11-01T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
@@ -127,7 +116,7 @@
     <CourierPhone>0539769649</CourierPhone>
     <Email>shimiavner@gmail.com</Email>
     <Password>password8651</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Bicycle</DeliveryMethod>
     <StartedWorking>2024-12-13T21:01:33</StartedWorking>
     <MaxPersonalDistance>3</MaxPersonalDistance>
@@ -138,7 +127,7 @@
     <CourierPhone>0599881050</CourierPhone>
     <Email>avitirmon@gmail.com</Email>
     <Password>password5017</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2025-10-05T21:01:33</StartedWorking>
     <MaxPersonalDistance>3</MaxPersonalDistance>
@@ -160,7 +149,7 @@
     <CourierPhone>0555208276</CourierPhone>
     <Email>malcabek@gmail.com</Email>
     <Password>password9178</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2025-08-14T21:01:33</StartedWorking>
     <MaxPersonalDistance>1</MaxPersonalDistance>
@@ -171,21 +160,10 @@
     <CourierPhone>0519111326</CourierPhone>
     <Email>yaellulu@gmail.com</Email>
     <Password>password4903</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Car</DeliveryMethod>
     <StartedWorking>2024-03-21T21:01:33</StartedWorking>
     <MaxPersonalDistance>13</MaxPersonalDistance>
-  </Courier>
-  <Courier>
-    <Id>343943026</Id>
-    <Name>Erez G</Name>
-    <CourierPhone>0598056688</CourierPhone>
-    <Email>erezg@gmail.com</Email>
-    <Password>password3026</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <StartedWorking>2024-03-22T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
   </Courier>
   <Courier>
     <Id>347161340</Id>
@@ -193,7 +171,7 @@
     <CourierPhone>0554469655</CourierPhone>
     <Email>danafrider@gmail.com</Email>
     <Password>password1340</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>Motorcycle</DeliveryMethod>
     <StartedWorking>2025-09-22T21:01:33</StartedWorking>
     <MaxPersonalDistance>4</MaxPersonalDistance>
@@ -204,7 +182,7 @@
     <CourierPhone>0556772744</CourierPhone>
     <Email>noatishbi@gmail.com</Email>
     <Password>Pass5809!</Password>
-    <Active>false</Active>
+    <Active>true</Active>
     <DeliveryMethod>4</DeliveryMethod>
     <StartedWorking>2025-08-18T21:01:33</StartedWorking>
     <MaxPersonalDistance>10</MaxPersonalDistance>
@@ -230,5 +208,27 @@
     <DeliveryMethod>Foot</DeliveryMethod>
     <StartedWorking>2024-12-22T21:01:33</StartedWorking>
     <MaxPersonalDistance>2</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>285500504</Id>
+    <Name>Ana Zak</Name>
+    <CourierPhone>0560121495</CourierPhone>
+    <Email>anazak@gmail.com</Email>
+    <Password>Password504_</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2024-06-12T21:01:33</StartedWorking>
+    <MaxPersonalDistance>1</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>343943026</Id>
+    <Name>Erez G</Name>
+    <CourierPhone>0598056688</CourierPhone>
+    <Email>erezg@gmail.com</Email>
+    <Password>Password3026-</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2024-03-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

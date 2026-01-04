@@ -1,4 +1,5 @@
-﻿using PL.Order;
+﻿using BO;
+using PL.Order;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,17 +53,12 @@ public partial class CourierListWindow : Window
     /// <summary>
     /// Property for the list filter
     /// </summary>
-    public bool? Active { get; set; } = null;
-
-    /// <summary>
-    /// Property for the list filter
-    /// </summary>
-    public BO.EnumDeliveryMethod FilterByMethod { get; set; } = BO.EnumDeliveryMethod.None;
+    public BO.EnumActiveCourier? ActiveFilter { get; set; } = BO.EnumActiveCourier.None;
 
     /// <summary>
     /// Property for the list sort
     /// </summary>
-    public BO.EnumCourierFieldSort SortByCourierFields { get; set; } = BO.EnumCourierFieldSort.Name;
+    public BO.EnumCourierFieldSort? SortField { get; set; } = BO.EnumCourierFieldSort.None;
 
     private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
@@ -91,10 +87,26 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void RefreshCourierList()
     {
-        if (FilterByMethod == BO.EnumDeliveryMethod.None)
-            CourierList = s_bl.Courier.GetCouriersInList(UserId);
-        else
-            CourierList = s_bl.Courier.GetCouriersInList(UserId, null, BO.EnumCourierFieldSort.Name, FilterByMethod, FilterByMethod);
+        //if (SortField == BO.EnumCourierFieldSort.None)
+        //    CourierList = s_bl.Courier.GetCouriersInList(UserId, ActiveFilter);
+        //else //sort by field
+        //    CourierList = s_bl.Courier.GetCouriersInList(UserId, ActiveFilter, SortField);
+        if (ActiveFilter == BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(UserId)!;
+        }
+        else if (ActiveFilter != BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter)!;
+        }
+        else if (ActiveFilter == BO.EnumActiveCourier.None && SortField != BO.EnumCourierFieldSort.None)
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(UserId, null, SortField)!;
+        }
+        else // both filter + sort are set
+        {
+            CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter, SortField)!;
+        }
 
     }
 
@@ -158,7 +170,7 @@ public partial class CourierListWindow : Window
     {
         if (SelectedCourier == null)
             return;
-        if(SelectedCourier.OrdersInProgressId != 0)
+        if(SelectedCourier.OrderInProgressId != 0)
         {
             MessageBox.Show("Cannot delete a courier with orders in progress.", "Operation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
             return;

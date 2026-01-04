@@ -9,6 +9,10 @@
         <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
         <local:EndStatusCollection x:Key="EndStatusCollectionKey" />
+        <local:ActiveCourierCollection x:Key="ActiveCourierCollectionKey" />
+        <local:SortFieldCourierCollection x:Key="SortFieldCourierCollectionKey" />
+
+
         <local:ConvertModeToReadOnly x:Key="ModeToReadOnlyConverter" />
         <local:ConvertModeToVisibility x:Key="ModeToVisibilityConverter" />
         <local:NullToVisibilityConverter x:Key="NullToVisibility" />

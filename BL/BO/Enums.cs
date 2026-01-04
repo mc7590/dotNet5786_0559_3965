@@ -67,12 +67,12 @@ public enum EnumEndDeliveryStatus
 /// </summary>
 public enum EnumCourierFieldSort
 {
+    None,
     Id,
     Name,
     StartedWorking,
     TotalOnTimeDeliveries,
-    TotalLateDeliveries,
-    MaxPersonalDistance
+    TotalLateDeliveries
 }
 
 /// <summary>
@@ -134,6 +134,16 @@ public enum EnumClosedDeliveryInListField
     DeliveryMethod,
     DistanceInKm,
     TotalDeliveryTime
+}
+
+/// <summary>
+/// represents the fields by which couriers data can be filtered
+/// </summary>
+public enum EnumActiveCourier
+{
+    None,
+    Active,
+    Inactive
 }
 
 
