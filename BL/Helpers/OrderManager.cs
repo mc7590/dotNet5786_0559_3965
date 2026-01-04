@@ -315,17 +315,21 @@ internal static class OrderManager
         if (!courier.Active)
             throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
         IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
+        var openOrder = from o in orders
+                        let BoOrder = DoOrderToBoOrder(o)
+                        where BoOrder.OrderStatus == BO.EnumOrderStatus.Open
+                        select o;
         if (typeFilter != null)
         {
-            orders = orders.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
+            openOrder = openOrder.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
         }
         var result =
-            from o in orders
+            from o in openOrder
             let distance = Tools.CalculateDistanceInKm(o.Longitude, o.Latitude)
             let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
             select new BO.OpenOrderInList
             {
-                CourierId = courierId,
+                CourierId = 0,
                 OrderId = o.Id,
                 OrderType = (BO.EnumOrderType)o.OrderType,
                 Weight = o.Weight,

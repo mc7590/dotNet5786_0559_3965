@@ -12,27 +12,47 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 
-namespace PL.Order
+namespace PL.Order;
+
+/// <summary>
+/// Interaction logic for SelectOrderWindow.xaml
+/// </summary>
+public partial class SelectOrderWindow : Window
 {
-    /// <summary>
-    /// Interaction logic for SelectOrderWindow.xaml
-    /// </summary>
-    public partial class SelectOrderWindow : Window
+    static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
+    readonly int UserId;
+    readonly int CourierId;
+    IEnumerable<BO.OpenOrderInList> orders;
+    public SelectOrderWindow(int userId, int courierId)
     {
-        static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-        readonly int UserId;
-        IEnumerable<BO.OpenOrderInList> orders;
-        public SelectOrderWindow(int userId)
-        {
-            InitializeComponent();
-            UserId = userId;
-            orders = s_bl.Order.GetListOfOpenOrderToChoose(userId, userId);
-            dgOrders.ItemsSource = orders;
-        }
+        InitializeComponent();             
+        orders = s_bl.Order.GetListOfOpenOrderToChoose(userId, courierId); 
+        UserId = userId;
+        CourierId = courierId;
+        dgOrders.ItemsSource = orders;
+    }
 
-        private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
-        {
+    private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
+    {
 
+        try
+        {
+            Button btn = sender as Button;
+
+            var selectedOrder = btn.DataContext as BO.OpenOrderInList;
+
+            if (selectedOrder != null)
+            {
+
+                s_bl.Courier.AssignOrderToCourier(CourierId, selectedOrder.OrderId);
+                MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
+            }
         }
+        catch (Exception ex) 
+        { 
+            MessageBox.Show($"Error assigning order: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        
     }
 }
