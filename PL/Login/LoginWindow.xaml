@@ -34,7 +34,7 @@
                 <TextBlock Text="Management System" FontSize="14" Foreground="Gray" 
                            HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
-                <Label Content="ID Number" FontWeight="SemiBold"/>
+                <Label Content="ID Number" FontWeight="SemiBold" Margin="0,15,0,0"/>
                 <TextBox x:Name="txtId" Height="35" VerticalContentAlignment="Center" 
                          Padding="5" BorderBrush="#E31E24" BorderThickness="0,0,0,2"
                          Text="{Binding IdText, UpdateSourceTrigger=PropertyChanged}"/>

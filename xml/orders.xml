@@ -603,8 +603,8 @@
     <OrderType>Express</OrderType>
     <Description>Customer used birthday coupon</Description>
     <Address>Arlozorov 28, Ramat Gan</Address>
-    <Latitude>34.81255700496421</Latitude>
-    <Longitude>32.08058627022238</Longitude>
+    <Latitude>32.080649904143364</Latitude>
+    <Longitude>34.81255700496421</Longitude>
     <CustomerName>Gili Wert</CustomerName>
     <CustomerPhone>0506789012</CustomerPhone>
     <OrderCreationTime>2025-12-10T20:44:33</OrderCreationTime>

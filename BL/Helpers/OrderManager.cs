@@ -126,7 +126,7 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
 
-        IEnumerable<BO.OrderInList> query = doOrderToBoOrderInList(s_dal.Order.ReadAll().Distinct()); //make list of BO.OrderInList
+        IEnumerable<BO.OrderInList> query = doOrderToBoOrderInList(s_dal.Order.ReadAll()/*.Distinct()*/); //make list of BO.OrderInList
 
         //filter
         if (filterBy != null && filterValue != null)
@@ -163,6 +163,11 @@ internal static class OrderManager
                 //BO.EnumOrderField.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
                 _ => query.OrderBy(order => order.OrderStatus) //otherwise sort by orderStatus
             };
+        }
+        else
+        {
+            //default sort in case no sort input
+            query = query.OrderBy(o => o.OrderStatus);
         }
 
         return query; //return the final query

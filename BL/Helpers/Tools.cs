@@ -207,7 +207,10 @@ public static class Tools
         dist = dist * 180 / Math.PI;
         dist = dist * 60 * 1.1515;
 
-        return dist * 1.609344;  
+        //return dist * 1.609344;  
+        double km = dist * 1.609344;
+
+        return Math.Round(km, 2);
     }
     public static TimeSpan CalculateTimeDifference(DateTime start, DateTime end)
     {

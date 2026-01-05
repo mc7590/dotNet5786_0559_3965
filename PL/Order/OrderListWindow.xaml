@@ -89,7 +89,7 @@
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>
-                <DataGridTextColumn Binding="{Binding AerialDistance}" Header="Aerial Distance" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding AerialDistance, StringFormat={}{0:F2} km}" Header="Aerial Distance" Width="Auto"/>
 
                 <DataGridTemplateColumn Header="Order Status" Width="Auto">
                     <DataGridTemplateColumn.CellTemplate>
