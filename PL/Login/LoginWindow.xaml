@@ -35,13 +35,20 @@
                            HorizontalAlignment="Center" Margin="0,0,0,30"/>
 
                 <Label Content="ID Number" FontWeight="SemiBold" Margin="0,15,0,0"/>
-                <TextBox x:Name="txtId" Height="35" VerticalContentAlignment="Center" 
-                         Padding="5" BorderBrush="#E31E24" BorderThickness="0,0,0,2"
-                         Text="{Binding IdText, UpdateSourceTrigger=PropertyChanged}"/>
+                <TextBox x:Name="txtId" Height="35" VerticalContentAlignment="Center"
+                         BorderBrush="#E31E24" BorderThickness="0,0,0,2"
+                         Text="{Binding IdText, UpdateSourceTrigger=PropertyChanged}">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
 
-                <Label Content="Password" FontWeight="SemiBold" Margin="0,15,0,0"/>
+                
+                    <Label Content="Password" FontWeight="SemiBold" Margin="0,15,0,0"/>
                 <PasswordBox x:Name="txtPassword" Height="35" VerticalContentAlignment="Center" 
-                             Padding="5" BorderBrush="#E31E24" BorderThickness="0,0,0,2"
+                             Padding="5" BorderBrush="#E31E24" BorderThickness="0,0,0,2" 
+                             
                              PasswordChanged="Password_Changed"/>
 
                 <Button Content="LOGIN" Height="45" Margin="0,40,0,0"

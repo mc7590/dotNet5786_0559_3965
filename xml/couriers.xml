@@ -231,4 +231,15 @@
     <StartedWorking>2024-12-13T21:01:33</StartedWorking>
     <MaxPersonalDistance>3</MaxPersonalDistance>
   </Courier>
+  <Courier>
+    <Id>999999330</Id>
+    <Name>shani</Name>
+    <CourierPhone>0888888888</CourierPhone>
+    <Email>as@g.com</Email>
+    <Password>Pa11a!!!</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2026-01-05T23:16:35.6528928+02:00</StartedWorking>
+    <MaxPersonalDistance>2</MaxPersonalDistance>
+  </Courier>
 </ArrayOfCourier>

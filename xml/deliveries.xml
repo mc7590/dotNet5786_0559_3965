@@ -420,4 +420,14 @@
     <EndDeliveryStatus xsi:nil="true" />
     <EndDeliveryTime xsi:nil="true" />
   </Delivery>
+  <Delivery>
+    <Id>1042</Id>
+    <OrderId>1042</OrderId>
+    <CourierId>999999330</CourierId>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <DeliveryStartTime>2027-01-11T22:01:33</DeliveryStartTime>
+    <DistanceInKm>2.068</DistanceInKm>
+    <EndDeliveryStatus xsi:nil="true" />
+    <EndDeliveryTime xsi:nil="true" />
+  </Delivery>
 </ArrayOfDelivery>
