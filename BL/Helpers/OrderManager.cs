@@ -122,11 +122,12 @@ internal static class OrderManager
     /// <param name="filterValue">the value to use for filter, if null, sort by OrderStatus </param>
     /// <param name="sortBy">if (value!=null), sort by the Enum option for sort</param>
     /// <param name="sortValue">if null, sort by OrderStatus</param>
-    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filterBy = null, object? filterValue = null, BO.EnumOrderField? sortBy = null, object? sortValue = null)
+    internal static IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldFilter? filterBy = null, object? filterValue = null, BO.EnumOrderFieldSort? sortBy = null, object? sortValue = null)
     {
         Tools.IsManager(id);
 
-        IEnumerable<BO.OrderInList> query = doOrderToBoOrderInList(s_dal.Order.ReadAll()/*.Distinct()*/); //make list of BO.OrderInList
+        var doQuery = s_dal.Order.ReadAll();
+        IEnumerable<BO.OrderInList> query = doQuery.Select(doOrder => doOrderToBoOrderInList(doOrder)); //make list of BO.OrderInList
 
         //filter
         if (filterBy != null && filterValue != null)
@@ -134,15 +135,8 @@ internal static class OrderManager
             string filterValString = filterValue.ToString()!; //convert filterValue once //won't be null bc after the 'if'
             query = filterBy.Value switch
             {
-                //BO.EnumOrderField.CourierId => query.Where(o => o.CourierId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.OrderId => query.Where(o => o.OrderId.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderType => query.Where(o => o.OrderType.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.AerialDistance => query.Where(o => o.AerialDistance.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                BO.EnumOrderField.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.ScheduleStatus => query.Where(o => o.ScheduleStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.RemainingTime => query.Where(o => o.RemainingTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.TotalDeliveryTime => query.Where(o => o.TotalDeliveryTime.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
-                //BO.EnumOrderField.TotalDeliveries => query.Where(o => o.TotalDeliveries.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderFieldFilter.OrderType => query.Where(o => o.OrderType.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
+                BO.EnumOrderFieldFilter.OrderStatus => query.Where(o => o.OrderStatus.ToString().Contains(filterValString, StringComparison.OrdinalIgnoreCase)),
                 _ => query //otherwise no filter
             };
         }
@@ -152,22 +146,22 @@ internal static class OrderManager
         {
             query = sortBy.Value switch
             {
-                //BO.EnumOrderField.CourierId => query.OrderBy(o => o.CourierId),
-                //BO.EnumOrderField.OrderId => query.OrderBy(o => o.OrderId),
-                BO.EnumOrderField.OrderType => query.OrderBy(o => o.OrderType),
-                //BO.EnumOrderField.AerialDistance => query.OrderBy(o => o.AerialDistance),
-                BO.EnumOrderField.OrderStatus => query.OrderBy(o => o.OrderStatus),
-                //BO.EnumOrderField.ScheduleStatus => query.OrderBy(o => o.ScheduleStatus),
-                //BO.EnumOrderField.RemainingTime => query.OrderBy(o => o.RemainingTime),
-                //BO.EnumOrderField.TotalDeliveryTime => query.OrderBy(o => o.TotalDeliveryTime),
-                //BO.EnumOrderField.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
-                _ => query.OrderBy(order => order.OrderStatus) //otherwise sort by orderStatus
+                BO.EnumOrderFieldSort.CourierId => query.OrderBy(o => o.CourierId),
+                BO.EnumOrderFieldSort.OrderId => query.OrderBy(o => o.OrderId),
+                BO.EnumOrderFieldSort.OrderType => query.OrderBy(o => o.OrderType.ToString()),
+                BO.EnumOrderFieldSort.AerialDistance => query.OrderBy(o => o.AerialDistance),
+                BO.EnumOrderFieldSort.OrderStatus => query.OrderBy(o => o.OrderStatus.ToString()),
+                BO.EnumOrderFieldSort.ScheduleStatus => query.OrderBy(o => o.ScheduleStatus.ToString()),
+                BO.EnumOrderFieldSort.RemainingTime => query.OrderBy(o => o.RemainingTime),
+                BO.EnumOrderFieldSort.TotalDeliveryTime => query.OrderBy(o => o.TotalDeliveryTime),
+                BO.EnumOrderFieldSort.TotalDeliveries => query.OrderBy(o => o.TotalDeliveries),
+                _ => query.OrderBy(order => order.OrderStatus.ToString()) //otherwise sort by orderStatus
             };
         }
         else
         {
             //default sort in case no sort input
-            query = query.OrderBy(o => o.OrderStatus);
+            query = query.OrderBy(o => o.OrderStatus.ToString());
         }
 
         return query; //return the final query
@@ -178,10 +172,24 @@ internal static class OrderManager
     /// </summary>
     /// <param name="doOrders"></param>
     /// <returns></returns>
-    internal static IEnumerable<BO.OrderInList> doOrderToBoOrderInList(IEnumerable<DO.Order> doOrders)
+    internal static BO.OrderInList doOrderToBoOrderInList(DO.Order doOrder)
     {
-        return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder)) //XXX
-                       .Select(boOrder => BoOrderToBoOrderInList(boOrder));
+        //return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder)) //XXX
+        //               .Select(boOrder => BoOrderToBoOrderInList(boOrder));
+        return new BO.OrderInList
+            {
+                CourierId = DeliveryManager.GetCourierIdToDoOrder(doOrder),
+                OrderId = doOrder.Id,
+                OrderType = (BO.EnumOrderType)doOrder.OrderType,
+                AerialDistance = Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude),
+                OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
+                ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
+                RemainingTime = OrderManager.GetRemainingTime(doOrder),
+                TotalDeliveryTime = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count() > 0 ?
+                    DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Last().DelCreationTime - doOrder.OrderCreationTime :
+                    TimeSpan.Zero,
+                TotalDeliveries = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count()
+            };
     }
 
     /// <summary>

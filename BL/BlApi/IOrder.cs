@@ -12,8 +12,8 @@ public interface IOrder : IObservable //stage 5
     /// <summary>
     /// returns a BO.OrderInList filtered and sorted
     /// </summary>
-    //IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? sort = null, object? value = null, BO.EnumOrderField? filter = null);
-    IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderField? filterBy = null, object? filterValue = null, BO.EnumOrderField? sortBy = null, object? sortValue = null);
+    //IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldFilter? sort = null, object? value = null, BO.EnumOrderFieldFilter? filter = null);
+    IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldFilter? filterBy = null, object? filterValue = null, BO.EnumOrderFieldSort? sortBy = null, object? sortValue = null);
 
 
     BO.Order? Read(int id, int orderId);

@@ -6,7 +6,7 @@
 
     <Application.Resources>
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
-        <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
+        <local:OrderListSortCollection x:Key="OrderListSortCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
         <local:EndStatusCollection x:Key="EndStatusCollectionKey" />
         <local:ActiveCourierCollection x:Key="ActiveCourierCollectionKey" />

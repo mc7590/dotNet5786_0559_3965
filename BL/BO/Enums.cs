@@ -76,9 +76,9 @@ public enum EnumCourierFieldSort
 }
 
 /// <summary>
-/// Specifies the fields by which order data can be filtered/sorted
+/// Specifies the fields by which order data can be filtered
 /// </summary>
-public enum EnumOrderField
+public enum EnumOrderFieldFilter
 {
 //CourierId,
 //OrderId,
@@ -89,6 +89,23 @@ OrderStatus //,
 //RemainingTime,
 //TotalDeliveryTime,
 //TotalDeliveries
+}
+
+/// <summary>
+/// Specifies the fields by which order data can be sorted
+/// </summary>
+public enum EnumOrderFieldSort
+{
+    None,
+    CourierId,
+    OrderId,
+    OrderType,
+    AerialDistance,
+    OrderStatus,
+    ScheduleStatus,
+    RemainingTime,
+    TotalDeliveryTime,
+    TotalDeliveries
 }
 
 /// <summary> 

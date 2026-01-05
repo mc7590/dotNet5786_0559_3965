@@ -18,11 +18,11 @@ public class MethodDeliveryCollection : IEnumerable<BO.EnumDeliveryMethod>
 /// <summary>
 /// for binding EnumOrderType in UI (ComboBox)
 /// </summary>
-public class OrderTypeCollection : IEnumerable<BO.EnumOrderType>
+public class OrderListSortCollection : IEnumerable<BO.EnumOrderFieldSort>
 {
-    static readonly IEnumerable<BO.EnumOrderType> s_enums =
-        (IEnumerable<BO.EnumOrderType>)Enum.GetValues(typeof(BO.EnumOrderType));
-    public IEnumerator<BO.EnumOrderType> GetEnumerator() => s_enums.GetEnumerator();
+    static readonly IEnumerable<BO.EnumOrderFieldSort> s_enums =
+        (IEnumerable<BO.EnumOrderFieldSort>)Enum.GetValues(typeof(BO.EnumOrderFieldSort));
+    public IEnumerator<BO.EnumOrderFieldSort> GetEnumerator() => s_enums.GetEnumerator();
     IEnumerator IEnumerable.GetEnumerator() => GetEnumerator();
 }
 

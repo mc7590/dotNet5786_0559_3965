@@ -49,7 +49,7 @@ public partial class OrderListWindow : Window
     /// <summary>
     /// Gets or sets the current order sort type
     /// </summary>
-    public BO.EnumOrderType OrderType { get; set; } = BO.EnumOrderType.None;
+    public BO.EnumOrderFieldSort OrderSort { get; set; } = BO.EnumOrderFieldSort.None;
 
     /// <summary>
     /// function to handle selection change in the combo box
@@ -64,21 +64,37 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void RefreshOrderList()
     {
-        if (OrderStatus == BO.EnumOrderStatus.None && OrderType == BO.EnumOrderType.None)
+        //if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+        //{
+        //    OrderList = s_bl?.Order.GetOrderInList(UserId)!;
+        //}
+        //else if(OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+        //{
+        //    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
+        //}
+        //else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
+        //{
+        //    OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, BO.EnumOrderFieldSort.OrderType, OrderSort)!;
+        //}
+        //else // both filter + sort are set
+        //{
+        //    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, BO.EnumOrderFieldSort.OrderType, OrderSort)!;
+        //}
+        if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
         {
             OrderList = s_bl?.Order.GetOrderInList(UserId)!;
         }
-        else if(OrderStatus != BO.EnumOrderStatus.None && OrderType == BO.EnumOrderType.None)
+        else if (OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
         {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderField.OrderStatus, OrderStatus)!;
+            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
         }
-        else if (OrderStatus == BO.EnumOrderStatus.None && OrderType != BO.EnumOrderType.None)
+        else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
         {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, BO.EnumOrderField.OrderType, OrderType)!;
+            OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, OrderSort, OrderSort)!;
         }
         else // both filter + sort are set
         {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderField.OrderStatus, OrderStatus, BO.EnumOrderField.OrderType, OrderType)!;
+            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, OrderSort, OrderSort)!;
         }
     }
 

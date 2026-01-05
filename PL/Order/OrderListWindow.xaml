@@ -40,8 +40,8 @@
 
             <Label Grid.Column="3" Content="Sort By:" VerticalAlignment="Center" Margin="5,0,5,0"/>
             <ComboBox Grid.Column="4" VerticalAlignment="Center"
-                      ItemsSource="{Binding Source={StaticResource OrderTypeCollectionKey}}"
-                      SelectedItem="{Binding OrderType, Mode=TwoWay}"
+                      ItemsSource="{Binding Source={StaticResource OrderListSortCollectionKey}}"
+                      SelectedItem="{Binding OrderSort, Mode=TwoWay}"
                       SelectionChanged="ComboBox_SelectionChanged" />
 
         </Grid>

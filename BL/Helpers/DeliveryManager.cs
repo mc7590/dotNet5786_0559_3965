@@ -121,6 +121,24 @@ internal static class DeliveryManager
     }
 
     /// <summary>
+    /// returns the courier ID that delivered the given DO order
+    /// </summary>
+    internal static int? GetCourierIdToDoOrder(DO.Order doOrder)
+    {
+        //get list of deliveries for the given order ID
+        var delList = GetListDeliveryPerOrderInList(doOrder.Id);
+
+        // Find the object where the time difference (boOrder.CreationTime - delivery.DelCreationTime) is minimal
+        // OrderBy-> calculates the time difference for each item and sorts from smallest to largest
+        // FirstOrDefault-> returns the first item in the sorted list (the item with the min time difference)
+        var closestDelivery = delList.OrderBy(delivery => doOrder.OrderCreationTime - delivery.DelCreationTime)
+                                     .FirstOrDefault();
+
+        // Return the CourierId of the found delivery (or null if no delivery was found)
+        return closestDelivery?.CourierId;
+    }
+
+    /// <summary>
     /// returns a list of DeliveryPerOrderInList for the given BO order ID
     /// </summary>
     internal static IEnumerable<BO.DeliveryPerOrderInList> GetListDeliveryPerOrderInList(int orderId)
