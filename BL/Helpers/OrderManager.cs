@@ -180,7 +180,7 @@ internal static class OrderManager
     /// <returns></returns>
     internal static IEnumerable<BO.OrderInList> doOrderToBoOrderInList(IEnumerable<DO.Order> doOrders)
     {
-        return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder))
+        return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder)) //XXX
                        .Select(boOrder => BoOrderToBoOrderInList(boOrder));
     }
 

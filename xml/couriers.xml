@@ -111,17 +111,6 @@
     <MaxPersonalDistance>1</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>222538651</Id>
-    <Name>Shimi Avner</Name>
-    <CourierPhone>0539769649</CourierPhone>
-    <Email>shimiavner@gmail.com</Email>
-    <Password>password8651</Password>
-    <Active>true</Active>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <StartedWorking>2024-12-13T21:01:33</StartedWorking>
-    <MaxPersonalDistance>3</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>221515017</Id>
     <Name>Avi Tirmon</Name>
     <CourierPhone>0599881050</CourierPhone>
@@ -229,6 +218,17 @@
     <Active>true</Active>
     <DeliveryMethod>Bicycle</DeliveryMethod>
     <StartedWorking>2024-03-22T21:01:33</StartedWorking>
+    <MaxPersonalDistance>3</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>222538651</Id>
+    <Name>Shimi Avner</Name>
+    <CourierPhone>0539769649</CourierPhone>
+    <Email>shimiavner@gmail.com</Email>
+    <Password>Password8651!</Password>
+    <Active>false</Active>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <StartedWorking>2024-12-13T21:01:33</StartedWorking>
     <MaxPersonalDistance>3</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

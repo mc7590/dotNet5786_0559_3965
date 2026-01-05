@@ -62,7 +62,8 @@ public partial class CourierListWindow : Window
 
     private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        RefreshCourierList();
+        //RefreshCourierList();
+        courierListObserver();
     }
 
     /// <summary>

@@ -87,7 +87,7 @@ internal static class CourierManager
 
         // convert doCouriers to BO.CourierInList
         IEnumerable<BO.CourierInList> boCouriersInList = from c in doCouriers
-                                                   let activeOrder = GetActiveDeliveryOrderForCourier(id, c.Id)
+                                                   let activeOrderId = GetActiveDeliveryIdForCourier(id, c.Id)
                                                    select new BO.CourierInList
                                                    {
                                                        Id = c.Id,
@@ -97,9 +97,7 @@ internal static class CourierManager
                                                        StartedWorking = c.StartedWorking,
                                                        TotalOnTimeDeliveries = DeliveryManager.GetDeliveriesOnTimeForCourier(id, c.Id),
                                                        TotalLateDeliveries = DeliveryManager.GetDeliveriesLateForCourier(id, c.Id),
-                                                       OrderInProgressId = activeOrder != null
-                                                                            ? activeOrder.OrderId
-                                                                            : 0
+                                                       OrderInProgressId = activeOrderId != null ? activeOrderId.Value : 0
                                                    };
         // SORT
         if (sortBy != null)
@@ -180,6 +178,11 @@ internal static class CourierManager
         if (!Tools.VerifyPassword(password, courier.Password))
             throw new BO.BlUnauthorizedException("Incorrect password.");
         return BO.EnumUserRole.Courier;
+    }
+    private static int? GetActiveDeliveryIdForCourier(int id, int courierId)
+    {
+        var activeDeliveryId = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime == null).FirstOrDefault()?.Id;
+        return activeDeliveryId;
     }
     /// <summary>
     /// gets the active delivery order for a specific courier

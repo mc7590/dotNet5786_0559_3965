@@ -151,7 +151,7 @@ public static class Tools
             string url = $"http://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
 
             // ביצוע הקריאה ב-Thread נפרד למניעת Deadlock
-            var response = Task.Run(() => client.GetAsync(url)).Result;
+            var response = client.GetAsync(url).Result;
 
             if (response.IsSuccessStatusCode)
             {
