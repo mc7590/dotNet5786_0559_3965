@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Order;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -21,49 +22,90 @@ namespace PL.Delivery;
 public partial class DeliveryHistory : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    int courierId;
-    private IEnumerable<BO.ClosedDeliveryInList> allDeliveries;
+    readonly int UserId;
+    readonly int CourierId;
+
+    /// <summary>
+    /// Ctor
+    /// </summary>
     public DeliveryHistory(int thisUserId, int currentCourierId)
     {
-        InitializeComponent();
-        courierId = currentCourierId;
+        UserId = thisUserId;
+        CourierId = currentCourierId;
 
-        allDeliveries = s_bl.Order.GetClosedDeliveriesInListsToCourier(thisUserId, currentCourierId);
-        HistoryGrid.ItemsSource = allDeliveries;
+        InitializeComponent();
+
     }
-    private void Window_Loaded(object sender, RoutedEventArgs e)
+
+    /// <summary>
+    /// Dependency property for the DeliveryHistory list
+    /// </summary>
+    public IEnumerable<BO.ClosedDeliveryInList> DeliveryHistoryList
     {
+        get { return (IEnumerable<BO.ClosedDeliveryInList>?)GetValue(CurrentDeliveryHistoryProperty)!; }
+        set { SetValue(CurrentDeliveryHistoryProperty, value); }
     }
+    public static readonly DependencyProperty CurrentDeliveryHistoryProperty =
+        DependencyProperty.Register("CurrentDeliveryHistory", typeof(IEnumerable<BO.ClosedDeliveryInList>), typeof(DeliveryHistory), new PropertyMetadata(null));
+
+    /// <summary>
+    /// Property for the list filter
+    /// </summary>
+    public BO.EnumOrderType? OrderTypeFilter { get; set; } = BO.EnumOrderType.None;
+
+    /// <summary>
+    /// Refresh the Delivery History list
+    /// also known as query
+    /// </summary>
+    private void RefreshDeliveryHistoryList()
+    {
+//if added SORT functionality, do it here
+
+        if (OrderTypeFilter == BO.EnumOrderType.None) //no filter
+        {
+            DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId);
+        }
+        else // with filter // (OrderTypeFilter != BO.EnumOrderType.None)
+        {
+            DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId, OrderTypeFilter);
+        }
+    }
+
+    private void DeliveryHistoryObserver()
+        => RefreshDeliveryHistoryList();
+
+
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+        => s_bl.Order.AddObserver(DeliveryHistoryObserver);
 
     private void Window_Closed(object sender, EventArgs e)
-    {
-
-    }
+        => s_bl.Order.RemoveObserver(DeliveryHistoryObserver);
 
     private void BtnClearFilter_Click(object sender, RoutedEventArgs e)
     {
-        CmbStatusFilter.SelectedItem = null;
-        HistoryGrid.ItemsSource = allDeliveries;
+        OrderTypeFilter= BO.EnumOrderType.None;
+        DeliveryHistoryObserver();
     }
 
     private void CmbStatusFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
+        DeliveryHistoryObserver();
 
-        // the user chose to clear the filter
-        if (CmbStatusFilter.SelectedItem == null)
-        {
-            HistoryGrid.ItemsSource = allDeliveries;
-            return;
-        }
+        //// the user chose to clear the filter
+        //if (CmbStatusFilter.SelectedItem == null)
+        //{
+        //    HistoryGrid.ItemsSource = allDeliveries;
+        //    return;
+        //}
 
-        // select the status to filter by
-        BO.EnumEndDeliveryStatus selectedStatus = (BO.EnumEndDeliveryStatus)CmbStatusFilter.SelectedItem;
+        //// select the status to filter by
+        //BO.EnumEndDeliveryStatus selectedStatus = (BO.EnumEndDeliveryStatus)CmbStatusFilter.SelectedItem;
 
-        // filter the list based on the selected status
-        var filteredList = allDeliveries.Where(d => d.EndDeliveryStatus == selectedStatus).ToList();
+        //// filter the list based on the selected status
+        //var filteredList = allDeliveries.Where(d => d.EndDeliveryStatus == selectedStatus).ToList();
 
-        // update the DataGrid with the filtered list
-        HistoryGrid.ItemsSource = filteredList;
+        //// update the DataGrid with the filtered list
+        //HistoryGrid.ItemsSource = filteredList;
     }
 }
 

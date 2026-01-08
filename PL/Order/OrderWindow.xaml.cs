@@ -21,7 +21,8 @@ namespace PL.Order;
 public partial class OrderWindow : Window
 {
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
-    static int ManagerId => s_bl.Admin.GetConfig().ManagerId;
+    readonly int UserId;
+
 
     // DependencyProperty for the Add/Update button text
     public static readonly DependencyProperty ButtonTextProperty =
@@ -47,27 +48,23 @@ public partial class OrderWindow : Window
 
     private void OrderObserver()
     {
-        Dispatcher.Invoke(() =>
-        {
-            int id = CurrentOrder.Id;
             try
             {
-                CurrentOrder = s_bl.Order.Read(id, id)!;
+                CurrentOrder = s_bl.Order.Read(UserId, CurrentOrder.Id)!;
             }
             catch (Exception)
             {
                 this.Close();
             }
-        });
     }
 
-    public OrderWindow(int orderId = 0)
+    public OrderWindow(int thisUserId, int orderId = 0)
     {
+        UserId = thisUserId;
         // for courier view only
         // Set button text before InitializeComponent
         ButtonText = orderId == 0 ? "Add" : "Update";
 
-        //InitializeComponent();
         InitializeComponent();
         try
         {
@@ -82,7 +79,7 @@ public partial class OrderWindow : Window
             }
             else
             {
-                CurrentOrder = BlApi.Factory.Get().Order.Read(ManagerId, orderId)!; //gotten the manager id!
+                CurrentOrder = BlApi.Factory.Get().Order.Read(UserId, orderId)!;
             }
 
         }
@@ -93,6 +90,9 @@ public partial class OrderWindow : Window
         }
     }
 
+    /// <summary>
+    /// list of deliveries associated with the current order
+    /// </summary>
     public IEnumerable<BO.DeliveryPerOrderInList> DeliveryPerOrderInList
     {
         get { return (IEnumerable<BO.DeliveryPerOrderInList>)GetValue(DeliveryPerOrderInListProperty); }
@@ -111,9 +111,9 @@ public partial class OrderWindow : Window
         try
         {
             if (ButtonText == "Add")
-                bl.Order.Create(ManagerId, CurrentOrder);
+                bl.Order.Create(UserId, CurrentOrder);
             else
-                bl.Order.Update(ManagerId, CurrentOrder);
+                bl.Order.Update(UserId, CurrentOrder);
 
             MessageBox.Show("Saved successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();

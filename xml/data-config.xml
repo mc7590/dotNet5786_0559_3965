@@ -1,16 +1,16 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
-  <NextOrderId>1052</NextOrderId>
-  <NextDeliveryId>1043</NextDeliveryId>
-  <Clock>11/01/2027 22:01:33</Clock>
+  <NextOrderId>1050</NextOrderId>
+  <NextDeliveryId>1049</NextDeliveryId>
+  <Clock>08/01/2026 18:46:26</Clock>
   <ManagerId>1</ManagerId>
-  <ManagerPassword>Aaa12345!/</ManagerPassword>
+  <ManagerPassword>Aaa12345!</ManagerPassword>
   <CompanyAddress></CompanyAddress>
-  <Latitude>32.07439131534755</Latitude>
-  <Longitude>34.843018231340615</Longitude>
+  <Latitude>0</Latitude>
+  <Longitude>0</Longitude>
   <MaxDeliveryDistance>3</MaxDeliveryDistance>
   <AveCarSpeedKmH>60</AveCarSpeedKmH>
-  <AveMotorcycleSpeedKmH>58</AveMotorcycleSpeedKmH>
+  <AveMotorcycleSpeedKmH>60</AveMotorcycleSpeedKmH>
   <AveBicycleSpeedKmH>15</AveBicycleSpeedKmH>
   <AveWalkingSpeedKmH>15</AveWalkingSpeedKmH>
   <GetMaxDeliveryTime>2</GetMaxDeliveryTime>

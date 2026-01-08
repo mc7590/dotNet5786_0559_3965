@@ -267,7 +267,7 @@ class Program
                     Console.Write("Delivery ID: ");
                     if (!int.TryParse(Console.ReadLine(), out int deliveryId8)) break;
 
-                    s_bl.Order.EndOrderStatus(askerId8, courierId8, deliveryId8);
+                    s_bl.Order.EndOrderStatus(askerId8, courierId8, deliveryId8, 0); //default value for EnumEndDeliveryStatus
                     Console.WriteLine("Order treatment ended.");
                     break;
 

@@ -8,6 +8,7 @@
         <local:MethodDeliveryCollection x:Key="MethodDeliveryCollectionKey" />
         <local:OrderListSortCollection x:Key="OrderListSortCollectionKey" />
         <local:OrderStatusCollection x:Key="OrderStatusCollectionKey" />
+        <local:OrderTypeCollection x:Key="OrderTypeCollectionKey" />
         <local:EndStatusCollection x:Key="EndStatusCollectionKey" />
         <local:ActiveCourierCollection x:Key="ActiveCourierCollectionKey" />
         <local:SortFieldCourierCollection x:Key="SortFieldCourierCollectionKey" />

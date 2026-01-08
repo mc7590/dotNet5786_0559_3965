@@ -26,7 +26,7 @@ public partial class CourierListWindow : Window
     readonly int UserId;
 
     /// <summary>
-    /// Constructor
+    /// Ctor
     /// </summary>
     public CourierListWindow(int ThisUserID)
     {
@@ -43,11 +43,7 @@ public partial class CourierListWindow : Window
         set => SetValue(CourierListProperty, value);
     }
     public static readonly DependencyProperty CourierListProperty =
-        DependencyProperty.Register(
-            nameof(CourierList),
-            typeof(IEnumerable<BO.CourierInList>),
-            typeof(CourierListWindow),
-            new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(CourierList), typeof(IEnumerable<BO.CourierInList>), typeof(CourierListWindow), new PropertyMetadata(null));
 
 
     /// <summary>
@@ -62,7 +58,6 @@ public partial class CourierListWindow : Window
 
     private void ComboBoxFilter_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        //RefreshCourierList();
         courierListObserver();
     }
 
@@ -88,10 +83,6 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void RefreshCourierList()
     {
-        //if (SortField == BO.EnumCourierFieldSort.None)
-        //    CourierList = s_bl.Courier.GetCouriersInList(UserId, ActiveFilter);
-        //else //sort by field
-        //    CourierList = s_bl.Courier.GetCouriersInList(UserId, ActiveFilter, SortField);
         if (ActiveFilter == BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
         {
             CourierList = s_bl?.Courier.GetCouriersInList(UserId)!;
@@ -138,10 +129,6 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void dgCourierList_MouseDoubleClick(object sender, MouseButtonEventArgs e) //public?
     {
-        //check if the double click was not on an empty area in the DataGrid
-        //if (SelectedCourier == null)
-        //    return;
-        //new CourierWindow(SelectedCourier.Id).Show();
         if (SelectedCourier != null)
         {
             //create new courier window with the selected courier id

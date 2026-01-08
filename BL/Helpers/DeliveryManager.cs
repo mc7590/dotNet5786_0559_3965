@@ -205,6 +205,7 @@ internal static class DeliveryManager
 
     /// <summary>
     /// get the closed deliveries in list for a specific courier with optional filtering and sorting
+    /// make better functionality
     /// </summary>
     internal static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id ,int courierId ,BO.EnumOrderType? typeFilter = null ,BO.EnumClosedDeliveryInListField? sortBy = null)
     {

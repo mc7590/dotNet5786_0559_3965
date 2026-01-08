@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Delivery"
         mc:Ignorable="d"
-        Title="DeliveryHistory" Height="450" Width="800"
+        Title="DeliveryHistory" Height="650" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
@@ -26,23 +26,28 @@
             </Grid.ColumnDefinitions>
 
             <StackPanel Orientation="Horizontal" Grid.Column="0">
-                <Label Content="Filter by End Status:" VerticalAlignment="Center" FontWeight="Bold"/>
-                <ComboBox x:Name="CmbStatusFilter" 
-                          Width="150" Margin="10,0"
-                          ItemsSource="{Binding Source={StaticResource EndStatusCollectionKey}}"
+                <!--can be sorted too-->
+                <Label Content="Filter by End order type:" VerticalAlignment="Center"/>
+                <ComboBox Width="150" Margin="10,0"
+                          SelectedItem="{Binding OrderTypeFilter, Mode=TwoWay}"
+                          ItemsSource="{Binding Source={StaticResource OrderTypeCollectionKey}}"
                           SelectionChanged="CmbStatusFilter_SelectionChanged"/>
 
-                <Button Content="Clear Filter" Click="BtnClearFilter_Click" Margin="5,0" Padding="5,2" Background="LightGray"/>
+
+                <Button Content="Clear Filter" Click="BtnClearFilter_Click" Margin="5,0" Padding="5,2"/>
             </StackPanel>
         </Grid>
 
-        <DataGrid x:Name="HistoryGrid" Grid.Row="1" 
+        <DataGrid Grid.Row="1"
+                  ItemsSource="{Binding DeliveryHistoryList}"
                   IsReadOnly="True"
                   AutoGenerateColumns="False" 
                   EnableRowVirtualization="True"
-                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EEEEEE"
+                  RowHeight="40"
+                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="LightGray"
                   RowDetailsVisibilityMode="VisibleWhenSelected"
                   Margin="10">
+            
 
             <DataGrid.Columns>
                 <DataGridTextColumn Binding="{Binding DeliveryId}" Header="Delivery ID" Width="Auto" FontWeight="Bold"/>
