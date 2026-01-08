@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PL.Courier;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,6 +48,8 @@ public partial class SelectOrderWindow : Window
                 s_bl.Courier.AssignOrderToCourier(CourierId, selectedOrder.OrderId);
                 MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
+                // Close the CourierWindow to refresh its data
+                Application.Current.Windows.OfType<CourierWindow>().FirstOrDefault()?.Close();
             }
         }
         catch (Exception ex) 

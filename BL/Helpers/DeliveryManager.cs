@@ -252,7 +252,7 @@ internal static class DeliveryManager
     /// <param name="id">id of person asking data</param>
     /// <param name="courierId">order id</param>
     /// <param name="deliveryId">delivery id to be ended</param>
-    internal static void EndOrderStatus(int id, int courierId, int deliveryId)
+    internal static void EndOrderStatus(int id, int courierId, int deliveryId, BO.EnumEndDeliveryStatus endStatus)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
             //int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
@@ -265,7 +265,7 @@ internal static class DeliveryManager
 
         //try to update the delivery end status and time
         DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
-        DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Delivered, AdminManager.Now);
+        DeliveryManager.UpdateDelivery(delivery, endStatus , AdminManager.Now);
 
     }
 

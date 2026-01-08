@@ -79,7 +79,7 @@ public partial class CourierWindow : Window
             int id = CurrentCourier.Id;
             try
             {
-                CurrentCourier = s_bl.Courier.Read(id,id)!;
+                CurrentCourier = s_bl.Courier.Read(id, id)!;
             }
             catch (Exception)
             {
@@ -87,7 +87,7 @@ public partial class CourierWindow : Window
             }
         });
     }
-    
+
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         var bl = BlApi.Factory.Get();
@@ -141,7 +141,7 @@ public partial class CourierWindow : Window
 
     private void BtnSelectOrder_Click(object sender, RoutedEventArgs e)
     {
-        new Order.SelectOrderWindow(UserId,CurrentCourier.Id).Show();
+        new Order.SelectOrderWindow(UserId, CurrentCourier.Id).Show();
     }
 
     private void BtnDeliveriesHistory_Click(object sender, RoutedEventArgs e)
@@ -149,12 +149,27 @@ public partial class CourierWindow : Window
         new Delivery.DeliveryHistory(UserId, CurrentCourier.Id).Show();
     }
 
-    private void BtnViewOrder_Click(object sender, RoutedEventArgs e)
+    private BO.EnumEndDeliveryStatus _selectedEndDeliveryStatus = BO.EnumEndDeliveryStatus.Unknown;
+    public BO.EnumEndDeliveryStatus SelectedEndDeliveryStatus
     {
-        BO.OrderInProgress? orderInProgress = CurrentCourier.ActiveDeliveryOrder;
-        if (orderInProgress == null)
-            return;
+        get => _selectedEndDeliveryStatus;
+        set => SetValue(SelectedEndDeliveryStatusProperty, value);
+    }
 
-        new Order.OrderInProgressWindow(CurrentCourier.Id, orderInProgress.OrderId).Show();
+    public static readonly DependencyProperty SelectedEndDeliveryStatusProperty =
+        DependencyProperty.Register("SelectedEndDeliveryStatus", typeof(BO.EnumEndDeliveryStatus), typeof(CourierWindow), new PropertyMetadata(BO.EnumEndDeliveryStatus.Unknown));
+
+    private void BtnClose_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            s_bl.Order.EndOrderStatus(UserId, CurrentCourier.Id, CurrentCourier.ActiveDeliveryOrder!.DeliveryId, SelectedEndDeliveryStatus);
+            CurrentCourier = s_bl.Courier.Read(UserId, CurrentCourier.Id)!;
+            MessageBox.Show("Delivery completed successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Error completing delivery: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 }
