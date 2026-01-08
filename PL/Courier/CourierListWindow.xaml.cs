@@ -29,10 +29,9 @@ public partial class CourierListWindow : Window
     /// Ctor
     /// </summary>
     public CourierListWindow(int ThisUserID)
-    {
+    { 
         UserId = ThisUserID;
-        InitializeComponent();
-        
+        InitializeComponent();     
     }
     /// <summary>
     /// Dependency property for the courier list

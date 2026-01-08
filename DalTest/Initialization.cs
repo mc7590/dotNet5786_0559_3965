@@ -34,7 +34,7 @@ public static class Initialization
 
             string phone = $"05{s_rand.Next(10000000, 99999999)}";
             string email = $"{name.Replace(" ", "").ToLower()}@gmail.com";
-            string password = $"password{id % 10000}";
+            string password = $"Password{id % 10000}/";
             bool isActive = s_rand.NextDouble() < 0.8;
             EnumDeliveryMethod method = (EnumDeliveryMethod)s_rand.Next(0, 4);
 

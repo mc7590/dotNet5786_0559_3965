@@ -1,7 +1,11 @@
-﻿using PL.Courier;
+﻿using BO;
+using DO;
+using PL.Courier;
+using PL.Delivery;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Permissions;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -23,15 +27,34 @@ public partial class SelectOrderWindow : Window
     static readonly BlApi.IBl s_bl = BlApi.Factory.Get();
     readonly int UserId;
     readonly int CourierId;
-    IEnumerable<BO.OpenOrderInList> orders;
     public SelectOrderWindow(int userId, int courierId)
     {
-        InitializeComponent();             
-        orders = s_bl.Order.GetListOfOpenOrderToChoose(userId, courierId); 
         UserId = userId;
-        CourierId = courierId;
-        dgOrders.ItemsSource = orders;
+        CourierId = courierId;        
+        InitializeComponent();             
     }
+
+    /// <summary>
+    /// Dependency property for the OpenOrderInList list
+    /// </summary>
+    public IEnumerable<BO.OpenOrderInList> OpenOrderInList
+    {
+        get { return (IEnumerable<BO.OpenOrderInList>?)GetValue(CurrentOpenOrderInListProperty)!; }
+        set { SetValue(CurrentOpenOrderInListProperty, value); }
+    }
+    public static readonly DependencyProperty CurrentOpenOrderInListProperty =
+        DependencyProperty.Register("CurrentOpenOrderInList", typeof(IEnumerable<BO.OpenOrderInList>), typeof(SelectOrderWindow), new PropertyMetadata(null));
+
+    private void RefreshOpenOrderList()
+    {
+        OpenOrderInList = s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+    }
+    private void OpenOrderListObserver()
+        => RefreshOpenOrderList();
+    private void Window_Loaded(object sender, RoutedEventArgs e)
+        => s_bl.Order.AddObserver(OpenOrderListObserver);
+    private void Window_Closed(object sender, EventArgs e)
+        => s_bl.Order.RemoveObserver(OpenOrderListObserver);
 
     private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
     {

@@ -5,10 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Order"
         mc:Ignorable="d"
-        Title="SelectOrderWindow" Height="450" Width="800">
+        Title="SelectOrderWindow" Height="450" Width="800"
+        DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
+        Loaded="Window_Loaded"
+        Closed="Window_Closed">
     <Grid Margin="10">
-        <DataGrid x:Name="dgOrders"
-                  AutoGenerateColumns="False"
+        <DataGrid AutoGenerateColumns="False"
                   IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Order ID" Binding="{Binding OrderId}" />
