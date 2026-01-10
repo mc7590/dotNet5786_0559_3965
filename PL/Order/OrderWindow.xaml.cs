@@ -110,6 +110,7 @@ public partial class OrderWindow : Window
         // Add or Update logic
         try
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             if (ButtonText == "Add")
                 bl.Order.Create(UserId, CurrentOrder);
             else
@@ -121,6 +122,10 @@ public partial class OrderWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show($"Error saving order: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
         }
     }
 

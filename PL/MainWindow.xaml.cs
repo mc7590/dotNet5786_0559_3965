@@ -140,7 +140,10 @@ public partial class MainWindow : Window
     /// </summary>
     private void BtnOrders_Click(object sender, RoutedEventArgs e)
     {
-        new OrderListWindow(UserId).Show();
+        Mouse.OverrideCursor = Cursors.Wait;
+        new OrderListWindow(UserId).Show();            
+        //Restore the mouse
+        Mouse.OverrideCursor = null;
     }
 
     /// <summary>
@@ -148,7 +151,10 @@ public partial class MainWindow : Window
     /// </summary>
     private void BtnCouriers_Click(object sender, RoutedEventArgs e)
     {
+        Mouse.OverrideCursor = Cursors.Wait;
         new CourierListWindow(UserId).Show();
+        //Restore the mouse
+        Mouse.OverrideCursor = null;
     }
 
     /// <summary>

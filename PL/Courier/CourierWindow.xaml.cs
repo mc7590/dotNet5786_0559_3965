@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace PL.Courier;
 /// <summary>
@@ -95,6 +96,7 @@ public partial class CourierWindow : Window
         // Add or Update logic
         try
         {
+            Mouse.OverrideCursor = Cursors.Wait;
             if (ButtonText == "Add")
                 bl.Courier.Create(UserId, CurrentCourier);
             else
@@ -106,6 +108,10 @@ public partial class CourierWindow : Window
         catch (Exception ex)
         {
             MessageBox.Show($"Error saving courier: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
         }
     }
 

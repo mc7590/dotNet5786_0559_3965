@@ -147,7 +147,9 @@ public partial class CourierListWindow : Window
     /// </summary>
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
+        Mouse.OverrideCursor = Cursors.Wait;
         new CourierWindow(UserId, 0).Show();
+        Mouse.OverrideCursor = null;
     }
 
     /// <summary>
@@ -171,11 +173,16 @@ public partial class CourierListWindow : Window
         {
             try
             {
+                Mouse.OverrideCursor = Cursors.Wait;
                 s_bl.Courier.Delete(UserId, SelectedCourier.Id);
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Could not delete courier. Reason: {ex.Message}", "Operation Failed", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+            finally
+            {
+                Mouse.OverrideCursor = null;
             }
         }
     }

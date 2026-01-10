@@ -139,11 +139,12 @@ public partial class OrderListWindow : Window
     {
         if (SelectedOrder == null)
             return;
-
+        Mouse.OverrideCursor = Cursors.Wait;
         BO.Order fullOrder =
             s_bl.Order.Read(UserId, SelectedOrder.OrderId)!;
 
         new OrderWindow(UserId, fullOrder.Id).Show();
+        Mouse.OverrideCursor = null;
     }
 
     /// <summary>
@@ -151,8 +152,10 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
+        Mouse.OverrideCursor = Cursors.Wait;
         OrderWindow window = new OrderWindow(UserId, 0);
-        window.Show();
+        window.Show();        
+        Mouse.OverrideCursor = null;
         RefreshOrderList();
     }
 
@@ -169,6 +172,10 @@ public partial class OrderListWindow : Window
         catch
         {
             MessageBox.Show("Failed to delete order");
+        }
+        finally
+        {
+            Mouse.OverrideCursor = null;
         }
     }
 
