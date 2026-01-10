@@ -32,8 +32,7 @@
                           SelectedItem="{Binding OrderTypeFilter, Mode=TwoWay}"
                           ItemsSource="{Binding Source={StaticResource OrderTypeCollectionKey}}"
                           SelectionChanged="CmbStatusFilter_SelectionChanged"/>
-
-
+                          
                 <Button Content="Clear Filter" Click="BtnClearFilter_Click" Margin="5,0" Padding="5,2"/>
             </StackPanel>
         </Grid>

@@ -143,7 +143,7 @@ public partial class OrderListWindow : Window
         BO.Order fullOrder =
             s_bl.Order.Read(UserId, SelectedOrder.OrderId)!;
 
-        new OrderWindow(UserId, fullOrder.Id).ShowDialog();
+        new OrderWindow(UserId, fullOrder.Id).Show();
     }
 
     /// <summary>
@@ -152,7 +152,7 @@ public partial class OrderListWindow : Window
     private void BtnAdd_Click(object sender, RoutedEventArgs e)
     {
         OrderWindow window = new OrderWindow(UserId, 0);
-        window.ShowDialog();
+        window.Show();
         RefreshOrderList();
     }
 

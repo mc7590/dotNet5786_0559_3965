@@ -34,7 +34,7 @@ public partial class DeliveryHistory : Window
         CourierId = currentCourierId;
 
         InitializeComponent();
-
+        DataContext = this;
     }
 
     /// <summary>
@@ -42,16 +42,25 @@ public partial class DeliveryHistory : Window
     /// </summary>
     public IEnumerable<BO.ClosedDeliveryInList> DeliveryHistoryList
     {
-        get { return (IEnumerable<BO.ClosedDeliveryInList>?)GetValue(CurrentDeliveryHistoryProperty)!; }
-        set { SetValue(CurrentDeliveryHistoryProperty, value); }
+        get => (IEnumerable<BO.ClosedDeliveryInList>?)GetValue(CurrentDeliveryHistoryProperty)!;
+        set => SetValue(CurrentDeliveryHistoryProperty, value);
     }
     public static readonly DependencyProperty CurrentDeliveryHistoryProperty =
-        DependencyProperty.Register("CurrentDeliveryHistory", typeof(IEnumerable<BO.ClosedDeliveryInList>), typeof(DeliveryHistory), new PropertyMetadata(null));
+        DependencyProperty.Register(nameof(DeliveryHistoryList), typeof(IEnumerable<BO.ClosedDeliveryInList>), typeof(DeliveryHistory), new PropertyMetadata(null));
 
     /// <summary>
     /// Property for the list filter
     /// </summary>
-    public BO.EnumOrderType? OrderTypeFilter { get; set; } = BO.EnumOrderType.None;
+    //public BO.EnumOrderType? OrderTypeFilter { get; set; } = BO.EnumOrderType.None;
+    public BO.EnumOrderType? OrderTypeFilter
+    {
+        get => (BO.EnumOrderType?)GetValue(OrderTypeFilterProperty);
+        set => SetValue(OrderTypeFilterProperty, value);
+    }
+
+    public static readonly DependencyProperty OrderTypeFilterProperty =
+        DependencyProperty.Register("OrderTypeFilter", typeof(BO.EnumOrderType?), typeof(DeliveryHistory),
+            new PropertyMetadata(BO.EnumOrderType.None));
 
     /// <summary>
     /// Refresh the Delivery History list
@@ -59,7 +68,7 @@ public partial class DeliveryHistory : Window
     /// </summary>
     private void RefreshDeliveryHistoryList()
     {
-//if added SORT functionality, do it here
+        //if added SORT functionality, do it here
 
         if (OrderTypeFilter == BO.EnumOrderType.None) //no filter
         {
@@ -72,18 +81,24 @@ public partial class DeliveryHistory : Window
     }
 
     private void DeliveryHistoryObserver()
-        => RefreshDeliveryHistoryList();
+    {
+        RefreshDeliveryHistoryList();
+    }
 
 
     private void Window_Loaded(object sender, RoutedEventArgs e)
-        => s_bl.Order.AddObserver(DeliveryHistoryObserver);
-
+    {
+        s_bl.Order.AddObserver(DeliveryHistoryObserver);
+        RefreshDeliveryHistoryList();
+    }
     private void Window_Closed(object sender, EventArgs e)
-        => s_bl.Order.RemoveObserver(DeliveryHistoryObserver);
+    {
+        s_bl.Order.RemoveObserver(DeliveryHistoryObserver);
+    }
 
     private void BtnClearFilter_Click(object sender, RoutedEventArgs e)
     {
-        OrderTypeFilter= BO.EnumOrderType.None;
+        OrderTypeFilter = BO.EnumOrderType.None;
         DeliveryHistoryObserver();
     }
 

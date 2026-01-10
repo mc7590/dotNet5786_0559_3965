@@ -33,7 +33,6 @@ public partial class SelectOrderWindow : Window
         CourierId = courierId;        
         InitializeComponent();             
     }
-
     /// <summary>
     /// Dependency property for the OpenOrderInList list
     /// </summary>
@@ -52,23 +51,32 @@ public partial class SelectOrderWindow : Window
     private void OpenOrderListObserver()
         => RefreshOpenOrderList();
     private void Window_Loaded(object sender, RoutedEventArgs e)
-        => s_bl.Order.AddObserver(OpenOrderListObserver);
+        => s_bl.Courier.AddObserver(OpenOrderListObserver);
     private void Window_Closed(object sender, EventArgs e)
-        => s_bl.Order.RemoveObserver(OpenOrderListObserver);
+        => s_bl.Courier.RemoveObserver(OpenOrderListObserver);
 
+
+    public BO.OpenOrderInList? SelectedOrder
+    {
+        get => (BO.OpenOrderInList?)GetValue(SelectedOrderProperty);
+        set => SetValue(SelectedOrderProperty, value);
+    }
+    public static readonly DependencyProperty SelectedOrderProperty =
+        DependencyProperty.Register(
+            nameof(SelectedOrderProperty),
+            typeof(BO.OpenOrderInList),
+            typeof(SelectOrderWindow),
+            new PropertyMetadata(null)
+        );
     private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
     {
 
         try
         {
-            Button btn = sender as Button;
-
-            var selectedOrder = btn.DataContext as BO.OpenOrderInList;
-
-            if (selectedOrder != null)
+            if (SelectedOrder != null)
             {
 
-                s_bl.Courier.AssignOrderToCourier(CourierId, selectedOrder.OrderId);
+                s_bl.Courier.AssignOrderToCourier(CourierId, SelectedOrder.OrderId);
                 MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
                 // Close the CourierWindow to refresh its data

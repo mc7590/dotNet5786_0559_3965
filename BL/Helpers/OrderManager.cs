@@ -112,6 +112,8 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
         s_dal.Order.Delete(orderId);
+        Observers.NotifyListUpdated();
+        Observers.NotifyItemUpdated(orderId);
     }
 
     /// <summary>
@@ -261,6 +263,7 @@ internal static class OrderManager
             s_dal.Delivery.Create(delivery);
 
             Observers.NotifyListUpdated();  //stage 5
+            Observers.NotifyItemUpdated(orderId);
 
         }
         else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
@@ -311,6 +314,7 @@ internal static class OrderManager
             s_dal.Delivery.Create(delivery);
 
             Observers.NotifyListUpdated();  //stage 5
+            Observers.NotifyItemUpdated(orderId);
         }
         else
         {
@@ -404,7 +408,7 @@ internal static class OrderManager
             DO.Order doOrder = BoOrderToDoOrder(boOrder);
             s_dal.Order.Update(doOrder);
 
-            Observers.NotifyItemUpdated(id); //stage 5
+            Observers.NotifyItemUpdated(boOrder.Id); //stage 5
             Observers.NotifyListUpdated();  //stage 5
 
         }

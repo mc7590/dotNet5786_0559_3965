@@ -128,11 +128,14 @@ internal static class CourierManager
         //check if password is strong enough
         if (!Tools.IsStrongPassword(boCourier.Password!))
             throw new BO.BlInvalidInputException($"Password {boCourier.Password} is not strong enough");
-
+        if(boCourier.ActiveDeliveryOrder != null && boCourier.Active == false)    
+            throw new BO.BlInvalidInputException("Cannot set courier to inactive while having an active delivery order.");
+        
         DO.Courier doCourier = CourierBoToDo(boCourier)!;
+
         s_dal.Courier.Update(doCourier);
 
-        Observers.NotifyItemUpdated(id); //stage 5
+        Observers.NotifyItemUpdated(boCourier.Id); //stage 5
         Observers.NotifyListUpdated();  //stage 5
     } 
     internal static void DeleteCourier(int id, int courierId)
@@ -141,7 +144,7 @@ internal static class CourierManager
         DO.Courier? existingCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
         s_dal.Courier.Delete(courierId);
 
-        Observers.NotifyItemUpdated(id); //stage 5
+        Observers.NotifyItemUpdated(courierId); //stage 5
         Observers.NotifyListUpdated();  //stage 5
     }
     internal static DO.Courier? CourierBoToDo(BO.Courier boCourier)

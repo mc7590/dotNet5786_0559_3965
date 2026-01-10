@@ -46,7 +46,7 @@ public partial class CourierWindow : Window
             CurrentCourier = new BO.Courier { Id = 0, StartedWorking = DateTime.Now };
         }
         // Bind all XAML elements to this object (Window)
-        //DataContext = this;
+        DataContext = this;
     }
 
     // DependencyProperty for the Add/Update button text
@@ -74,18 +74,19 @@ public partial class CourierWindow : Window
 
     private void CourierObserver()
     {
-        Dispatcher.Invoke(() =>
+
+            
+        int id = CurrentCourier.Id;
+            
+        try           
+        {   
+            CurrentCourier = s_bl.Courier.Read(UserId, id)!;
+        }
+        catch (Exception)
         {
-            int id = CurrentCourier.Id;
-            try
-            {
-                CurrentCourier = s_bl.Courier.Read(id, id)!;
-            }
-            catch (Exception)
-            {
-                this.Close();
-            }
-        });
+             this.Close();
+        }
+
     }
 
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
@@ -125,6 +126,7 @@ public partial class CourierWindow : Window
         if (CurrentCourier != null && CurrentCourier.Id != 0)
         {
             s_bl.Courier.AddObserver(CurrentCourier.Id, CourierObserver);
+            s_bl.Order.AddObserver(CourierObserver);
         }
         if (UserId == s_bl.Admin.GetConfig().ManagerId) //the user is manager
             HistoryVisibility = Visibility.Visible;
@@ -136,6 +138,7 @@ public partial class CourierWindow : Window
         if (CurrentCourier != null && CurrentCourier.Id != 0)
         {
             s_bl.Courier.RemoveObserver(CurrentCourier.Id, CourierObserver);
+            s_bl.Order.RemoveObserver(CourierObserver);
         }
     }
 
@@ -149,22 +152,13 @@ public partial class CourierWindow : Window
         new Delivery.DeliveryHistory(UserId, CurrentCourier.Id).Show();
     }
 
-    private BO.EnumEndDeliveryStatus _selectedEndDeliveryStatus = BO.EnumEndDeliveryStatus.Unknown;
-    public BO.EnumEndDeliveryStatus SelectedEndDeliveryStatus
-    {
-        get => _selectedEndDeliveryStatus;
-        set => SetValue(SelectedEndDeliveryStatusProperty, value);
-    }
-
-    public static readonly DependencyProperty SelectedEndDeliveryStatusProperty =
-        DependencyProperty.Register("SelectedEndDeliveryStatus", typeof(BO.EnumEndDeliveryStatus), typeof(CourierWindow), new PropertyMetadata(BO.EnumEndDeliveryStatus.Unknown));
+    public BO.EnumEndDeliveryStatus SelectedEndDeliveryStatus { get; set; } = BO.EnumEndDeliveryStatus.Unknown;
 
     private void BtnClose_Click(object sender, RoutedEventArgs e)
     {
         try
         {
             s_bl.Order.EndOrderStatus(UserId, CurrentCourier.Id, CurrentCourier.ActiveDeliveryOrder!.DeliveryId, SelectedEndDeliveryStatus);
-            CurrentCourier = s_bl.Courier.Read(UserId, CurrentCourier.Id)!;
             MessageBox.Show("Delivery completed successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
@@ -172,4 +166,5 @@ public partial class CourierWindow : Window
             MessageBox.Show($"Error completing delivery: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
+
 }

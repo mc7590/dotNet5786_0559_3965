@@ -24,7 +24,12 @@ public enum EnumOrderType
 /// successful, refused, canceled, or failed due to other reasons.</remarks>
 public enum EnumEndDeliveryStatus
 {
-    Delivered, RefusedToReceive, Canceled, CustomerNotFound, Failed
+    Unknown,
+    Delivered,
+    RefusedToReceive,
+    Canceled,
+    CustomerNotFound,
+    Failed
 }
 
 /// <summary>

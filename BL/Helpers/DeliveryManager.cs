@@ -262,12 +262,15 @@ internal static class DeliveryManager
 
         //check if the order exists
         if (s_dal.Courier.Read(courierId) == null)
-            throw new BO.BlDoesNotExistException($"Order with ID={courierId} does Not exist");
+            throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
 
         //try to update the delivery end status and time
         DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
         DeliveryManager.UpdateDelivery(delivery, endStatus , AdminManager.Now);
-
+        CourierManager.Observers.NotifyItemUpdated(courierId);
+        CourierManager.Observers.NotifyListUpdated();
+        OrderManager.Observers.NotifyItemUpdated(delivery.OrderId);
+        OrderManager.Observers.NotifyListUpdated();
     }
 
     /// <summary>
@@ -277,7 +280,10 @@ internal static class DeliveryManager
     {
         if (delivery != null)
         {
-            var updatedDelivery = delivery with //create delivery copy by updated delivery
+            //Update logic
+
+            var updatedDelivery = delivery with
+
             {
                 EndDeliveryStatus = (DO.EnumEndDeliveryStatus)newStatus,
                 EndDeliveryTime = endTime
@@ -286,9 +292,8 @@ internal static class DeliveryManager
 
             Observers.NotifyItemUpdated(updatedDelivery.Id); //stage 5
             Observers.NotifyListUpdated();  //stage 5
-
         }
     }
 
 
-}
+}  
