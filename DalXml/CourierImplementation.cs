@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Dal;
 using DalApi;
 using DO;
+using System.Runtime.CompilerServices;
 using System.Xml.Linq;
 
 /// <summary>
@@ -17,6 +18,7 @@ internal class CourierImplementation : ICourier
 {
     //working by 2nd method
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     private static Courier getCourier(XElement c)
     {
         return new Courier()
@@ -32,6 +34,8 @@ internal class CourierImplementation : ICourier
             MaxPersonalDistance = c.ToDoubleNullable("MaxPersonalDistance")
         };
     }
+
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     private static IEnumerable<XElement> createCourierElement(Courier c) // Converts Courier to XML elements (without <Courier> tag)
     {
         return new XElement[] {
@@ -46,6 +50,8 @@ internal class CourierImplementation : ICourier
             new XElement("MaxPersonalDistance", c.MaxPersonalDistance)
         };
     }
+
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Create(Courier item)
     {
         XElement courierRootElem = XMLTools.LoadListFromXMLElement(Config.s_couriers_xml);
@@ -55,6 +61,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLElement(courierRootElem, Config.s_couriers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Delete(int id)
     {
         XElement courierRootElem = XMLTools.LoadListFromXMLElement(Config.s_couriers_xml);
@@ -63,6 +70,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLElement(courierRootElem, Config.s_couriers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void DeleteAll()
     {
         XElement courierRootElem = XMLTools.LoadListFromXMLElement(Config.s_couriers_xml);
@@ -70,6 +78,7 @@ internal class CourierImplementation : ICourier
         XMLTools.SaveListToXMLElement(courierRootElem, Config.s_couriers_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Courier? Read(int id)
     {
         XElement? courierElem =
@@ -77,11 +86,13 @@ XMLTools.LoadListFromXMLElement(Config.s_couriers_xml).Elements().FirstOrDefault
         return courierElem is null ? null : getCourier(courierElem);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Courier? Read(Func<Courier, bool> filter)
     {
         return XMLTools.LoadListFromXMLElement(Config.s_couriers_xml).Elements().Select(c => getCourier(c)).FirstOrDefault(filter);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null)
     {
         XElement courierRootElem = XMLTools.LoadListFromXMLElement(Config.s_couriers_xml);
@@ -89,6 +100,7 @@ XMLTools.LoadListFromXMLElement(Config.s_couriers_xml).Elements().FirstOrDefault
         return filter == null ? couriers : couriers.Where(filter);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Update(Courier item)
     {
         XElement courierRootElem = XMLTools.LoadListFromXMLElement(Config.s_couriers_xml);

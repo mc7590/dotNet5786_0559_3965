@@ -2,12 +2,13 @@
 namespace Dal;
 using DalApi;
 using DO;
-
+using System.Runtime.CompilerServices;
 
 internal class OrderImplementation : IOrder
 {
     //working by 1st method
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Create(Order item)
     {
         int nextId = Config.NextOrderId; //no need to summon like this: "Dal.Config..." because we are inside Dal namespace
@@ -17,6 +18,7 @@ internal class OrderImplementation : IOrder
         XMLTools.SaveListToXMLSerializer(Orders, Config.s_orders_xml);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Delete(int id)
     {
         List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
@@ -25,19 +27,20 @@ internal class OrderImplementation : IOrder
         XMLTools.SaveListToXMLSerializer(Orders, Config.s_orders_xml);
     }
 
-
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void DeleteAll()
     {
         XMLTools.SaveListToXMLSerializer(new List<Order>(), Config.s_orders_xml);
     }
 
-
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Order? Read(int id)
     {
         List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
         return Orders.FirstOrDefault(it => it.Id == id);
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Order? Read(Func<Order, bool> filter)
     {
         List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
@@ -45,6 +48,7 @@ internal class OrderImplementation : IOrder
 
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null)
     {
         List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);
@@ -56,6 +60,7 @@ internal class OrderImplementation : IOrder
               select item;
     }
 
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Update(Order item)
     {
         List<Order> Orders = XMLTools.LoadListFromXMLSerializer<Order>(Config.s_orders_xml);

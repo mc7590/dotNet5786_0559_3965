@@ -1,13 +1,13 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <config>
   <NextOrderId>1050</NextOrderId>
-  <NextDeliveryId>1041</NextDeliveryId>
-  <Clock>09/01/2026 00:09:23</Clock>
+  <NextDeliveryId>10046</NextDeliveryId>
+  <Clock>12/01/2026 15:17:13</Clock>
   <ManagerId>0</ManagerId>
-  <ManagerPassword>BDI846924?/</ManagerPassword>
+  <ManagerPassword>Aaa12345!</ManagerPassword>
   <CompanyAddress></CompanyAddress>
-  <Latitude>0</Latitude>
-  <Longitude>0</Longitude>
+  <Latitude>32.072059916717016</Latitude>
+  <Longitude>34.82851580681851</Longitude>
   <MaxDeliveryDistance>3</MaxDeliveryDistance>
   <AveCarSpeedKmH>60</AveCarSpeedKmH>
   <AveMotorcycleSpeedKmH>60</AveMotorcycleSpeedKmH>

@@ -3,6 +3,7 @@ namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 internal class OrderImplementation : IOrder
 {
@@ -12,6 +13,7 @@ internal class OrderImplementation : IOrder
     /// <remarks>The method assigns a unique identifier to the order before adding it to the data source. 
     /// Ensure that the order does not already exist in the data source to prevent duplicates.</remarks>
     /// <param name="item">The order to be added. The order must not be null and should not have an existing identifier.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Create(Order item)
     {
         int nextId = Config.NextOrderId;
@@ -23,6 +25,7 @@ internal class OrderImplementation : IOrder
     /// Retrieves an order by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the order to retrieve.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Order? Read(int id)
     {
         //return DataSource.Orders.Find(item => item.Id == id); //stage 1
@@ -32,6 +35,7 @@ internal class OrderImplementation : IOrder
     /// <summary>
     /// Retrieves an order by a specified filter.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Order? Read(Func<Order, bool> filter) // stage 2
     {
         return DataSource.Orders.FirstOrDefault(item => filter(item));
@@ -48,6 +52,7 @@ internal class OrderImplementation : IOrder
     /// <summary>
     /// Retrieves filtered orders from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public IEnumerable<Order> ReadAll(Func<Order, bool>? filter = null) //stage 2
     {
         return filter != null
@@ -64,6 +69,7 @@ internal class OrderImplementation : IOrder
     /// <param name="item">The order containing updated details. The order must have a valid ID that matches an existing order in the data
     /// source.</param>
     /// <exception cref="DalDoesNotExistException">In case Order with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Update(Order item)
     {
         foreach (var order in DataSource.Orders)
@@ -83,6 +89,7 @@ internal class OrderImplementation : IOrder
     /// </summary>
     /// <param name="id">The unique identifier of the order to be deleted.</param>
     /// <exception cref="DalDoesNotExistException">In case Order with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Delete(int id)
     {
         foreach (var order in DataSource.Orders)
@@ -100,6 +107,7 @@ internal class OrderImplementation : IOrder
     /// Deletes all orders from the data source.
     /// </summary>
     /// <remarks>This method clears the entire collection of orders, removing all existing entries.</remarks>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void DeleteAll()
     {
         DataSource.Orders.Clear();

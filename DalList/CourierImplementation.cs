@@ -3,6 +3,8 @@ namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
 /// <summary>
 /// CourierImplementation class implements ICourier interface for managing Courier entities in the data source  
 /// </summary>
@@ -13,6 +15,7 @@ internal class CourierImplementation : ICourier
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalAlreadyExistsException">In case a courier with the same ID already exists.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Create(Courier item)
     {
         if (Read(item.Id) != null)
@@ -24,6 +27,7 @@ internal class CourierImplementation : ICourier
     /// <summary>
     /// Retrieves a courier by its unique identifier.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Courier? Read(int id)
     {
         //return DataSource.Couriers.Find(item => item.Id == id); //stage 1
@@ -33,6 +37,7 @@ internal class CourierImplementation : ICourier
     /// <summary>
     /// Retrieves a courier by a specified filter.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Courier? Read(Func<Courier, bool> filter) // stage 2
     {
         return DataSource.Couriers.FirstOrDefault(item => filter(item));
@@ -49,6 +54,7 @@ internal class CourierImplementation : ICourier
     /// <summary>
     /// Retrieves filtered couriers from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public IEnumerable<Courier> ReadAll(Func<Courier, bool>? filter = null) //stage 2
     {
         return filter != null
@@ -64,6 +70,7 @@ internal class CourierImplementation : ICourier
     /// </summary>
     /// <param name="id"></param>
     /// <exception cref="DalDoesNotExistException">In case a courier with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Delete(int id)
     {
         foreach (var courier in DataSource.Couriers)
@@ -80,6 +87,7 @@ internal class CourierImplementation : ICourier
     /// <summary>
     /// Deletes all couriers from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void DeleteAll()
     {
         DataSource.Couriers.Clear();
@@ -90,6 +98,7 @@ internal class CourierImplementation : ICourier
     /// </summary>
     /// <param name="item"></param>
     /// <exception cref="DalDoesNotExistException">In case courier with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Update(Courier item)
     {
         foreach (var courier in DataSource.Couriers)

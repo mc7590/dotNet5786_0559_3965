@@ -64,37 +64,28 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void RefreshOrderList()
     {
-        //if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
-        //{
-        //    OrderList = s_bl?.Order.GetOrderInList(UserId)!;
-        //}
-        //else if(OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
-        //{
-        //    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
-        //}
-        //else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
-        //{
-        //    OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, BO.EnumOrderFieldSort.OrderType, OrderSort)!;
-        //}
-        //else // both filter + sort are set
-        //{
-        //    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, BO.EnumOrderFieldSort.OrderType, OrderSort)!;
-        //}
-        if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+        try
         {
-            OrderList = s_bl?.Order.GetOrderInList(UserId)!;
+            if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+            {
+                OrderList = s_bl?.Order.GetOrderInList(UserId)!;
+            }
+            else if (OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+            {
+                OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
+            }
+            else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
+            {
+                OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, OrderSort, OrderSort)!;
+            }
+            else // both filter + sort are set
+            {
+                OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, OrderSort, OrderSort)!;
+            }
         }
-        else if (OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+        catch (Exception ex)
         {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
-        }
-        else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
-        {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, OrderSort, OrderSort)!;
-        }
-        else // both filter + sort are set
-        {
-            OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, OrderSort, OrderSort)!;
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 
@@ -137,14 +128,21 @@ public partial class OrderListWindow : Window
     /// </summary>
     private void dgOrderList_MouseDoubleClick(object sender, MouseButtonEventArgs e)
     {
-        if (SelectedOrder == null)
-            return;
-        Mouse.OverrideCursor = Cursors.Wait;
-        BO.Order fullOrder =
-            s_bl.Order.Read(UserId, SelectedOrder.OrderId)!;
+        try
+        {
+            if (SelectedOrder == null)
+                return;
+            Mouse.OverrideCursor = Cursors.Wait;
+            BO.Order fullOrder =
+                s_bl.Order.Read(UserId, SelectedOrder.OrderId)!;
 
-        new OrderWindow(UserId, fullOrder.Id).Show();
-        Mouse.OverrideCursor = null;
+            new OrderWindow(UserId, fullOrder.Id).Show();
+            Mouse.OverrideCursor = null;
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+        }
     }
 
     /// <summary>

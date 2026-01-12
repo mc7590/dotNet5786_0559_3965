@@ -3,6 +3,7 @@ namespace Dal;
 using DalApi;
 using DO;
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 
 /// <summary>
 /// DeliveryImplementation class implements IDelivery interface for managing Delivery entities in the data source  
@@ -13,6 +14,7 @@ internal class DeliveryImplementation : IDelivery
     /// Adds a new delivery to the data source with a unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to retrieve.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Create(Delivery item)
     {
         int nextId = Config.NextDeliveryId;
@@ -24,6 +26,7 @@ internal class DeliveryImplementation : IDelivery
     /// Retrieves a delivery by its unique identifier.
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to retrieve.</param>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Delivery? Read(int id)
     {
         //return DataSource.Deliverys.Find(item => item.Id == id); //stage 1
@@ -33,6 +36,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Retrieves a delivery by a specified filter.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public Delivery? Read(Func<Delivery, bool> filter) // stage 2
     {
         return DataSource.Deliverys.FirstOrDefault(item => filter(item));
@@ -49,6 +53,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Retrieves filtered deliveries from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public IEnumerable<Delivery> ReadAll(Func<Delivery, bool>? filter = null) //stage 2
     {
         return filter != null
@@ -64,6 +69,7 @@ internal class DeliveryImplementation : IDelivery
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to be deleted.</param>
     /// <exception cref="DalDoesNotExistException">In case Delivery with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Update(Delivery item)
     {
         foreach (var delivery in DataSource.Deliverys)
@@ -83,6 +89,7 @@ internal class DeliveryImplementation : IDelivery
     /// </summary>
     /// <param name="id">The unique identifier of the delivery to be deleted.</param>
     /// <exception cref="DalDoesNotExistException">In case Delivery with the specified ID doesn't exist.</exception>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void Delete(int id)
     {
         foreach (var delivery in DataSource.Deliverys)
@@ -99,6 +106,7 @@ internal class DeliveryImplementation : IDelivery
     /// <summary>
     /// Deletes all deliveries from the data source.
     /// </summary>
+    [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
     public void DeleteAll()
     {
         DataSource.Deliverys.Clear();

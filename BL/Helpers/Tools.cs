@@ -1,10 +1,11 @@
 ﻿using System.Collections;
 using System.Reflection;
 namespace Helpers;
+using BO;
 using System;
 using System.Net.Http;
-using System.Threading.Tasks;
 using System.Text.Json;
+using System.Threading.Tasks;
 
 public static class Tools
 {
@@ -93,12 +94,12 @@ public static class Tools
     public static void IsManager(int id)
     {
         if (id != AdminManager.GetConfig().ManagerId)
-            throw new UnauthorizedAccessException("Access denied: User is not a manager.");
+            throw new BlUnauthorizedException("Access denied: User is not a manager.");
     }
     public static void IsManagerOrCourier(int id, int courierId)
     {
         if (id != AdminManager.GetConfig().ManagerId && id != courierId)
-            throw new UnauthorizedAccessException("Access denied: User is not a manager or courier.");
+            throw new BlUnauthorizedException("Access denied: User is not a manager or courier.");
     }
     public static void IsValidId(int id)
     {
@@ -148,7 +149,7 @@ public static class Tools
         try
         {
             string coordinates = $"{originLon},{originLat};{destLon},{destLat}";
-            string url = $"http://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
+            string url = $"https://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
 
             // ביצוע הקריאה ב-Thread נפרד למניעת Deadlock
             var response = client.GetAsync(url).Result;
@@ -179,6 +180,7 @@ public static class Tools
 
         return 0;
     }
+
     /// <summary>
     /// Calculates the aerial distance in kilometers between the company location and the given coordinates using the Haversine formula.
     /// </summary>
