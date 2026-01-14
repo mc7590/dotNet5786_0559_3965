@@ -31,16 +31,6 @@
     <EndDeliveryTime>2025-11-14T16:38:13</EndDeliveryTime>
   </Delivery>
   <Delivery>
-    <Id>10003</Id>
-    <OrderId>1003</OrderId>
-    <CourierId>381388064</CourierId>
-    <DeliveryMethod>Bicycle</DeliveryMethod>
-    <DeliveryStartTime>2026-01-12T13:45:13</DeliveryStartTime>
-    <DistanceInKm>0.36188664363825057</DistanceInKm>
-    <EndDeliveryStatus xsi:nil="true" />
-    <EndDeliveryTime xsi:nil="true" />
-  </Delivery>
-  <Delivery>
     <Id>10004</Id>
     <OrderId>1004</OrderId>
     <CourierId>298447795</CourierId>
@@ -459,5 +449,15 @@
     <DistanceInKm>0.9060616802071138</DistanceInKm>
     <EndDeliveryStatus>Unknown</EndDeliveryStatus>
     <EndDeliveryTime>2026-01-12T14:52:13</EndDeliveryTime>
+  </Delivery>
+  <Delivery>
+    <Id>10003</Id>
+    <OrderId>1003</OrderId>
+    <CourierId>381388064</CourierId>
+    <DeliveryMethod>Bicycle</DeliveryMethod>
+    <DeliveryStartTime>2026-01-12T13:45:13</DeliveryStartTime>
+    <DistanceInKm>0.36188664363825057</DistanceInKm>
+    <EndDeliveryStatus>Delivered</EndDeliveryStatus>
+    <EndDeliveryTime>2026-01-12T15:17:13</EndDeliveryTime>
   </Delivery>
 </ArrayOfDelivery>

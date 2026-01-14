@@ -133,7 +133,7 @@ public static class Tools
     /// <summary>
     /// Calculates the estimated road distance in kilometers from the company location to the given coordinates.
     /// </summary>
-    public static double CalculateDistanceInKm(double longitude, double latitude)
+    public static async Task<double> CalculateDistanceInKm(double longitude, double latitude)
     {
         double? originLat = AdminManager.GetConfig().Latitude;
         double? originLon = AdminManager.GetConfig().Longitude;
@@ -141,22 +141,26 @@ public static class Tools
         {
             return 0;
         }
-        return GetDrivingDistanceFromApi(originLat.Value, originLon.Value, latitude, longitude);
+        return await GetDrivingDistanceFromApi(originLat.Value, originLon.Value, latitude, longitude);
     }
     private static readonly HttpClient client = new HttpClient();
-    private static double GetDrivingDistanceFromApi(double originLat, double originLon, double destLat, double destLon)
+
+    //async net function to get actual distance
+    //private static double GetDrivingDistanceFromApi(double originLat, double originLon, double destLat, double destLon) //stage 4
+    private static async Task<double> GetDrivingDistanceFromApi(double originLat, double originLon, double destLat, double destLon) //stage 7
     {
         try
         {
             string coordinates = $"{originLon},{originLat};{destLon},{destLat}";
-            string url = $"https://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
+            string url = $"http://router.project-osrm.org/route/v1/driving/{coordinates}?overview=false";
 
-            // ביצוע הקריאה ב-Thread נפרד למניעת Deadlock
-            var response = client.GetAsync(url).Result;
+// ביצוע הקריאה ב-Thread נפרד למניעת Deadlock
+            //var response = client.GetAsync(url).Result; //stage 4
+            HttpResponseMessage response = await client.GetAsync(url); //stage 7
 
             if (response.IsSuccessStatusCode)
             {
-                var content = response.Content.ReadAsStringAsync().Result;
+                var content = await response.Content.ReadAsStringAsync();
 
                 using (JsonDocument doc = JsonDocument.Parse(content))
                 {
@@ -180,6 +184,7 @@ public static class Tools
 
         return 0;
     }
+
 
     /// <summary>
     /// Calculates the aerial distance in kilometers between the company location and the given coordinates using the Haversine formula.
