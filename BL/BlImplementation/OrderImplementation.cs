@@ -55,9 +55,9 @@ internal class OrderImplementation : IOrder
         return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
     }
 
-    public IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    public async Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
-        return OrderManager.GetListOfOpenOrderToChoose(id, courierId, typeFilter, sortBy);
+        return await OrderManager.GetListOfOpenOrderToChoose(id, courierId, typeFilter, sortBy);
     }
 
     #region Stage 5

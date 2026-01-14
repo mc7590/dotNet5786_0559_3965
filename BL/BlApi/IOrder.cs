@@ -48,7 +48,7 @@ public interface IOrder : IObservable //stage 5
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList
     /// </summary>
-    IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null);
+    Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null);
 
 
 }

@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.Globalization;
 using System.ComponentModel;
 using System.Text.Encodings.Web;
+using BO;
 
 internal static class OrderManager
 {
@@ -332,14 +333,12 @@ internal static class OrderManager
     /// <summary>
     /// gets list of open orders that a courier can chose from, with optional filtering and sorting
     /// </summary>
-    internal static IEnumerable<BO.OpenOrderInList> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
+    internal static async Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
         DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
-        
         if (!courier.Active)
             throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
-        
         IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
         var openOrder = from o in orders
                         let BoOrder = DoOrderToBoOrder(o)
@@ -349,11 +348,14 @@ internal static class OrderManager
         {
             openOrder = openOrder.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
         }
-        var result =
-            from o in openOrder
-            let distance = Tools.CalculateDistanceInKm(o.Longitude, o.Latitude)
-            let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
-            select new BO.OpenOrderInList
+
+        var tasksOpenOIL= openOrder.Select(async o =>
+        {
+            double distance = await Tools.CalculateDistanceInKm(o.Longitude, o.Latitude);
+
+            var maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime;
+
+            return new BO.OpenOrderInList
             {
                 CourierId = 0,
                 OrderId = o.Id,
@@ -368,6 +370,38 @@ internal static class OrderManager
                 RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
                 MaxDeliveryTime = maxDeliveryTime,
             };
+        });
+
+        // במקום List, נשתמש ב-IEnumerable
+        IEnumerable<BO.OpenOrderInList> result = new List<BO.OpenOrderInList>();
+
+        // הלופ שלך נשאר אותו דבר
+        foreach (var openTask in tasksOpenOIL)
+        {
+            BO.OpenOrderInList openO = await openTask;
+            ((List<BO.OpenOrderInList>)result).Add(openO);
+        }
+
+
+        //var result =
+        //    from o in openOrder
+        //    let distance = await Tools.CalculateDistanceInKm(o.Longitude, o.Latitude)
+        //    let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
+        //    select new BO.OpenOrderInList
+        //    {
+        //        CourierId = 0,
+        //        OrderId = o.Id,
+        //        OrderType = (BO.EnumOrderType)o.OrderType,
+        //        Weight = o.Weight,
+        //        Fragile = o.Fragile,
+        //        Address = o.Address,
+        //        AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
+        //        DistanceInKm = distance,
+        //        EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
+        //        ScheduleStatus = DeliveryManager.GetScheduleStatus(o),
+        //        RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
+        //        MaxDeliveryTime = maxDeliveryTime,
+        //    };
         result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
             : sortBy switch
             {
