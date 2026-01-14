@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Infrastructure;
 
 ///Config.cs
 namespace Dal;
@@ -60,7 +61,7 @@ internal static class Config
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         set; 
-    } = 32.072059916717016;
+    } = GlobalConstants.Coordinates.Company_Lat;
 
     internal static double? Longitude 
     {
@@ -68,7 +69,7 @@ internal static class Config
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         set; 
-    } = 34.82851580681851;
+    } = GlobalConstants.Coordinates.Company_Lon;
 
     internal static double? MaxDeliveryDistance 
     {

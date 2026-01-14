@@ -1,4 +1,5 @@
 ﻿using System.Runtime.CompilerServices;
+using Infrastructure;
 
 namespace Dal;
 
@@ -124,8 +125,8 @@ internal static class Config
         ManagerId = 0;
         ManagerPassword = "Aaa12345!";
         CompanyAddress = null;
-        Latitude = OriginalLat;
-        Longitude = OriginalLon;
+        Latitude = Infrastructure.GlobalConstants.Coordinates.Company_Lat;
+        Longitude = Infrastructure.GlobalConstants.Coordinates.Company_Lon;
         MaxDeliveryDistance = null;
         AveCarSpeedKmH = 60;
         AveMotorcycleSpeedKmH = 60;

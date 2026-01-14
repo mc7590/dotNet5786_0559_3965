@@ -2,6 +2,7 @@
 namespace DalTest;
 using DalApi;
 using DO;
+using Infrastructure;
 
 public static class Initialization
 {
@@ -196,9 +197,8 @@ public static class Initialization
     /// </summary>
     private static void createDeliveries()
     {
-        // const- better to define at config
-        const double COMPANY_LAT = 32.072059916717016;
-        const double COMPANY_LON = 34.82851580681851;
+        //company coordinates in namespace Infrastructure.GlobalConstants.Coordinates
+
 
         // read data
         var allCouriers = s_dal!.Courier.ReadAll().ToList();
@@ -224,7 +224,7 @@ public static class Initialization
                 .Where(c =>
                 {
                     //check availability by two conditions: distance and active status
-                    double distance = CalculateDistanceKm(COMPANY_LAT, COMPANY_LON, order.Latitude, order.Longitude);
+                    double distance = CalculateDistanceKm(GlobalConstants.Coordinates.Company_Lat, GlobalConstants.Coordinates.Company_Lon, order.Latitude, order.Longitude);
                     if (!(distance <= c.MaxPersonalDistance && c.Active)) return false;
 
                     //check time overlap with existing deliveries
@@ -264,7 +264,7 @@ public static class Initialization
                 CourierId: courier.Id,
                 DeliveryMethod: courier.DeliveryMethod,
                 DeliveryStartTime: startTime,
-                DistanceInKm: CalculateDistanceKm(COMPANY_LAT, COMPANY_LON, order.Latitude, order.Longitude),
+                DistanceInKm: CalculateDistanceKm(GlobalConstants.Coordinates.Company_Lat, GlobalConstants.Coordinates.Company_Lon, order.Latitude, order.Longitude),
                 EndDeliveryStatus: endStatus,
                 EndDeliveryTime: endTime
                 );
