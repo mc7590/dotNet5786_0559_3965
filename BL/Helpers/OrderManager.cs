@@ -1,9 +1,15 @@
 ﻿namespace Helpers;
 //using BO;
 using DalApi;
+using System;
+using System.Net.Http.Json;
 //using DO;
 using System.Reflection.Metadata.Ecma335;
-
+using System.Text.Json;
+using System.Threading.Tasks;
+using System.Globalization;
+using System.ComponentModel;
+using System.Text.Encodings.Web;
 
 internal static class OrderManager
 {
@@ -70,15 +76,15 @@ internal static class OrderManager
         Tools.IsValidAddress(boOrder.Address); // Check if Address is valid
         Tools.IsValidName(boOrder.CustomerName);
         Tools.IsValidPhone(boOrder.CustomerPhone);
-
+        (double lat, double lon) = Tools.GetLatiAndLong(boOrder.Address!).Result;
         DO.Order doOrder = new DO.Order()
         {
             Id = boOrder.Id,
             OrderType = (DO.EnumOrderType)boOrder.OrderType,
             Description = boOrder.Description,
             Address = boOrder.Address!,
-            Latitude = boOrder.Latitude,
-            Longitude = boOrder.Longitude,
+            Latitude = lat,
+            Longitude = lon,
             CustomerName = boOrder.CustomerName!,
             CustomerPhone = boOrder.CustomerPhone!,
             Weight = boOrder.Weight,
@@ -179,19 +185,19 @@ internal static class OrderManager
         //return doOrders.Select(doOrder => DoOrderToBoOrder(doOrder)) //XXX
         //               .Select(boOrder => BoOrderToBoOrderInList(boOrder));
         return new BO.OrderInList
-            {
-                CourierId = DeliveryManager.GetCourierIdToDoOrder(doOrder),
-                OrderId = doOrder.Id,
-                OrderType = (BO.EnumOrderType)doOrder.OrderType,
-                AerialDistance = Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude),
-                OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
-                ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
-                RemainingTime = OrderManager.GetRemainingTime(doOrder),
-                TotalDeliveryTime = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count() > 0 ?
+        {
+            CourierId = DeliveryManager.GetCourierIdToDoOrder(doOrder),
+            OrderId = doOrder.Id,
+            OrderType = (BO.EnumOrderType)doOrder.OrderType,
+            AerialDistance = Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude),
+            OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
+            ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
+            RemainingTime = OrderManager.GetRemainingTime(doOrder),
+            TotalDeliveryTime = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count() > 0 ?
                     DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Last().DelCreationTime - doOrder.OrderCreationTime :
                     TimeSpan.Zero,
-                TotalDeliveries = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count()
-            };
+            TotalDeliveries = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count()
+        };
     }
 
     /// <summary>
@@ -414,4 +420,6 @@ internal static class OrderManager
         }
 
     }
+
+    
 }

@@ -3,7 +3,9 @@ using System.Reflection;
 namespace Helpers;
 using BO;
 using System;
+using System.Globalization;
 using System.Net.Http;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -255,6 +257,36 @@ public static class Tools
         config.ManagerPassword = newPassword;
         AdminManager.SetConfig(config);
     }
+    // Get latitude and longitude from address using geocoding API
+    internal static async Task<(double lat, double lon)> GetLatiAndLong(string address)
+    {
+        Tools.IsValidAddress(address);
+        string encoded = UrlEncoder.Default.Encode(address);
+        string apiKey = "6967b0585e7ac453693044aou6c470b";
+        // request URL 
+        string url = $"https://geocode.maps.co/search?q={encoded}&api_key={apiKey}";
+        using HttpClient client = new HttpClient();
+        // 
+        HttpResponseMessage response = await client.GetAsync(url);
+        // check if the server response is successful
+        if (!response.IsSuccessStatusCode)
+        {
+            throw new BO.BlInvalidInputException($"Could not get latitude and longitude for address: {address}");
+        }
+        // read the json response content
+        string json = await response.Content.ReadAsStringAsync();
+        using JsonDocument document = JsonDocument.Parse(json);
+        var root = document.RootElement;
+        if (root.GetArrayLength() == 0)
+        {
+            throw new BO.BlInvalidInputException($"Could not get latitude and longitude for address: {address}");
+        }
+        var firstResult = root[0]; // get the first result
+        // parse latitude and longitude
+        double lat = double.Parse(firstResult.GetProperty("lat").GetString()!, CultureInfo.InvariantCulture);
+        double lon = double.Parse(firstResult.GetProperty("lon").GetString()!, CultureInfo.InvariantCulture);
+        // return latitude and longitude as a tuple
+        return (lat, lon);
 
-
+    }
 }
