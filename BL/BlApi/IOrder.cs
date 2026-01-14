@@ -43,7 +43,7 @@ public interface IOrder : IObservable //stage 5
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList
     /// </summary>
-    IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null);
+    Task<IEnumerable<BO.ClosedDeliveryInList>> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null);
 
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList

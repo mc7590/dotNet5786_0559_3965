@@ -382,28 +382,7 @@ internal static class OrderManager
             ((List<BO.OpenOrderInList>)result).Add(openO);
         }
 
-
-        //var result =
-        //    from o in openOrder
-        //    let distance = await Tools.CalculateDistanceInKm(o.Longitude, o.Latitude)
-        //    let maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime
-        //    select new BO.OpenOrderInList
-        //    {
-        //        CourierId = 0,
-        //        OrderId = o.Id,
-        //        OrderType = (BO.EnumOrderType)o.OrderType,
-        //        Weight = o.Weight,
-        //        Fragile = o.Fragile,
-        //        Address = o.Address,
-        //        AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
-        //        DistanceInKm = distance,
-        //        EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
-        //        ScheduleStatus = DeliveryManager.GetScheduleStatus(o),
-        //        RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
-        //        MaxDeliveryTime = maxDeliveryTime,
-        //    };
-        result = sortBy == null ? result.OrderBy(r => r.ScheduleStatus)
-            : sortBy switch
+        result = sortBy switch
             {
                 BO.EnumOpenOrderInListField.CourierId => result.OrderBy(r => r.CourierId),
                 BO.EnumOpenOrderInListField.OrderId => result.OrderBy(r => r.OrderId),
@@ -411,7 +390,7 @@ internal static class OrderManager
                 BO.EnumOpenOrderInListField.Address => result.OrderBy(r => r.Address),
                 BO.EnumOpenOrderInListField.DistanceInKm => result.OrderBy(r => r.DistanceInKm),
                 BO.EnumOpenOrderInListField.RemainingTime => result.OrderBy(r => r.RemainingTime),
-                _ => result
+                _ => result.OrderBy(r => r.ScheduleStatus)
             };
 
         return result;
@@ -425,13 +404,23 @@ internal static class OrderManager
             return TimeSpan.Zero;
         return Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime);
     }
+
+    //private static TimeSpan CalculateExpectedDeliveryTime(int orderId)
+    //{
+    //    DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+    //    DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
+    //    if (delivery == null || delivery.DistanceInKm == null)
+    //        return TimeSpan.Zero;
+    //    return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude));
+    //}
+
     private static TimeSpan CalculateExpectedDeliveryTime(int orderId)
     {
         DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
         DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
         if (delivery == null || delivery.DistanceInKm == null)
             return TimeSpan.Zero;
-        return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude));
+        return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude));
     }
 
     /// <summary>

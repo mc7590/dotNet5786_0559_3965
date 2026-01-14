@@ -68,6 +68,8 @@ public partial class SelectOrderWindow : Window
             typeof(SelectOrderWindow),
             new PropertyMetadata(null)
         );
+
+    //until result come isEnable=false so there will be no excess click
     private async void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
     {
 
