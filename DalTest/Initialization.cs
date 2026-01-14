@@ -47,12 +47,13 @@ public static class Initialization
             int range = (s_dal!.Config.Clock - start).Days;
             DateTime startedworking = start.AddDays(s_rand.Next(range));
 
+            //max distance values from Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm
             double maxDistance = method switch
             {
-                EnumDeliveryMethod.Foot => s_rand.Next(1, 2),
-                EnumDeliveryMethod.Bicycle => s_rand.Next(2, 5),
-                EnumDeliveryMethod.Motorcycle => s_rand.Next(3, 10),
-                EnumDeliveryMethod.Car => s_rand.Next(5, 25),
+                EnumDeliveryMethod.Foot => s_rand.Next(Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.FootMinDistanceKm, Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.FootMaxDistanceKm),
+                EnumDeliveryMethod.Bicycle => s_rand.Next(Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.BicycleMinDistanceKm, Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.BicycleMaxDistanceKm),
+                EnumDeliveryMethod.Motorcycle => s_rand.Next(Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.MotorCycleMinDistanceKm, Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.MotorCycleMaxDistanceKm),
+                EnumDeliveryMethod.Car => s_rand.Next(Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.CarMinDistanceKm, Infrastructure.GlobalConstants.deliveryMethodMaxDistanceKm.CarMaxDistanceKm),
                 _ => s_rand.Next(2, 10)
             };
 

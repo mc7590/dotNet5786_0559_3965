@@ -85,21 +85,21 @@ internal static class Config
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         set; 
-    } = 60;
+    } = Infrastructure.GlobalConstants.AverageSpeedKmH.CarSpeedKmH;
 
     internal static double AveMotorcycleSpeedKmH 
     {
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
-        set; } = 60;
+        set; } = Infrastructure.GlobalConstants.AverageSpeedKmH.MotorCycleSpeedKmH;
     internal static double AveBicycleSpeedKmH 
     {
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         set; 
-    } = 10;
+    } = Infrastructure.GlobalConstants.AverageSpeedKmH.BicycleSpeedKmH;
 
     internal static double AveWalkingSpeedKmH 
     {
@@ -107,7 +107,7 @@ internal static class Config
         get;
         [MethodImpl(MethodImplOptions.Synchronized)] //stage 7
         set; 
-    } = 10;
+    } = Infrastructure.GlobalConstants.AverageSpeedKmH.WalkingSpeedKmH;
 
     internal static TimeSpan GetMaxDeliveryTime = TimeSpan.FromHours(2);
     internal static TimeSpan RiskRange = TimeSpan.FromHours(1.5);
@@ -125,10 +125,10 @@ internal static class Config
         Latitude = null;
         Longitude = null;
         MaxDeliveryDistance = null;
-        AveCarSpeedKmH = 60;
-        AveMotorcycleSpeedKmH = 60;
-        AveBicycleSpeedKmH = 15;
-        AveWalkingSpeedKmH = 15;
+        AveCarSpeedKmH = Infrastructure.GlobalConstants.AverageSpeedKmH.CarSpeedKmH;
+        AveMotorcycleSpeedKmH = Infrastructure.GlobalConstants.AverageSpeedKmH.MotorCycleSpeedKmH;
+        AveBicycleSpeedKmH = Infrastructure.GlobalConstants.AverageSpeedKmH.BicycleSpeedKmH;
+        AveWalkingSpeedKmH = Infrastructure.GlobalConstants.AverageSpeedKmH.WalkingSpeedKmH;
         GetMaxDeliveryTime = TimeSpan.FromHours(2);    
         RiskRange = TimeSpan.FromHours(1.5);
         InactivityThreshold = TimeSpan.FromDays(30);
