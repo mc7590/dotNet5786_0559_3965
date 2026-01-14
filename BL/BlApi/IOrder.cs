@@ -38,7 +38,7 @@ public interface IOrder : IObservable //stage 5
     /// <summary>
     /// Attempting to add (Create) a new DO.Delivery from a data layer
     /// </summary>
-    void CreateDeliveryForOrder(int id, int orderId, int deliveryId);
+    Task CreateDeliveryForOrder(int id, int orderId, int deliveryId);
 
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList

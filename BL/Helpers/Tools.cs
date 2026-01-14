@@ -132,6 +132,7 @@ public static class Tools
         if (string.IsNullOrWhiteSpace(address))
             throw new BO.BlInvalidInputException($"Empty address");
     }
+
     /// <summary>
     /// Calculates the estimated road distance in kilometers from the company location to the given coordinates.
     /// </summary>

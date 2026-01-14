@@ -287,7 +287,7 @@ internal static class OrderManager
     /// <param name="id">The person asking the date - manager / courier</param>
     /// <param name="courierId">The courier id assigned to deliver the order.</param>
     /// <param name="orderId">The order id to be delivered.</param>
-    internal static void CreateDeliveryForOrder(int id, int courierId, int orderId)
+    internal static async Task CreateDeliveryForOrder(int id, int courierId, int orderId)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
@@ -313,7 +313,7 @@ internal static class OrderManager
                 CourierId = courierId,
                 DeliveryMethod = doCourier.DeliveryMethod,
                 DeliveryStartTime = AdminManager.Now,
-                DistanceInKm = Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude),
+                DistanceInKm = await Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude),
                 EndDeliveryStatus = null,
                 EndDeliveryTime = null
             };
@@ -336,8 +336,10 @@ internal static class OrderManager
     {
         Tools.IsManagerOrCourier(id, courierId);
         DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
+        
         if (!courier.Active)
             throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
+        
         IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
         var openOrder = from o in orders
                         let BoOrder = DoOrderToBoOrder(o)

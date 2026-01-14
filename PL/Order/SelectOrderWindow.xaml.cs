@@ -68,7 +68,7 @@ public partial class SelectOrderWindow : Window
             typeof(SelectOrderWindow),
             new PropertyMetadata(null)
         );
-    private void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
+    private async void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
     {
 
         try
@@ -76,7 +76,7 @@ public partial class SelectOrderWindow : Window
             if (SelectedOrder != null)
             {
 
-                s_bl.Courier.AssignOrderToCourier(CourierId, SelectedOrder.OrderId);
+                await s_bl.Courier.AssignOrderToCourier(CourierId, SelectedOrder.OrderId);
                 MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
                 this.Close();
                 // Close the CourierWindow to refresh its data
