@@ -7,7 +7,9 @@ internal class AdminImplementation : IAdmin
 {
     public void ForwardClock(BO.EnumTimeUnit unit)
     {
-       switch (unit)
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+
+        switch (unit)
         {
             case BO.EnumTimeUnit.Minute:
                 AdminManager.UpdateClock(AdminManager.Now.AddMinutes(1));
@@ -33,11 +35,22 @@ internal class AdminImplementation : IAdmin
 
     public BO.Config GetConfig()=> AdminManager.GetConfig();
 
-    public void InitializeDB() => AdminManager.InitializeDB();
+    public void InitializeDB()
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.InitializeDB();
+    }
 
-    public void ResetDB() => AdminManager.ResetDB();
-
-    public void SetConfig(BO.Config config) => AdminManager.SetConfig(config);
+    public void ResetDB()
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.ResetDB();
+    }
+    public void SetConfig(BO.Config config)
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.SetConfig(config);
+    }
 
     #region Stage 5
     public void AddClockObserver(Action clockObserver) =>
@@ -49,4 +62,16 @@ internal class AdminImplementation : IAdmin
     public void RemoveConfigObserver(Action configObserver) =>
     AdminManager.ConfigUpdatedObservers -= configObserver;
     #endregion Stage 5
+
+    #region stage 7 simulator
+    public void StartSimulator(int interval)  //stage 7
+    {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
+        AdminManager.Start(interval); //stage 7
+    }
+
+    public void StopSimulator() => AdminManager.Stop(); //stage 7
+
+
+    #endregion stage 7 simulator
 }

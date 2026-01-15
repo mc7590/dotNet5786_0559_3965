@@ -200,19 +200,22 @@ public static class Initialization
     {
         //company coordinates in namespace Infrastructure.GlobalConstants.Coordinates
 
-
         // read data
         var allCouriers = s_dal!.Courier.ReadAll().ToList();
         var allOrders = s_dal!.Order.ReadAll().ToList();
 
-        // will be empty bc it's initioalization
-        var initialDeliveries = s_dal!.Delivery.ReadAll().ToList();
+            // will be empty bc it's initioalization
+            var initialDeliveries = s_dal!.Delivery.ReadAll().ToList();
 
         // list of new deliveries created in this function
         var newDeliveries = new List<Delivery>();
 
         foreach (var order in allOrders)
         {
+            // דילוג על כ-20% מההזמנות באופן אקראי
+            if (s_rand.NextDouble() < 0.2)
+                continue;
+
             //union of existing and new deliveries
             var allCurrentDeliveries = initialDeliveries.Concat(newDeliveries);
 
@@ -259,7 +262,7 @@ public static class Initialization
                 endStatus = (EnumEndDeliveryStatus)s_rand.Next(0, 5);
             }
 
-            Delivery newDelivery = new (
+            Delivery newDelivery = new(
                 Id: 0,
                 OrderId: order.Id,
                 CourierId: courier.Id,

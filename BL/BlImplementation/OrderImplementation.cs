@@ -8,6 +8,7 @@ internal class OrderImplementation : IOrder
 {
     public async Task Create(int id, BO.Order boOrder)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         await OrderManager.CreateOrder(id, boOrder);
     }
 
@@ -18,6 +19,7 @@ internal class OrderImplementation : IOrder
 
     public void Delete(int id, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         OrderManager.DeleteOrder(id, orderId);
     }
     public IEnumerable<BO.OrderInList> GetOrderInList(int id, BO.EnumOrderFieldFilter? filterBy = null, object? filterValue = null, BO.EnumOrderFieldSort? sortBy = null, object? sortValue = null)
@@ -27,6 +29,7 @@ internal class OrderImplementation : IOrder
 
     public async Task Update(int id, BO.Order boOrder)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         await OrderManager.UpdateOrder(id, boOrder);
     }
 
@@ -37,16 +40,19 @@ internal class OrderImplementation : IOrder
 
     public void CancelOrder(int id, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         OrderManager.CancelOrder(id, orderId);
     }
 
     public void EndOrderStatus(int id, int courierId, int deliveryId, BO.EnumEndDeliveryStatus newStatus)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         DeliveryManager.EndOrderStatus(id, courierId, deliveryId, newStatus);
     }
 
     public async Task CreateDeliveryForOrder(int id, int courierId, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         await OrderManager.CreateDeliveryForOrder(id, courierId, orderId);
     }
 

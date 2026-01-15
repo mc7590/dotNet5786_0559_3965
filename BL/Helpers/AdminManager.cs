@@ -19,7 +19,7 @@ internal static class AdminManager //stage 4
     internal static event Action? ConfigUpdatedObservers; //stage 5 - for config update observers
     internal static event Action? ClockUpdatedObservers; //stage 5 - for clock update observers
 
-    private static Task? _periodicTask = null; //stage 7
+    //private static Task? _periodicTask = null; //stage 7 //unnecessary
 
     /// <summary>
     /// Method to update application's clock from any BL class as may be required
@@ -37,8 +37,9 @@ internal static class AdminManager //stage 4
         // - (students become not active after 5 years etc.)
 
         //TO_DO: //stage 4
-        CourierManager.PeriodicCouriersUpdates(oldClock, newClock); //stage 4. to be removed in stage 7 and replaced as below
-
+        //CourierManager.PeriodicCouriersUpdates(oldClock, newClock); //stage 4. to be removed in stage 7 and replaced as below
+        Task.Run(() => CourierManager.PeriodicCouriersUpdates(oldClock, newClock));
+        
         //TO_DO: //stage 7
         //if (_periodicTask is null || _periodicTask.IsCompleted) //stage 7
         //    _periodicTask = Task.Run(() => StudentManager.PeriodicStudentsUpdates(oldClock, newClock));
@@ -194,7 +195,7 @@ internal static class AdminManager //stage 4
     private static int s_interval = 1;
     /// <summary>
     /// The flag that signs whether simulator is running
-    /// 
+    /// </summary>
     private static volatile bool s_stop = false;
 
     [MethodImpl(MethodImplOptions.Synchronized)] //stage 7                                                 
@@ -242,6 +243,7 @@ internal static class AdminManager //stage 4
             if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
                 _simulateTask = Task.Run(() => CourierManager.SimulateCourierInactivity());
 
+            //choose delivery to courier simulation
             //etc...
 
             try

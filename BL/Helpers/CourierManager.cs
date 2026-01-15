@@ -269,6 +269,9 @@ internal static class CourierManager
         Observers.NotifyListUpdated();  //stage 5
 
     }
-    public static void SimulateCourierInactivity() => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
+
+
+    public static void SimulateCourierInactivity() 
+        => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
  
 }

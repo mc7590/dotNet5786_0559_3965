@@ -8,6 +8,7 @@ internal class CourierImplementation : ICourier
     public BO.EnumUserRole Login(string username, string password) => CourierManager.Login(username, password);
     public void Create(int id, BO.Courier boCourier)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CourierManager.CreateCourier(id,boCourier);
     }
     public BO.Courier? Read(int id, int courierId)
@@ -20,10 +21,12 @@ internal class CourierImplementation : ICourier
     }
     public void Update(int id, BO.Courier boCourier)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CourierManager.UpdateCourier(id, boCourier);
     }
     public void Delete(int id, int courierId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         CourierManager.DeleteCourier(id,courierId);
     }    
     public int GetNumOfDeliveryOnTimeForCourier(int id, int courierId)
@@ -36,6 +39,7 @@ internal class CourierImplementation : ICourier
     }
     public async Task AssignOrderToCourier(int courierId, int orderId)
     {
+        AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
         await OrderManager.CreateDeliveryForOrder(courierId, courierId, orderId);
     }
     public IEnumerable<BO.ClosedDeliveryInList> GetCloseDeliveriesForCourier(int id, int courierId)
