@@ -1,16 +1,17 @@
 ﻿namespace Helpers;
+using BO;
 //using BO;
 using DalApi;
 using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Globalization;
 using System.Net.Http.Json;
 //using DO;
 using System.Reflection.Metadata.Ecma335;
+using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Threading.Tasks;
-using System.Globalization;
-using System.ComponentModel;
-using System.Text.Encodings.Web;
-using BO;
 
 internal static class OrderManager
 {
@@ -21,24 +22,24 @@ internal static class OrderManager
     /// <summary>
     /// Converts a BO Order to a DO Order
     /// </summary>
-    internal static DO.Order BoOrderToDoOrder(BO.Order boOrder)
-    {
-        return new DO.Order()
-        {
-            Id = boOrder.Id,
-            OrderType = (DO.EnumOrderType)boOrder.OrderType,
-            Description = boOrder.Description,
-            Address = boOrder.Address!,
-            Latitude = boOrder.Latitude,
-            Longitude = boOrder.Longitude,
-            CustomerName = boOrder.CustomerName!,
-            CustomerPhone = boOrder.CustomerPhone!,
-            OrderCreationTime = boOrder.CreationTime,
-            Weight = boOrder.Weight,
-            Fragile = boOrder.Fragile
-        };
+    //internal static DO.Order BoOrderToDoOrder(BO.Order boOrder)
+    //{
+    //    return new DO.Order()
+    //    {
+    //        Id = boOrder.Id,
+    //        OrderType = (DO.EnumOrderType)boOrder.OrderType,
+    //        Description = boOrder.Description,
+    //        Address = boOrder.Address!,
+    //        Latitude = boOrder.Latitude,
+    //        Longitude = boOrder.Longitude,
+    //        CustomerName = boOrder.CustomerName!,
+    //        CustomerPhone = boOrder.CustomerPhone!,
+    //        OrderCreationTime = boOrder.CreationTime,
+    //        Weight = boOrder.Weight,
+    //        Fragile = boOrder.Fragile
+    //    };
 
-    }
+    //}
 
     /// <summary>
     /// Converts a DO Order to a BO Order
@@ -93,7 +94,8 @@ internal static class OrderManager
             OrderCreationTime = boOrder.CreationTime,
         };
 
-        s_dal.Order.Create(doOrder);
+        lock (AdminManager.BlMutex) //stage 7
+            s_dal.Order.Create(doOrder);
 
         Observers.NotifyListUpdated(); //stage 5 //no need to notify item updated as it is a new item
 
@@ -108,7 +110,10 @@ internal static class OrderManager
         Tools.IsManager(id);
 
         DO.Order doOrder;
-        doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+
+        lock (AdminManager.BlMutex) //stage 7
+            doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        
         return DoOrderToBoOrder(doOrder);
     }
 
@@ -118,7 +123,10 @@ internal static class OrderManager
     internal static void DeleteOrder(int id, int orderId)
     {
         Tools.IsManager(id);
-        s_dal.Order.Delete(orderId);
+
+        lock (AdminManager.BlMutex) //stage 7
+            s_dal.Order.Delete(orderId);
+
         Observers.NotifyListUpdated();
         Observers.NotifyItemUpdated(orderId);
     }
@@ -135,7 +143,11 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
 
-        var doQuery = s_dal.Order.ReadAll();
+        IEnumerable<DO.Order> doQuery;
+
+        lock (AdminManager.BlMutex) //stage 7
+            doQuery = s_dal.Order.ReadAll();
+
         IEnumerable<BO.OrderInList> query = doQuery.Select(doOrder => doOrderToBoOrderInList(doOrder)); //make list of BO.OrderInList
 
         //filter
@@ -201,26 +213,26 @@ internal static class OrderManager
         };
     }
 
-    /// <summary>
-    /// converts a BO Order to a BO OrderInList
-    /// </summary>
-    internal static BO.OrderInList BoOrderToBoOrderInList(BO.Order boOrder)
-    {
-        return new BO.OrderInList
-        {
-            CourierId = DeliveryManager.GetCourierIdToBoOrder(boOrder),
-            OrderId = boOrder.Id,
-            OrderType = boOrder.OrderType,
-            AerialDistance = boOrder.AerialDistance,
-            OrderStatus = boOrder.OrderStatus,
-            ScheduleStatus = boOrder.ScheduleStatus,
-            RemainingTime = boOrder.RemainingTime,
-            TotalDeliveryTime = boOrder.OrderDelivHist != null && boOrder.OrderDelivHist.Count() > 0 ?//check logic again
-                                boOrder.OrderDelivHist.Last().DelCreationTime - boOrder.CreationTime :
-                                TimeSpan.Zero,
-            TotalDeliveries = boOrder.OrderDelivHist != null ? boOrder.OrderDelivHist.Count() : 0
-        };
-    }
+    ///// <summary>
+    ///// converts a BO Order to a BO OrderInList
+    ///// </summary>
+    //internal static BO.OrderInList BoOrderToBoOrderInList(BO.Order boOrder)
+    //{
+    //    return new BO.OrderInList
+    //    {
+    //        CourierId = DeliveryManager.GetCourierIdToBoOrder(boOrder),
+    //        OrderId = boOrder.Id,
+    //        OrderType = boOrder.OrderType,
+    //        AerialDistance = boOrder.AerialDistance,
+    //        OrderStatus = boOrder.OrderStatus,
+    //        ScheduleStatus = boOrder.ScheduleStatus,
+    //        RemainingTime = boOrder.RemainingTime,
+    //        TotalDeliveryTime = boOrder.OrderDelivHist != null && boOrder.OrderDelivHist.Count() > 0 ?//check logic again
+    //                            boOrder.OrderDelivHist.Last().DelCreationTime - boOrder.CreationTime :
+    //                            TimeSpan.Zero,
+    //        TotalDeliveries = boOrder.OrderDelivHist != null ? boOrder.OrderDelivHist.Count() : 0
+    //    };
+    //}
 
     /// <summary>
     /// Returns an array of order quantities by all status types.
@@ -230,7 +242,11 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
 
-        var orders = s_dal.Order.ReadAll().Select(doOrder => DoOrderToBoOrder(doOrder));
+        IEnumerable < BO.Order > orders;
+
+        lock (AdminManager.BlMutex) //stage 7
+            orders = s_dal.Order.ReadAll().Select(doOrder => DoOrderToBoOrder(doOrder));
+
         int[] arrayAmountOfOrdersByStatus = new int[Enum.GetValues(typeof(BO.EnumOrderStatus)).Length]; //create array with size of EnumOrderStatus
 
         // group orders by OrderStatus and count occurrences
@@ -259,27 +275,30 @@ internal static class OrderManager
     {
         Tools.IsManager(id);
 
-        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
-        BO.Order boOrder = DoOrderToBoOrder(doOrder);
-        //Can be canceled if: Order is Open or InProgress but not yet delivered.
-        //no need to update order status in DAL, as it is calculated at the conversion "DoOrderToBoOrder"
-        if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
+        lock (AdminManager.BlMutex) //stage 7
         {
-            //create a deme delivery with status Canceled
-            DO.Delivery delivery = DeliveryManager.CreateDemeDelivery(orderId);
-            s_dal.Delivery.Create(delivery);
+            DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+            BO.Order boOrder = DoOrderToBoOrder(doOrder);
+            //Can be canceled if: Order is Open or InProgress but not yet delivered.
+            //no need to update order status in DAL, as it is calculated at the conversion "DoOrderToBoOrder"
+            if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
+            {
+                //create a deme delivery with status Canceled
+                DO.Delivery delivery = DeliveryManager.CreateDemeDelivery(orderId);
+                s_dal.Delivery.Create(delivery);
 
-            Observers.NotifyListUpdated();  //stage 5
-            Observers.NotifyItemUpdated(orderId);
+                Observers.NotifyListUpdated();  //stage 5
+                Observers.NotifyItemUpdated(orderId);
 
+            }
+            else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
+            {
+                /////connect to deliveryManager to update delivery
+                DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with Order ID={orderId} does Not exist");
+                DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Canceled, AdminManager.Now);
+            }
+            else throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be canceled as it is already {boOrder.OrderStatus}.");
         }
-        else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
-        {
-            /////connect to deliveryManager to update delivery
-            DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with Order ID={orderId} does Not exist");
-            DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Canceled, AdminManager.Now);
-        }
-        else throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be canceled as it is already {boOrder.OrderStatus}.");
     }
 
     /// <summary>
@@ -293,40 +312,49 @@ internal static class OrderManager
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
 
-        //check if order exists
-        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        DO.Order doOrder;
+        DO.Courier doCourier;
 
-        //check if a delivery for this order already exists
-        if (s_dal.Delivery.Read(d => d.OrderId == orderId) != null)
-            throw new BO.BlInvalidOperationException($"Order with ID={orderId} is already assigned to a delivery.");
+        lock (AdminManager.BlMutex) //stage 7
+        {
+            //check if order exists
+            doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
 
-        //check if courier exists
-        DO.Courier doCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+            //check if a delivery for this order already exists
+            if (s_dal.Delivery.Read(d => d.OrderId == orderId) != null)
+                throw new BO.BlInvalidOperationException($"Order with ID={orderId} is already assigned to a delivery.");
+
+            //check if courier exists
+            doCourier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+        }
 
         BO.Order boOrder = DoOrderToBoOrder(doOrder);
-        if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
-        {
-            //create a new delivery for this order and courier
-            DO.Delivery delivery = new DO.Delivery()
-            {
-                Id = 0, //will be set by DAL
-                OrderId = orderId,
-                CourierId = courierId,
-                DeliveryMethod = doCourier.DeliveryMethod,
-                DeliveryStartTime = AdminManager.Now,
-                DistanceInKm = await Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude),
-                EndDeliveryStatus = null,
-                EndDeliveryTime = null
-            };
-            s_dal.Delivery.Create(delivery);
+        double distance = await Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude);
 
-            Observers.NotifyListUpdated();  //stage 5
-            Observers.NotifyItemUpdated(orderId);
-        }
-        else
+        lock (AdminManager.BlMutex) //stage 7
         {
-            throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be assigned to delivery as its status is {boOrder.OrderStatus}.");
+
+            if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
+            {
+                //create a new delivery for this order and courier
+                DO.Delivery delivery = new DO.Delivery()
+                {
+                    Id = 0, //will be set by DAL
+                    OrderId = orderId,
+                    CourierId = courierId,
+                    DeliveryMethod = doCourier.DeliveryMethod,
+                    DeliveryStartTime = AdminManager.Now,
+                    DistanceInKm = distance,
+                    EndDeliveryStatus = null,
+                    EndDeliveryTime = null
+                };
+                s_dal.Delivery.Create(delivery);
+            }
+            else
+                throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be assigned to delivery as its status is {boOrder.OrderStatus}.");
         }
+        Observers.NotifyListUpdated();  //stage 5
+        Observers.NotifyItemUpdated(orderId);
     }
 
 
@@ -336,17 +364,26 @@ internal static class OrderManager
     internal static async Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
-        DO.Courier courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
-        if (!courier.Active)
-            throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
-        IEnumerable<DO.Order> orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
+
+        DO.Courier courier;
+        IEnumerable<DO.Order> orders;
+
+        lock (AdminManager.BlMutex) //stage 7
+        {
+            courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
+            if (!courier.Active)
+                throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
+            orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
+        }
+
         var openOrder = from o in orders
                         let BoOrder = DoOrderToBoOrder(o)
                         where BoOrder.OrderStatus == BO.EnumOrderStatus.Open
                         select o;
+
         if (typeFilter != null)
         {
-            openOrder = openOrder.Where(or => s_dal.Order.Read(or.Id)!.OrderType == (DO.EnumOrderType)typeFilter);
+            openOrder = openOrder.Where(or => or.OrderType == (DO.EnumOrderType)typeFilter);
         }
 
         var tasksOpenOIL= openOrder.Select(async o =>
@@ -405,19 +442,18 @@ internal static class OrderManager
         return Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime);
     }
 
-    //private static TimeSpan CalculateExpectedDeliveryTime(int orderId)
-    //{
-    //    DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
-    //    DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
-    //    if (delivery == null || delivery.DistanceInKm == null)
-    //        return TimeSpan.Zero;
-    //    return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude));
-    //}
-
     private static TimeSpan CalculateExpectedDeliveryTime(int orderId)
     {
-        DO.Order doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
-        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
+        DO.Order doOrder;
+        DO.Delivery? delivery;
+
+        lock (AdminManager.BlMutex) //stage 7
+        {
+            doOrder = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+            delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null);
+
+        }
+
         if (delivery == null || delivery.DistanceInKm == null)
             return TimeSpan.Zero;
         return DeliveryManager.CalculateEstimatedDeliveryTime(delivery.DeliveryMethod, Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude));
@@ -428,14 +464,18 @@ internal static class OrderManager
     /// </summary>
     internal static async Task UpdateOrder(int id, BO.Order boOrder)
     {
+        if (boOrder == null)
+            return;
+
         Tools.IsManager(id);
 
         if (boOrder != null)
         {
-            DO.Order? doOrder = s_dal.Order.Read(boOrder.Id);
-            //check if order exists
-            if (s_dal.Order.Read(boOrder.Id) == null)
-                throw new BO.BlDoesNotExistException($"Order with ID={boOrder.Id} does Not exist");
+            DO.Order? doOrder;
+
+            lock (AdminManager.BlMutex) //stage 7
+                doOrder = s_dal.Order.Read(boOrder.Id) ?? throw new BO.BlDoesNotExistException($"Order with ID={boOrder.Id} does Not exist");
+            
             if (boOrder.Address != doOrder!.Address)
             {
                 // do new latitude and longitude
@@ -443,13 +483,13 @@ internal static class OrderManager
                 doOrder = doOrder with { Latitude = lat, Longitude = lon };
             }
 
-            s_dal.Order.Update(doOrder!);
+            lock (AdminManager.BlMutex) //stage 7
+                s_dal.Order.Update(doOrder!);
 
             Observers.NotifyItemUpdated(boOrder.Id); //stage 5
             Observers.NotifyListUpdated();  //stage 5
 
         }
-
     }
 
     

@@ -24,15 +24,6 @@ internal static class DeliveryManager
         };
         return estimatedTime;
     }
-    ///// <summary>
-    ///// calculates the order status based on deliveries associated with the order
-    ///// </summary>
-    //internal static BO.EnumOrderStatus CalculateOrderStatus(int OrderId)
-    //{
-
-
-    //    throw new NotImplementedException();
-    //}
 
     /// <summary>
     /// Calculates the order status based on deliveries associated with the order
@@ -42,53 +33,58 @@ internal static class DeliveryManager
     /// <exception cref="BO.ObjectNotFoundException">Thrown if the order ID is not found.</exception>
     internal static BO.EnumOrderStatus CalculateOrderStatus(int id)
     {
-        // get the order from DAL
-        IDal dal = Factory.Get;
-        DO.Order order = dal.Order.Read(id) ?? throw new BO.BlDoesNotExistException($"Order with ID {id} does not exist.");
-
-        IEnumerable<DO.Delivery> deliveries = dal.Delivery.ReadAll(d => d.OrderId == id);
-
-        //case: finished delivery
-        //if last delivery found that ended, that determines the order status
-        DO.Delivery? lastDelivery = deliveries.OrderByDescending(d => d.EndDeliveryTime).FirstOrDefault(d => d.EndDeliveryTime != null);
-
-        if (lastDelivery != null)
+        lock (AdminManager.BlMutex) //stage 7
         {
-            //order is closed, status determined by last delivery end status
-            switch (lastDelivery.EndDeliveryStatus)
+            DO.Order order = s_dal.Order.Read(id) ?? throw new BO.BlDoesNotExistException($"Order with ID {id} does not exist.");
+
+            IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.OrderId == id);
+
+            //case: finished delivery
+            //if last delivery found that ended, that determines the order status
+            DO.Delivery? lastDelivery = deliveries.OrderByDescending(d => d.EndDeliveryTime).FirstOrDefault(d => d.EndDeliveryTime != null);
+
+            if (lastDelivery != null)
             {
-                case DO.EnumEndDeliveryStatus.Delivered:
-                    return BO.EnumOrderStatus.Delivered;
+                //order is closed, status determined by last delivery end status
+                switch (lastDelivery.EndDeliveryStatus)
+                {
+                    case DO.EnumEndDeliveryStatus.Delivered:
+                        return BO.EnumOrderStatus.Delivered;
 
-                case DO.EnumEndDeliveryStatus.RefusedToReceive:
-                    return BO.EnumOrderStatus.CustomerRefused;
+                    case DO.EnumEndDeliveryStatus.RefusedToReceive:
+                        return BO.EnumOrderStatus.CustomerRefused;
 
-                case DO.EnumEndDeliveryStatus.Canceled:
-                    return BO.EnumOrderStatus.Canceled;
+                    case DO.EnumEndDeliveryStatus.Canceled:
+                        return BO.EnumOrderStatus.Canceled;
 
-                default:
-                    return BO.EnumOrderStatus.Canceled;
+                    default:
+                        return BO.EnumOrderStatus.Canceled;
+                }
             }
+
+            //check for active delivery (not ended yet)
+
+            //if no finished delivery found, check for active delivery (not yet ended)
+            DO.Delivery? activeDelivery = deliveries.FirstOrDefault(d => d.EndDeliveryTime == null);
+
+            if (activeDelivery != null)
+            {
+                //in progress - there is an active delivery that has not yet ended
+                return BO.EnumOrderStatus.InProgress;
+            }
+
+            //default: opened
+
+            //no finished delivery and no active delivery: the order is open
+            return BO.EnumOrderStatus.Open;
         }
-
-        //check for active delivery (not ended yet)
-
-        //if no finished delivery found, check for active delivery (not yet ended)
-        DO.Delivery? activeDelivery = deliveries.FirstOrDefault(d => d.EndDeliveryTime == null);
-
-        if (activeDelivery != null)
-        {
-            //in progress - there is an active delivery that has not yet ended
-            return BO.EnumOrderStatus.InProgress;
-        }
-
-        //default: opened
-
-        //no finished delivery and no active delivery: the order is open
-        return BO.EnumOrderStatus.Open;
     }
 
-
+    /// <summary>
+    /// deme delivery creation when order is canceled
+    /// </summary>
+    /// <param name="orderId"></param>
+    /// <returns></returns>
     internal static DO.Delivery CreateDemeDelivery(int orderId)
     {
         return new DO.Delivery
@@ -102,6 +98,7 @@ internal static class DeliveryManager
             EndDeliveryTime = AdminManager.Now
         };
     }
+
     /// <summary>
     /// returns the courier ID that delivered the given BO order
     /// </summary>
@@ -129,8 +126,7 @@ internal static class DeliveryManager
         var delList = GetListDeliveryPerOrderInList(doOrder.Id);
 
         // Find the object where the time difference (boOrder.CreationTime - delivery.DelCreationTime) is minimal
-        // OrderBy-> calculates the time difference for each item and sorts from smallest to largest
-        // FirstOrDefault-> returns the first item in the sorted list (the item with the min time difference)
+        // OrderBy-> calc the time difference for each item and sorts from smallest to largest
         var closestDelivery = delList.OrderBy(delivery => doOrder.OrderCreationTime - delivery.DelCreationTime)
                                      .FirstOrDefault();
 
@@ -143,7 +139,9 @@ internal static class DeliveryManager
     /// </summary>
     internal static IEnumerable<BO.DeliveryPerOrderInList> GetListDeliveryPerOrderInList(int orderId)
     {
-        return s_dal.Delivery.ReadAll(d => d.OrderId == orderId)   /*.Where(delivery => delivery.OrderId == orderId)*/
+        lock (AdminManager.BlMutex) //stage 7
+        {
+            return s_dal.Delivery.ReadAll(d => d.OrderId == orderId)   /*.Where(delivery => delivery.OrderId == orderId)*/
             .Select(delivery => new BO.DeliveryPerOrderInList()
             {
                 DeliveryId = delivery.Id,
@@ -154,6 +152,7 @@ internal static class DeliveryManager
                 EndDeliveryStatus = (BO.EnumEndDeliveryStatus?)delivery.EndDeliveryStatus,
                 EndDeliveryTime = delivery.EndDeliveryTime
             }).ToList(); //leave the "tolist" because there in no use of foreach when func is called
+        }
     }
 
 
@@ -169,12 +168,20 @@ internal static class DeliveryManager
             return BO.EnumScheduleStatus.InRisk;
         return BO.EnumScheduleStatus.OnTime;
     }
-    
+
+    /// <summary>
+    /// returns the total delivery time
+    /// </summary>
     internal static TimeSpan GetTotalDeliveryTime(int orderId, DateTime? end)
     {
-        DO.Order order = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        DO.Order order;
+
+        lock (AdminManager.BlMutex) //stage 7
+            order = s_dal.Order.Read(orderId) ?? throw new BO.BlDoesNotExistException($"Order with ID={orderId} does Not exist");
+        
         return order.OrderCreationTime - end ?? throw new BO.BlInvalidInputException("Delivery is not yet closed");
     }
+
     /// <summary>
     /// checks if the given delivery was delivered on time or not
     /// </summary>
@@ -184,22 +191,34 @@ internal static class DeliveryManager
         TimeSpan maxTime = AdminManager.GetConfig().GetMaxDeliveryTime;
         return totalTime <= maxTime;
     }
+
     /// <summary>
     /// gets the number of late deliveries for a specific courier
     /// </summary>
     public static int GetDeliveriesLateForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
+        IEnumerable<DO.Delivery> deliveries;
+
+        lock (AdminManager.BlMutex) //stage 7
+            deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
         return deliveries.Count(d => IsDeliveredOnTime(d));
     }
+
     /// <summary>
     /// gets the number of on-time deliveries for a specific courier
     /// </summary>
     public static int GetDeliveriesOnTimeForCourier(int id, int courierId)
     {
         Tools.IsManagerOrCourier(id, courierId);
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
+        IEnumerable<DO.Delivery> deliveries;
+
+        lock (AdminManager.BlMutex) //stage 7
+            deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId);
+
         return deliveries.Count(d => !IsDeliveredOnTime(d));
     }
 
@@ -211,49 +230,55 @@ internal static class DeliveryManager
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
 
-        //get all closed deliveries for the given courier 
-        IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime != null) ?? throw new BO.BlDoesNotExistException($"No closed deliveries found for courier with ID={courierId}");
-
-        //filter
-        if (typeFilter != null)
+        lock (AdminManager.BlMutex) //stage 7
         {
-            deliveries = deliveries.Where(d => s_dal.Order.Read(d.OrderId)!.OrderType == (DO.EnumOrderType)typeFilter);
+            //get all closed deliveries for the given courier 
+            IEnumerable<DO.Delivery> deliveries = s_dal.Delivery.ReadAll(d => d.CourierId == courierId && d.EndDeliveryTime != null) ?? throw new BO.BlDoesNotExistException($"No closed deliveries found for courier with ID={courierId}");
+
+            //filter
+            if (typeFilter != null)
+            {
+                deliveries = deliveries.Where(d => s_dal.Order.Read(d.OrderId)!.OrderType == (DO.EnumOrderType)typeFilter);
+            }
+
+            //return result;
+            return deliveries.Select(d => new BO.ClosedDeliveryInList
+            {
+                DeliveryId = d.Id,
+                OrderId = d.OrderId,
+                OrderType = (BO.EnumOrderType)s_dal.Order.Read(d.OrderId)!.OrderType,
+                Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
+                DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
+                DistanceInKm = d.DistanceInKm ?? 0, //why cant be null??
+                TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
+                EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+            });
         }
-
-        //return result;
-        return deliveries.Select(d => new BO.ClosedDeliveryInList
-        {
-            DeliveryId = d.Id,
-            OrderId = d.OrderId,
-            OrderType = (BO.EnumOrderType)s_dal.Order.Read(d.OrderId)!.OrderType,
-            Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
-            DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
-            DistanceInKm = d.DistanceInKm ?? 0, //why cant be null??
-            TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
-            EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
-        });
     }
 
     /// <summary>
     /// make delivery end for given order and delivery IDs
     /// </summary>
     /// <param name="id">id of person asking data</param>
-    /// <param name="courierId">order id</param>
+    /// <param name="courierId">courier id</param>
     /// <param name="deliveryId">delivery id to be ended</param>
     internal static void EndOrderStatus(int id, int courierId, int deliveryId, BO.EnumEndDeliveryStatus endStatus)
     {
-        //check if the person asking is a manager or the courier assigned to the delivery
-            //int? nullableCourierId = s_dal.Delivery.Read(deliveryId)!.CourierId;
-            //int courierId = nullableCourierId  ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
-        Tools.IsManagerOrCourier(id, s_dal.Delivery.Read(deliveryId)!.CourierId);
+        Tools.IsManagerOrCourier(id, courierId);
 
-        //check if the order exists
-        if (s_dal.Courier.Read(courierId) == null)
-            throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+        DO.Delivery? delivery;
 
-        //try to update the delivery end status and time
-        DO.Delivery? delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
-        DeliveryManager.UpdateDelivery(delivery, endStatus , AdminManager.Now);
+        lock (AdminManager.BlMutex) //stage 7
+        {
+            //check if the order exists
+            if (s_dal.Courier.Read(courierId) == null)
+                throw new BO.BlDoesNotExistException($"Courier with ID={courierId} does Not exist");
+
+            //try to update the delivery end status and time
+            delivery = s_dal.Delivery.Read(d => d.Id == deliveryId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with ID={deliveryId} does Not exist");
+            DeliveryManager.UpdateDelivery(delivery, endStatus, AdminManager.Now);
+        }
+
         CourierManager.Observers.NotifyItemUpdated(courierId);
         CourierManager.Observers.NotifyListUpdated();
         OrderManager.Observers.NotifyItemUpdated(delivery.OrderId);
@@ -267,15 +292,15 @@ internal static class DeliveryManager
     {
         if (delivery != null)
         {
-            //Update logic
-
             var updatedDelivery = delivery with
 
             {
                 EndDeliveryStatus = (DO.EnumEndDeliveryStatus)newStatus,
                 EndDeliveryTime = endTime
             };
-            s_dal.Delivery.Update(updatedDelivery);
+
+            lock (AdminManager.BlMutex) //stage 7
+                s_dal.Delivery.Update(updatedDelivery);
 
             Observers.NotifyItemUpdated(updatedDelivery.Id); //stage 5
             Observers.NotifyListUpdated();  //stage 5
