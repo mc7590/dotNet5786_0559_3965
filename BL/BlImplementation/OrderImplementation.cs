@@ -6,9 +6,9 @@ using Helpers;
 
 internal class OrderImplementation : IOrder
 {
-    public void Create(int id, BO.Order boOrder)
+    public async Task Create(int id, BO.Order boOrder)
     {
-        OrderManager.CreateOrder(id, boOrder);
+        await OrderManager.CreateOrder(id, boOrder);
     }
 
     public BO.Order? Read(int id, int orderId)
@@ -25,9 +25,9 @@ internal class OrderImplementation : IOrder
         return OrderManager.GetOrderInList(id, filterBy, filterValue, sortBy, sortValue);
     }
 
-    public void Update(int id, BO.Order boOrder)
+    public async Task Update(int id, BO.Order boOrder)
     {
-        OrderManager.UpdateOrder(id, boOrder);
+        await OrderManager.UpdateOrder(id, boOrder);
     }
 
     public int[] GetAmountOfOrdersByStatus(int id)
@@ -50,9 +50,9 @@ internal class OrderImplementation : IOrder
         await OrderManager.CreateDeliveryForOrder(id, courierId, orderId);
     }
 
-    public async Task<IEnumerable<BO.ClosedDeliveryInList>> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
+    public IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
     {
-        return await DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
+        return DeliveryManager.GetClosedDeliveriesInListsToCourier(id, courierId, typeFilter, sortBy);
     }
 
     public async Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)

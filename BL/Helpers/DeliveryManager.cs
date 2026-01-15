@@ -206,7 +206,7 @@ internal static class DeliveryManager
     /// <summary>
     /// get the closed deliveries in list for a specific courier with optional filtering and sorting
     /// </summary>
-    internal static async Task<IEnumerable<BO.ClosedDeliveryInList>> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
+    internal static IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
@@ -220,57 +220,57 @@ internal static class DeliveryManager
             deliveries = deliveries.Where(d => s_dal.Order.Read(d.OrderId)!.OrderType == (DO.EnumOrderType)typeFilter);
         }
 
-        var tasksClosedOIL = deliveries.Select(async d =>
-        {
-            var order = s_dal.Order.Read(d.OrderId)!;
-            double distance = await Tools.CalculateDistanceInKm(order.Longitude, order.Latitude);
-
-            return new BO.ClosedDeliveryInList
-            {
-                DeliveryId = d.Id,
-                OrderId = d.OrderId,
-                OrderType = (BO.EnumOrderType)order.OrderType,
-                Address = order.Address,
-                DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
-                DistanceInKm = distance,
-                TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
-                EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
-            };
-        });
-
-        IEnumerable<BO.ClosedDeliveryInList> result = new List<BO.ClosedDeliveryInList>();
-
-        foreach (var task in tasksClosedOIL)
-        {
-            BO.ClosedDeliveryInList closedD = await task;
-            ((List<BO.ClosedDeliveryInList>)result).Add(closedD);
-        }
-
-        //sort
-        deliveries = sortBy switch
-        {
-            BO.EnumClosedDeliveryInListField.DeliveryId => deliveries.OrderBy(d => d.Id),
-            BO.EnumClosedDeliveryInListField.OrderId => deliveries.OrderBy(d => d.OrderId),
-            BO.EnumClosedDeliveryInListField.OrderType => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.OrderType),
-            BO.EnumClosedDeliveryInListField.Address => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.Address),
-            BO.EnumClosedDeliveryInListField.DeliveryMethod => deliveries.OrderBy(d => d.DeliveryMethod),
-            BO.EnumClosedDeliveryInListField.DistanceInKm => deliveries.OrderBy(d => Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude)),
-            BO.EnumClosedDeliveryInListField.TotalDeliveryTime => deliveries.OrderBy(d => d.EndDeliveryTime - d.DeliveryStartTime),
-            _ => deliveries.OrderBy(d => d.EndDeliveryStatus) //default sorting by end delivery status (all deliveries here are closed)
-        };
-
-        return result;
-        //return deliveries.Select(d => new BO.ClosedDeliveryInList
+        //var tasksClosedOIL = deliveries.Select(async d =>
         //{
-        //    DeliveryId = d.Id,
-        //    OrderId = d.OrderId,
-        //    OrderType = (BO.EnumOrderType)s_dal.Order.Read(d.OrderId)!.OrderType,
-        //    Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
-        //    DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
-        //    DistanceInKm = Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude),
-        //    TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
-        //    EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+        //    var order = s_dal.Order.Read(d.OrderId)!;
+        //    double distance = await Tools.CalculateDistanceInKm(order.Longitude, order.Latitude);
+
+        //    return new BO.ClosedDeliveryInList
+        //    {
+        //        DeliveryId = d.Id,
+        //        OrderId = d.OrderId,
+        //        OrderType = (BO.EnumOrderType)order.OrderType,
+        //        Address = order.Address,
+        //        DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
+        //        DistanceInKm = distance,
+        //        TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
+        //        EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+        //    };
         //});
+
+        //IEnumerable<BO.ClosedDeliveryInList> result = new List<BO.ClosedDeliveryInList>();
+
+        //foreach (var task in tasksClosedOIL)
+        //{
+        //    BO.ClosedDeliveryInList closedD = await task;
+        //    ((List<BO.ClosedDeliveryInList>)result).Add(closedD);
+        //}
+
+        ////sort
+        //deliveries = sortBy switch
+        //{
+        //    BO.EnumClosedDeliveryInListField.DeliveryId => deliveries.OrderBy(d => d.Id),
+        //    BO.EnumClosedDeliveryInListField.OrderId => deliveries.OrderBy(d => d.OrderId),
+        //    BO.EnumClosedDeliveryInListField.OrderType => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.OrderType),
+        //    BO.EnumClosedDeliveryInListField.Address => deliveries.OrderBy(d => s_dal.Order.Read(d.OrderId)!.Address),
+        //    BO.EnumClosedDeliveryInListField.DeliveryMethod => deliveries.OrderBy(d => d.DeliveryMethod),
+        //    BO.EnumClosedDeliveryInListField.DistanceInKm => deliveries.OrderBy(d => Tools.CalculateDistanceInKm(s_dal.Order.Read(d.OrderId)!.Longitude, s_dal.Order.Read(d.OrderId)!.Latitude)),
+        //    BO.EnumClosedDeliveryInListField.TotalDeliveryTime => deliveries.OrderBy(d => d.EndDeliveryTime - d.DeliveryStartTime),
+        //    _ => deliveries.OrderBy(d => d.EndDeliveryStatus) //default sorting by end delivery status (all deliveries here are closed)
+        //};
+
+        //return result;
+        return deliveries.Select(d => new BO.ClosedDeliveryInList
+        {
+            DeliveryId = d.Id,
+            OrderId = d.OrderId,
+            OrderType = (BO.EnumOrderType)s_dal.Order.Read(d.OrderId)!.OrderType,
+            Address = s_dal.Order.Read(d.OrderId)!.Address ?? null,
+            DeliveryMethod = (BO.EnumDeliveryMethod)d.DeliveryMethod,
+            DistanceInKm = d.DistanceInKm ?? 0, //why cant be null??
+            TotalDeliveryTime = GetTotalDeliveryTime(d.OrderId, d.EndDeliveryTime),
+            EndDeliveryStatus = (BO.EnumEndDeliveryStatus)d.EndDeliveryStatus!
+        });
     }
 
     /// <summary>

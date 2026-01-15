@@ -44,12 +44,12 @@ public partial class SelectOrderWindow : Window
     public static readonly DependencyProperty CurrentOpenOrderInListProperty =
         DependencyProperty.Register("CurrentOpenOrderInList", typeof(IEnumerable<BO.OpenOrderInList>), typeof(SelectOrderWindow), new PropertyMetadata(null));
 
-    private void RefreshOpenOrderList()
+    private async Task RefreshOpenOrderList()
     {
-        OpenOrderInList = s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+        OpenOrderInList = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
     }
-    private void OpenOrderListObserver()
-        => RefreshOpenOrderList();
+    private async void OpenOrderListObserver()
+        => await RefreshOpenOrderList();
     private void Window_Loaded(object sender, RoutedEventArgs e)
         => s_bl.Courier.AddObserver(OpenOrderListObserver);
     private void Window_Closed(object sender, EventArgs e)

@@ -18,7 +18,7 @@ public interface IOrder : IObservable //stage 5
 
     BO.Order? Read(int id, int orderId);
 
-    void Update(int id, BO.Order boOrder);
+    Task Update(int id, BO.Order boOrder);
 
     /// <summary>
     /// Checks that the order is open or in processing but not yet fulfilled, otherwise the request is invalid.
@@ -27,7 +27,7 @@ public interface IOrder : IObservable //stage 5
 
     void Delete(int id, int orderId);
 
-    void Create(int id, BO.Order boOrder);
+    Task Create(int id, BO.Order boOrder);
 
     /// <summary>
     /// Attempting to request an update of a DO.Delivery from a data layer
@@ -43,7 +43,7 @@ public interface IOrder : IObservable //stage 5
     /// <summary>
     /// Returns a sorted collection BO.ClosedDeliveryInList
     /// </summary>
-    Task<IEnumerable<BO.ClosedDeliveryInList>> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null);
+    IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int Id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null);
 
     /// <summary>
     /// Returns a sorted collection BO.OpenOrderInList

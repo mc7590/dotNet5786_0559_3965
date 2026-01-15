@@ -71,13 +71,13 @@ internal static class OrderManager
     /// <summary>
     /// Creates a new order in DAL
     /// </summary>
-    internal static void CreateOrder(int id, BO.Order boOrder)
+    internal static async Task CreateOrder(int id, BO.Order boOrder)
     {
         Tools.IsManager(id);
         Tools.IsValidAddress(boOrder.Address); // Check if Address is valid
         Tools.IsValidName(boOrder.CustomerName);
         Tools.IsValidPhone(boOrder.CustomerPhone);
-        (double lat, double lon) = Tools.GetLatiAndLong(boOrder.Address!).Result;
+        (double lat, double lon) = await Tools.GetLatiAndLong(boOrder.Address!);
         DO.Order doOrder = new DO.Order()
         {
             Id = boOrder.Id,
@@ -426,18 +426,24 @@ internal static class OrderManager
     /// <summary>
     /// updates an order in DAL
     /// </summary>
-    internal static void UpdateOrder(int id, BO.Order boOrder)
+    internal static async Task UpdateOrder(int id, BO.Order boOrder)
     {
         Tools.IsManager(id);
 
         if (boOrder != null)
         {
+            DO.Order? doOrder = s_dal.Order.Read(boOrder.Id);
             //check if order exists
             if (s_dal.Order.Read(boOrder.Id) == null)
                 throw new BO.BlDoesNotExistException($"Order with ID={boOrder.Id} does Not exist");
+            if (boOrder.Address != doOrder!.Address)
+            {
+                // do new latitude and longitude
+                (double lat, double lon) = await Tools.GetLatiAndLong(boOrder.Address!);
+                doOrder = doOrder with { Latitude = lat, Longitude = lon };
+            }
 
-            DO.Order doOrder = BoOrderToDoOrder(boOrder);
-            s_dal.Order.Update(doOrder);
+            s_dal.Order.Update(doOrder!);
 
             Observers.NotifyItemUpdated(boOrder.Id); //stage 5
             Observers.NotifyListUpdated();  //stage 5

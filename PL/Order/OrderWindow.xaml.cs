@@ -104,7 +104,7 @@ public partial class OrderWindow : Window
         DependencyProperty.Register("DeliveryPerOrderInList", typeof(IEnumerable<BO.DeliveryPerOrderInList>), typeof(OrderWindow), new PropertyMetadata(null));
 
 
-    private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
+    private async void btnAddUpdate_Click(object sender, RoutedEventArgs e)
     {
         var bl = BlApi.Factory.Get();
         // Add or Update logic
@@ -112,9 +112,9 @@ public partial class OrderWindow : Window
         {
             Mouse.OverrideCursor = Cursors.Wait;
             if (ButtonText == "Add")
-                bl.Order.Create(UserId, CurrentOrder);
+                await bl.Order.Create(UserId, CurrentOrder);
             else
-                bl.Order.Update(UserId, CurrentOrder);
+                await bl.Order.Update(UserId, CurrentOrder);
 
             MessageBox.Show("Saved successfully.", "Info", MessageBoxButton.OK, MessageBoxImage.Information);
             Close();

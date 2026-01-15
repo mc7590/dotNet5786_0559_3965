@@ -207,7 +207,7 @@ internal static class CourierManager
             Description = order.Description,
             Address = order.Address,
             AerialDistance = Tools.CalculateAerialDistance(order.Longitude, order.Latitude),
-            ActualDistance = Tools.CalculateDistanceInKm(order.Longitude, order.Latitude),
+            ActualDistance = activeDelivery.DistanceInKm,
             CustomerName = order.CustomerName,
             CustomerPhone = order.CustomerPhone,
             ExpectedDeliveryTime = activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime),
