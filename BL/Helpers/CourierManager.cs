@@ -261,13 +261,23 @@ internal static class CourierManager
     }
 
 
+
+    //the mutex for periodic tasks
+    private static readonly AsyncMutex s_periodicMutex = new(); //stage 7
+
     /// <summary>
     /// functions to update time
     /// </summary>
     public static void PeriodicCouriersUpdates(DateTime oldClock, DateTime newClock)
     {
+        // If the previous simulation is still in progress, exit immediately
+        if (s_periodicMutex.CheckAndSetInProgress()) //stage 7
+            return;
+
+
         DateTime now = newClock;
         TimeSpan maxInactivity = AdminManager.GetConfig().InactivityThreshold;
+        IEnumerable<DO.Courier> inactiveCouriers;
 
         lock (AdminManager.BlMutex) //stage 7
         {
@@ -294,7 +304,7 @@ internal static class CourierManager
                 };
 
             // filter the courier which need update
-            var inactiveCouriers =
+            inactiveCouriers =
                 from item in couriersWithLastActivity
                 where item.Courier.Active == true
                 where (now - item.LastActivity) > maxInactivity
@@ -303,19 +313,105 @@ internal static class CourierManager
             // update the couriers
             inactiveCouriers
                 .Select(c => c with { Active = false })
-                .ToList()
-                .ForEach(c =>
-                {
-                    s_dal.Courier.Update(c);
-                    Observers.NotifyItemUpdated(c.Id);  //stage 5
-                });
+                .ToList() //must ToList bc cannot use ForEach on IEnumerable
+                .ForEach(s_dal.Courier.Update);
         }
+
+        foreach (var courier in inactiveCouriers)
+            Observers.NotifyItemUpdated(courier.Id); //stage 5
+
         Observers.NotifyListUpdated();  //stage 5
+
+        s_periodicMutex.UnsetInProgress(); //stage 7
+    }
+
+
+    internal static async Task SimulateCourierInactivity()
+    {
 
     }
 
 
-    public static void SimulateCourierInactivity() 
-        => PeriodicCouriersUpdates(s_dal.Config.Clock.AddMinutes(-1), s_dal.Config.Clock);
- 
+    /// <summary>
+    /// Random number generator to simulation data
+    /// </summary>
+    private static readonly Random s_rand = new();
+
+    private static readonly AsyncMutex s_simulationMutex = new(); //stage 7
+
+
+    internal static async Task SimulateActivityOfCouriers()
+    {
+        // If the previous simulation is still in progress, exit immediately
+        if (s_simulationMutex.CheckAndSetInProgress())
+            return;
+
+
+        List<DO.Courier> activeCouriers;
+        lock (AdminManager.BlMutex)
+        {
+            activeCouriers = s_dal.Courier.ReadAll(c => c.Active == true).ToList();
+        }
+
+        foreach (var courier in activeCouriers)
+        {
+            // does courier has active order
+            BO.OrderInProgress? activeOrder;
+            lock (AdminManager.BlMutex)
+                activeOrder = CourierManager.GetActiveDeliveryOrderForCourier(courier.Id, courier.Id);
+
+            //A case: courier has no order in progress
+            if (activeOrder == null)
+            {
+                // 15% chance for un-busy courier to choose order
+                if (s_rand.NextDouble() < 0.15)
+                {
+                    var openOrders = await OrderManager.GetListOfOpenOrderToChoose(courier.Id, courier.Id);
+
+                    if (openOrders.Any() && s_rand.NextDouble() < 0.50) // הסתברות של 50% שיבחר אחת
+                    {
+                        var selectedOrder = openOrders.ElementAt(s_rand.Next(openOrders.Count()));
+
+                        await OrderManager.CreateDeliveryForOrder(courier.Id, courier.Id, selectedOrder.OrderId);
+                    }
+                }
+            }
+            //B case: courier has order in progress
+            else
+            {
+                //calc if enough time passed
+                if (activeOrder.ActualDistance == null) //if net func for actual distance failed
+                    continue;
+
+                if (AdminManager.Now >= activeOrder.ExpectedDeliveryTime)
+                {
+                    //end the delivery, random final status
+                    BO.EnumEndDeliveryStatus finalStatus = s_rand.NextDouble() switch
+                    {
+                        < 0.80 => BO.EnumEndDeliveryStatus.Delivered,       // 80% הצלחה
+                        < 0.87 => BO.EnumEndDeliveryStatus.RefusedToReceive, // 7% סירבו לקבל
+                        < 0.92 => BO.EnumEndDeliveryStatus.CustomerNotFound, // 5% לא נמצא הלקוח
+                        < 0.97 => BO.EnumEndDeliveryStatus.Failed,           // 5% נכשל
+                        _ => BO.EnumEndDeliveryStatus.Canceled              // 3% השאר בוטל
+                    };
+
+                    //close delivery
+                    lock (AdminManager.BlMutex)
+                        DeliveryManager.EndOrderStatus(courier.Id, courier.Id, activeOrder.DeliveryId, finalStatus);
+                }
+                else //if not enough time passed
+                {
+                    //10% manager cancel the order
+                    if (s_rand.NextDouble() < 0.10)
+                    {
+                        lock (AdminManager.BlMutex)
+                            OrderManager.CancelOrder(AdminManager.GetConfig().ManagerId, activeOrder.OrderId);
+                    }
+                }
+            }
+        }
+
+        s_simulationMutex.UnsetInProgress();
+    }
+
 }

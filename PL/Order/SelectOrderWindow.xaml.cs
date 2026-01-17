@@ -2,6 +2,7 @@
 using DO;
 using PL.Courier;
 using PL.Delivery;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,10 +45,47 @@ public partial class SelectOrderWindow : Window
     public static readonly DependencyProperty CurrentOpenOrderInListProperty =
         DependencyProperty.Register("CurrentOpenOrderInList", typeof(IEnumerable<BO.OpenOrderInList>), typeof(SelectOrderWindow), new PropertyMetadata(null));
 
+
+    private readonly ObserverMutex _openOrderListmutex = new(); //stage 7
+
     private async Task RefreshOpenOrderList()
     {
-        OpenOrderInList = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+        //#region Stage 7 (for multithreading)
+        //if (_openOrderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
+        //    return;
+
+        //Dispatcher.BeginInvoke(async () =>
+        //{
+        //    OpenOrderInList = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+
+        //    // Check if a restart was requested while we were working
+        //    if (await _openOrderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
+        //        RefreshOpenOrderList();
+        //});
+        //#endregion Stage 7 (for multithreading)
+
+        #region Stage 7 (for multithreading)
+        if (_openOrderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
+
+        // מפעילים Task שירוץ ברקע
+        _ = Task.Run(async () =>
+        {
+            //heavy work out of dispacher
+            var result = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+
+            _ = Dispatcher.BeginInvoke(async () =>
+            {
+                OpenOrderInList = result; //the actual work
+
+                //Check if a restart was requested while we were working
+                if (await _openOrderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
+                    _ = RefreshOpenOrderList();
+            });
+        });
+        #endregion Stage 7 (for multithreading)
     }
+
     private async void OpenOrderListObserver()
         => await RefreshOpenOrderList();
     private void Window_Loaded(object sender, RoutedEventArgs e)

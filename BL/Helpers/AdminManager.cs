@@ -239,12 +239,13 @@ internal static class AdminManager //stage 4
 
             //TO_DO: //stage 7
             //Add calls here to any logic simulation that was required in stage 7
-            //for example: course registration simulation
-            if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
-                _simulateTask = Task.Run(() => CourierManager.SimulateCourierInactivity());
 
             //choose delivery to courier simulation
-            //etc...
+            if (_simulateTask is null || _simulateTask.IsCompleted)//stage 7
+            {
+                _simulateTask = Task.Run(() => CourierManager.SimulateActivityOfCouriers());
+            }
+
 
             try
             {

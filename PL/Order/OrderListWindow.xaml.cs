@@ -1,8 +1,10 @@
 ﻿using PL.Courier;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -59,34 +61,49 @@ public partial class OrderListWindow : Window
         RefreshOrderList();
     }
 
+
+    private readonly ObserverMutex _orderListmutex = new(); //stage 7
+
     /// <summary>
     /// Refresh the order list according to the selected filter
     /// </summary>
     private void RefreshOrderList()
     {
-        try
+        #region Stage 7 (for multithreading)
+        if (_orderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
+
+        Dispatcher.BeginInvoke(async () =>
         {
-            if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+            try
             {
-                OrderList = s_bl?.Order.GetOrderInList(UserId)!;
+                if (OrderStatus == BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+                {
+                    OrderList = s_bl?.Order.GetOrderInList(UserId)!;
+                }
+                else if (OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+                {
+                    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
+                }
+                else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
+                {
+                    OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, OrderSort, OrderSort)!;
+                }
+                else // both filter + sort are set
+                {
+                    OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, OrderSort, OrderSort)!;
+                }
             }
-            else if (OrderStatus != BO.EnumOrderStatus.None && OrderSort == BO.EnumOrderFieldSort.None)
+            catch (Exception ex)
             {
-                OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus)!;
+                MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
-            else if (OrderStatus == BO.EnumOrderStatus.None && OrderSort != BO.EnumOrderFieldSort.None)
-            {
-                OrderList = s_bl?.Order.GetOrderInList(UserId, null, null, OrderSort, OrderSort)!;
-            }
-            else // both filter + sort are set
-            {
-                OrderList = s_bl?.Order.GetOrderInList(UserId, BO.EnumOrderFieldFilter.OrderStatus, OrderStatus, OrderSort, OrderSort)!;
-            }
-        }
-        catch (Exception ex)
-        {
-            MessageBox.Show(ex.Message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
+
+            // Check if a restart was requested while we were working
+            if (await _orderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
+                orderListObserver();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
     /// <summary>
@@ -105,7 +122,7 @@ public partial class OrderListWindow : Window
     /// <summary>
     /// Remove the observer when the window is closed
     /// </summary>
-    private void Window_Closed(object sender, EventArgs e) 
+    private void Window_Closed(object sender, EventArgs e)
         => s_bl.Order.RemoveObserver(orderListObserver);
 
     public BO.OrderInList? SelectedOrder
@@ -152,7 +169,7 @@ public partial class OrderListWindow : Window
     {
         Mouse.OverrideCursor = Cursors.Wait;
         OrderWindow window = new OrderWindow(UserId, 0);
-        window.Show();        
+        window.Show();
         Mouse.OverrideCursor = null;
         RefreshOrderList();
     }
@@ -163,7 +180,8 @@ public partial class OrderListWindow : Window
             return;
         try
         {
-            s_bl.Order.Delete(UserId, SelectedOrder.OrderId);
+            s_bl.Order.CancelOrder(UserId, SelectedOrder.OrderId);
+            //s_bl.Order.Delete(UserId, SelectedOrder.OrderId);
             MessageBox.Show("Order deleted successfully");
             RefreshOrderList();
         }

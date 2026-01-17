@@ -1,5 +1,6 @@
 ﻿using BlApi;
 using PL.Courier;
+using PL.Helpers;
 using PL.Login;
 using PL.Order;
 using System.Text;
@@ -97,14 +98,47 @@ public partial class MainWindow : Window
         }
     }
 
+
+    private readonly ObserverMutex _clockMutex = new(); //stage 7
+
     private void ClockObserver()
     {
-        Dispatcher.Invoke(() => { CurrentTime = s_bl.Admin.GetClock(); });
+        #region Stage 7 (for multithreading)
+        if (_clockMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
+
+        Dispatcher.BeginInvoke(async () =>
+        {
+            // The actual work to be done on the UI thread
+            CurrentTime = s_bl.Admin.GetClock(); //stage 5
+
+            // After completing the work, check if a restart was requested
+            if (await _clockMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                ClockObserver();
+        });
+        #endregion Stage 7 (for multithreading)
+
     }
+
+
+    private readonly ObserverMutex _configMutex = new(); //stage 7
 
     private void ConfigObserver()
     {
-        Dispatcher.Invoke(() => { Configuration = s_bl.Admin.GetConfig(); });
+        #region Stage 7 (for multithreading)
+        if (_configMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
+
+        Dispatcher.BeginInvoke(async () =>
+        {
+            // The actual work to be done on the UI thread
+            Configuration = s_bl.Admin.GetConfig(); //stage 5
+
+            // After completing the work, check if a restart was requested
+            if (await _configMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                ConfigObserver();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
     /// <summary>

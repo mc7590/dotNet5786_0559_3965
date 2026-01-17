@@ -1,4 +1,5 @@
 ﻿using PL.Courier;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -46,8 +47,17 @@ public partial class OrderWindow : Window
     public static readonly DependencyProperty CurrentOrderProperty =
     DependencyProperty.Register("CurrentOrder", typeof(BO.Order), typeof(OrderWindow), new PropertyMetadata(null));
 
+
+    private readonly ObserverMutex _orderMutex = new(); //stage 7
+
     private void OrderObserver()
     {
+        #region Stage 7 (for multithreading)
+        if (_orderMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
+
+        Dispatcher.BeginInvoke(async () =>
+        {
             try
             {
                 CurrentOrder = s_bl.Order.Read(UserId, CurrentOrder.Id)!;
@@ -56,6 +66,12 @@ public partial class OrderWindow : Window
             {
                 this.Close();
             }
+
+            // After completing the work, check if a restart was requested
+            if (await _orderMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                OrderObserver();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
     public OrderWindow(int thisUserId, int orderId = 0)

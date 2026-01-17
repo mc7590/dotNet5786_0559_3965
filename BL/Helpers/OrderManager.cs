@@ -286,19 +286,18 @@ internal static class OrderManager
                 //create a deme delivery with status Canceled
                 DO.Delivery delivery = DeliveryManager.CreateDemeDelivery(orderId);
                 s_dal.Delivery.Create(delivery);
-
-                Observers.NotifyListUpdated();  //stage 5
-                Observers.NotifyItemUpdated(orderId);
-
             }
             else if (boOrder.OrderStatus == BO.EnumOrderStatus.InProgress)
             {
-                /////connect to deliveryManager to update delivery
-                DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with Order ID={orderId} does Not exist");
+                //connect to deliveryManager to update delivery
+                DO.Delivery? delivery = s_dal.Delivery.Read(d => d.OrderId == orderId && d.EndDeliveryStatus == null) ?? throw new BO.BlDoesNotExistException($"Delivery with Order ID={orderId} does Not exist or can't be canceled");
                 DeliveryManager.UpdateDelivery(delivery, BO.EnumEndDeliveryStatus.Canceled, AdminManager.Now);
             }
             else throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be canceled as it is already {boOrder.OrderStatus}.");
         }
+
+        Observers.NotifyListUpdated();  //stage 5
+        Observers.NotifyItemUpdated(orderId);
     }
 
     /// <summary>
