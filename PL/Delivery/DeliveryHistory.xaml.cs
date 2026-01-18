@@ -1,4 +1,5 @@
 ﻿using PL.Order;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -62,22 +63,37 @@ public partial class DeliveryHistory : Window
         DependencyProperty.Register("OrderTypeFilter", typeof(BO.EnumOrderType?), typeof(DeliveryHistory),
             new PropertyMetadata(BO.EnumOrderType.None));
 
+
+    private readonly ObserverMutex _deliveryHistListMutex = new(); //stage 7
+
     /// <summary>
     /// Refresh the Delivery History list
     /// also known as query
     /// </summary>
     private void RefreshDeliveryHistoryList()
     {
-        //if added SORT functionality, do it here
+        #region Stage 7 (for multithreading)
+        if (_deliveryHistListMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
 
-        if (OrderTypeFilter == BO.EnumOrderType.None) //no filter
+        Dispatcher.BeginInvoke(async () =>
         {
-            DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId);
-        }
-        else // with filter // (OrderTypeFilter != BO.EnumOrderType.None)
-        {
-            DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId, OrderTypeFilter);
-        }
+
+            //if added SORT functionality, do it here
+            if (OrderTypeFilter == BO.EnumOrderType.None) //no filter
+            {
+                DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId);
+            }
+            else // with filter // (OrderTypeFilter != BO.EnumOrderType.None)
+            {
+                DeliveryHistoryList = s_bl.Order.GetClosedDeliveriesInListsToCourier(UserId, CourierId, OrderTypeFilter);
+            }
+
+            // Check if a restart was requested while we were working
+            if (await _deliveryHistListMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                RefreshDeliveryHistoryList();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
     private void DeliveryHistoryObserver()
