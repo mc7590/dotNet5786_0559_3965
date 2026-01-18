@@ -1,5 +1,6 @@
 ﻿using BO;
 using PL.Order;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -76,29 +77,44 @@ public partial class CourierListWindow : Window
             new PropertyMetadata(null)
         );
 
+
+    private readonly ObserverMutex _courierListMutex = new(); //stage 7
+
     /// <summary>
     /// Refresh the courier list according to the selected filter
     /// also known as query
     /// </summary>
     private void RefreshCourierList()
     {
-        if (ActiveFilter == BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
-        {
-            CourierList = s_bl?.Courier.GetCouriersInList(UserId)!;
-        }
-        else if (ActiveFilter != BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
-        {
-            CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter)!;
-        }
-        else if (ActiveFilter == BO.EnumActiveCourier.None && SortField != BO.EnumCourierFieldSort.None)
-        {
-            CourierList = s_bl?.Courier.GetCouriersInList(UserId, null, SortField)!;
-        }
-        else // both filter + sort are set
-        {
-            CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter, SortField)!;
-        }
+        #region Stage 7 (for multithreading)
+        if (_courierListMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
 
+        Dispatcher.BeginInvoke(async () =>
+        {
+
+            if (ActiveFilter == BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
+            {
+                CourierList = s_bl?.Courier.GetCouriersInList(UserId)!;
+            }
+            else if (ActiveFilter != BO.EnumActiveCourier.None && SortField == BO.EnumCourierFieldSort.None)
+            {
+                CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter)!;
+            }
+            else if (ActiveFilter == BO.EnumActiveCourier.None && SortField != BO.EnumCourierFieldSort.None)
+            {
+                CourierList = s_bl?.Courier.GetCouriersInList(UserId, null, SortField)!;
+            }
+            else // both filter + sort are set
+            {
+                CourierList = s_bl?.Courier.GetCouriersInList(UserId, ActiveFilter, SortField)!;
+            }
+
+            // Check if a restart was requested while we were working
+            if (await _courierListMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                RefreshCourierList();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
 

@@ -1,5 +1,6 @@
 ﻿using Helpers;
 using PL.Delivery;
+using PL.Helpers;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -73,21 +74,33 @@ public partial class CourierWindow : Window
     public static readonly DependencyProperty CurrentCourierProperty =
     DependencyProperty.Register("CurrentCourier", typeof(BO.Courier), typeof(CourierWindow), new PropertyMetadata(null));
 
+
+    private readonly ObserverMutex _courierMutex = new(); //stage 7
+
     private void CourierObserver()
     {
+        #region Stage 7 (for multithreading)
+        if (_courierMutex.CheckAndSetLoadInProgressOrRestartRequired())
+            return;
 
-            
-        int id = CurrentCourier.Id;
-            
-        try           
-        {   
-            CurrentCourier = s_bl.Courier.Read(UserId, id)!;
-        }
-        catch (Exception)
+        Dispatcher.BeginInvoke(async () =>
         {
-             this.Close();
-        }
 
+            int id = CurrentCourier.Id;
+            try
+            {
+                CurrentCourier = s_bl.Courier.Read(UserId, id)!;
+            }
+            catch (Exception)
+            {
+                this.Close();
+            }
+
+            // Check if a restart was requested while we were working
+            if (await _courierMutex.UnsetLoadInProgressAndCheckRestartRequested())
+                CourierObserver();
+        });
+        #endregion Stage 7 (for multithreading)
     }
 
     private void btnAddUpdate_Click(object sender, RoutedEventArgs e)
