@@ -187,8 +187,10 @@ public class CourierEnableConverter : IMultiValueConverter
     /// <summary>
     /// simulation button content converter from bool to "Start"/"Stop"
     /// </summary>
-    public class BoolToSimStatusConverter : IValueConverter
-    {
+    
+}
+public class BoolToSimStatusConverter : IValueConverter
+{
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
             => (bool)value ? "⏹ Stop" : "▶ Start";
 
@@ -207,4 +209,3 @@ public class CourierEnableConverter : IMultiValueConverter
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
     }
-}
