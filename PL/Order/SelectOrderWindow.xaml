@@ -11,6 +11,7 @@
         Closed="Window_Closed">
     <Grid Margin="10">
         <DataGrid AutoGenerateColumns="False"
+                    ItemsSource="{Binding OpenOrderInList}"
                   IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Order ID" Binding="{Binding OrderId}" />

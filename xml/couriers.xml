@@ -34,17 +34,6 @@
     <MaxPersonalDistance>23</MaxPersonalDistance>
   </Courier>
   <Courier>
-    <Id>316144771</Id>
-    <Name>Eli Amar</Name>
-    <CourierPhone>0593730056</CourierPhone>
-    <Email>eliamar@gmail.com</Email>
-    <Password>Password4771/</Password>
-    <Active>false</Active>
-    <DeliveryMethod>Foot</DeliveryMethod>
-    <StartedWorking>2025-01-02T19:56:32</StartedWorking>
-    <MaxPersonalDistance>1</MaxPersonalDistance>
-  </Courier>
-  <Courier>
     <Id>364163634</Id>
     <Name>Mimi Asulin</Name>
     <CourierPhone>0579703994</CourierPhone>
@@ -229,6 +218,17 @@
     <Active>false</Active>
     <DeliveryMethod>Car</DeliveryMethod>
     <StartedWorking>2025-10-14T19:56:32</StartedWorking>
+    <MaxPersonalDistance>5</MaxPersonalDistance>
+  </Courier>
+  <Courier>
+    <Id>316144771</Id>
+    <Name>Eli Amar</Name>
+    <CourierPhone>0593730056</CourierPhone>
+    <Email>eliamar@gmail.com</Email>
+    <Password>Password4771/</Password>
+    <Active>true</Active>
+    <DeliveryMethod>Foot</DeliveryMethod>
+    <StartedWorking>2025-01-02T19:56:32</StartedWorking>
     <MaxPersonalDistance>5</MaxPersonalDistance>
   </Courier>
 </ArrayOfCourier>

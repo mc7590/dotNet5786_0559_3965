@@ -5,7 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="MainWindow" Height="500" Width="850"
+        Title="MainWindow" Height="640" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="MainWindow_Loaded"
         Closed="MainWindow_Closed"
@@ -107,16 +107,29 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="1"
+            <!--<Border Grid.Column="1"
             Background="#ED1C24"
-            Padding="10"
+            Padding="20,10"
             CornerRadius="18"
             HorizontalAlignment="Center">
+
                 <Label Content="{Binding CurrentTime}"
-               FontSize="25"
-               FontWeight="Bold"
+               FontSize="45"
+               FontWeight="ExtraBold"
                Foreground="White"
                Background="#ED1C24"/>
+            </Border>-->
+            <Border Grid.Column="1"
+        Background="#F2464D"
+        Padding="20,10"
+        CornerRadius="18"
+        HorizontalAlignment="Center">
+                <Label Background="Transparent">
+                    <TextBlock Text="{Binding CurrentTime}"
+                   FontSize="35" 
+                   FontWeight="ExtraBold"
+                   Foreground="White"/>
+                </Label>
             </Border>
 
             <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,10,0,0">

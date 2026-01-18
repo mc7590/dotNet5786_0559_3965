@@ -32,38 +32,26 @@ public partial class SelectOrderWindow : Window
     {
         UserId = userId;
         CourierId = courierId;        
-        InitializeComponent();             
+        InitializeComponent();    
+        
+        _=RefreshOpenOrderList(); //
     }
     /// <summary>
     /// Dependency property for the OpenOrderInList list
     /// </summary>
     public IEnumerable<BO.OpenOrderInList> OpenOrderInList
     {
-        get { return (IEnumerable<BO.OpenOrderInList>?)GetValue(CurrentOpenOrderInListProperty)!; }
-        set { SetValue(CurrentOpenOrderInListProperty, value); }
+        get { return (IEnumerable<BO.OpenOrderInList>?)GetValue(OpenOrderInListProperty)!; }
+        set { SetValue(OpenOrderInListProperty, value); }
     }
-    public static readonly DependencyProperty CurrentOpenOrderInListProperty =
-        DependencyProperty.Register("CurrentOpenOrderInList", typeof(IEnumerable<BO.OpenOrderInList>), typeof(SelectOrderWindow), new PropertyMetadata(null));
+    public static readonly DependencyProperty OpenOrderInListProperty =
+        DependencyProperty.Register("OpenOrderInList", typeof(IEnumerable<BO.OpenOrderInList>), typeof(SelectOrderWindow), new PropertyMetadata(null));
 
 
     private readonly ObserverMutex _openOrderListmutex = new(); //stage 7
 
     private async Task RefreshOpenOrderList()
     {
-        //#region Stage 7 (for multithreading)
-        //if (_openOrderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
-        //    return;
-
-        //Dispatcher.BeginInvoke(async () =>
-        //{
-        //    OpenOrderInList = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
-
-        //    // Check if a restart was requested while we were working
-        //    if (await _openOrderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
-        //        RefreshOpenOrderList();
-        //});
-        //#endregion Stage 7 (for multithreading)
-
         #region Stage 7 (for multithreading)
         if (_openOrderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
             return;

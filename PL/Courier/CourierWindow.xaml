@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL.Courier"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Courier Window" Height="650" Width="800"
+        Title="Courier Window" Height="550" Width="400"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"

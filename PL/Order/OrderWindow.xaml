@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PL.Order"
         xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
-        Title="Order Window" Height="450" Width="800"
+        Title="Order Window" Height="550" Width="400"
         WindowStartupLocation="CenterScreen"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"

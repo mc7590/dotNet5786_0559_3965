@@ -159,9 +159,9 @@ internal static class DeliveryManager
     /// <summary>
     /// get the schedule status of the given DO order
     /// </summary>
-    internal static BO.EnumScheduleStatus GetScheduleStatus(DO.Order doOrder)
+    internal static BO.EnumScheduleStatus GetScheduleStatus(DateTime OrderCreationTime)
     {
-        TimeSpan timePass = doOrder.OrderCreationTime - AdminManager.Now;
+        TimeSpan timePass = AdminManager.Now - OrderCreationTime;
         if (timePass > AdminManager.GetConfig().GetMaxDeliveryTime)
             return BO.EnumScheduleStatus.Late;
         if (timePass > AdminManager.GetConfig().RiskRange)

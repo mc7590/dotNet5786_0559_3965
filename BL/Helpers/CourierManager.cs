@@ -254,7 +254,7 @@ internal static class CourierManager
                 ExpectedDeliveryTime = activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime),
                 MaxDeliveryTime = activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime).Add(AdminManager.GetConfig().RiskRange),
                 OrderStatus = BO.EnumOrderStatus.InProgress,
-                ScheduleStatus = DeliveryManager.GetScheduleStatus(order),
+                ScheduleStatus = DeliveryManager.GetScheduleStatus(order.OrderCreationTime),
                 RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, activeDelivery.DeliveryStartTime.Add(AdminManager.GetConfig().GetMaxDeliveryTime))
             };
         }
@@ -350,15 +350,13 @@ internal static class CourierManager
         foreach (var courier in activeCouriers)
         {
             // does courier has active order
-            BO.OrderInProgress? activeOrder;
-            lock (AdminManager.BlMutex)
-                activeOrder = CourierManager.GetActiveDeliveryOrderForCourier(courier.Id, courier.Id);
+            BO.OrderInProgress? activeOrder = CourierManager.GetActiveDeliveryOrderForCourier(courier.Id, courier.Id);
 
             //A case: courier has no order in progress
             if (activeOrder == null)
             {
-                // 15% chance for un-busy courier to choose order
-                if (s_rand.NextDouble() < 0.15)
+                // 35% chance for un-busy courier to choose order
+                if (s_rand.NextDouble() < 0.35)
                 {
                     var openOrders = await OrderManager.GetListOfOpenOrderToChoose(courier.Id, courier.Id);
 
@@ -390,7 +388,6 @@ internal static class CourierManager
                     };
 
                     //close delivery
-                    lock (AdminManager.BlMutex)
                         DeliveryManager.EndOrderStatus(courier.Id, courier.Id, activeOrder.DeliveryId, finalStatus);
                 }
                 else //if not enough time passed
@@ -398,7 +395,6 @@ internal static class CourierManager
                     //10% manager cancel the order
                     if (s_rand.NextDouble() < 0.10)
                     {
-                        lock (AdminManager.BlMutex)
                             OrderManager.CancelOrder(AdminManager.GetConfig().ManagerId, activeOrder.OrderId);
                     }
                 }
