@@ -35,7 +35,6 @@ public partial class DeliveryHistory : Window
         CourierId = currentCourierId;
 
         InitializeComponent();
-        DataContext = this;
     }
 
     /// <summary>
@@ -52,7 +51,6 @@ public partial class DeliveryHistory : Window
     /// <summary>
     /// Property for the list filter
     /// </summary>
-    //public BO.EnumOrderType? OrderTypeFilter { get; set; } = BO.EnumOrderType.None;
     public BO.EnumOrderType? OrderTypeFilter
     {
         get => (BO.EnumOrderType?)GetValue(OrderTypeFilterProperty);

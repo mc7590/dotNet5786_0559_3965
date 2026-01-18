@@ -50,10 +50,10 @@ internal class OrderImplementation : IOrder
         DeliveryManager.EndOrderStatus(id, courierId, deliveryId, newStatus);
     }
 
-    public async Task CreateDeliveryForOrder(int id, int courierId, int orderId)
+    public async Task CreateDeliveryForOrder(int id, int courierId, int orderId, double? distanceInKm) //used in courierManager as 'AssignOrderToCourier'
     {
         AdminManager.ThrowOnSimulatorIsRunning();  //stage 7
-        await OrderManager.CreateDeliveryForOrder(id, courierId, orderId);
+        await OrderManager.CreateDeliveryForOrder(id, courierId, orderId, distanceInKm);
     }
 
     public IEnumerable<BO.ClosedDeliveryInList> GetClosedDeliveriesInListsToCourier(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumClosedDeliveryInListField? sortBy = null)

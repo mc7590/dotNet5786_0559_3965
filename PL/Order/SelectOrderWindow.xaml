@@ -5,14 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:PL.Order"
         mc:Ignorable="d"
-        Title="SelectOrderWindow" Height="450" Width="800"
+        Title="SelectOrderWindow" Height="600" Width="800"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
         Loaded="Window_Loaded"
         Closed="Window_Closed">
     <Grid Margin="10">
         <DataGrid AutoGenerateColumns="False"
                     ItemsSource="{Binding OpenOrderInList}"
+                  SelectedItem="{Binding SelectedOrder, Mode=TwoWay}"
                   IsReadOnly="True">
+            
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Order ID" Binding="{Binding OrderId}" />
                 <DataGridTextColumn Header="Courier ID" Binding="{Binding CourierId}" />
@@ -26,7 +28,8 @@
                     <DataGridTemplateColumn.CellTemplate>
                         <DataTemplate>
                             <Button Content="Select" Width="75" 
-                                    Click="BtnSelectOrderRow_Click"/>
+                                    Click="BtnSelectOrderRow_Click"
+                                    DataContext="{Binding SelectedOrder}"/>
                         </DataTemplate>
                     </DataGridTemplateColumn.CellTemplate>
                 </DataGridTemplateColumn>

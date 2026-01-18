@@ -92,6 +92,7 @@ public partial class MainWindow : Window
         try
         {
             s_bl.Admin.SetConfig(Configuration);
+            MessageBox.Show("Configuration saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
         }
         catch (Exception ex)
         {

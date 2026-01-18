@@ -53,48 +53,6 @@
             <!-- Database Buttons -->
         </Grid.RowDefinitions>
 
-               <!--1) System Clock Area-->
-        <!--<Grid Grid.Row="0" Margin="0,0,0,20">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition Height="Auto"/>
-            </Grid.RowDefinitions>
-
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            --><!-- System clock display --><!--
-            <Border Grid.Column="1"
-                    Background="#ED1C24"
-                    Padding="10"
-                    CornerRadius="18"
-                    HorizontalAlignment="Center">
-                <Label Content="{Binding CurrentTime}"
-                    FontSize="25"
-                       FontWeight="Bold"
-                       Foreground="White"
-                       Background="#ED1C24"/>
-            </Border>
-
-            --><!-- Time adjustment buttons --><!--
-            <StackPanel Grid.Row="1"
-            Grid.Column="1"
-            Margin="0,10,0,0"
-            Height="36" 
-            Orientation="Horizontal"
-            HorizontalAlignment="Center">
-
-                <Button Content="+1 Minute" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneMinute_Click"/>
-                <Button Content="+1 Hour" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneHour_Click"/>
-                <Button Content="+1 Day" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneDay_Click"/>
-                <Button Content="+1 Month" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneMonth_Click"/>
-                <Button Content="+1 Year" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneYear_Click"/>
-            </StackPanel>
-        </Grid>-->
-
         <Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -107,18 +65,6 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!--<Border Grid.Column="1"
-            Background="#ED1C24"
-            Padding="20,10"
-            CornerRadius="18"
-            HorizontalAlignment="Center">
-
-                <Label Content="{Binding CurrentTime}"
-               FontSize="45"
-               FontWeight="ExtraBold"
-               Foreground="White"
-               Background="#ED1C24"/>
-            </Border>-->
             <Border Grid.Column="1"
         Background="#F2464D"
         Padding="20,10"
@@ -192,6 +138,8 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
 
                     <Grid.ColumnDefinitions>
@@ -220,7 +168,14 @@
                     <Label Grid.Row="6" Grid.Column="0" Content="Inactivity Threshold:" />
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Configuration.InactivityThreshold, UpdateSourceTrigger=PropertyChanged}"/>
 
-                    <Button Grid.Row="7" Grid.Column="1" Margin="5" Content="Update" Click="SaveConfigurationCommand" Width="100" HorizontalAlignment="Left"/>
+                    <Label Grid.Row="7" Grid.Column="0" Content="Manager Id:" />
+                    <TextBox Grid.Row="7" Grid.Column="1" Text="{Binding Configuration.ManagerId, UpdateSourceTrigger=PropertyChanged}"/>
+
+                    <Label Grid.Row="8" Grid.Column="0" Content="Inactivity Threshold:" />
+                    <TextBox Grid.Row="8" Grid.Column="1" Text="{Binding Configuration.ManagerPassword, UpdateSourceTrigger=PropertyChanged}"/>
+
+
+                    <Button Grid.Row="9" Grid.Column="1" Margin="5" Content="Update" Click="SaveConfigurationCommand" Width="100" HorizontalAlignment="Left"/>
                 </Grid>
             </ScrollViewer>
         </Grid>

@@ -31,11 +31,14 @@ public partial class SelectOrderWindow : Window
     public SelectOrderWindow(int userId, int courierId)
     {
         UserId = userId;
-        CourierId = courierId;        
-        InitializeComponent();    
-        
-        _=RefreshOpenOrderList(); //
+        CourierId = courierId;
+        InitializeComponent();
+
+        OpenOrderListObserver();
+
+
     }
+
     /// <summary>
     /// Dependency property for the OpenOrderInList list
     /// </summary>
@@ -50,32 +53,36 @@ public partial class SelectOrderWindow : Window
 
     private readonly ObserverMutex _openOrderListmutex = new(); //stage 7
 
-    private async Task RefreshOpenOrderList()
+    private void RefreshOpenOrderList()
     {
         #region Stage 7 (for multithreading)
         if (_openOrderListmutex.CheckAndSetLoadInProgressOrRestartRequired())
             return;
 
-        // מפעילים Task שירוץ ברקע
-        _ = Task.Run(async () =>
+        //// מפעילים Task שירוץ ברקע
+        //_ = Task.Run(async () =>
+        //{
+        ////heavy work out of dispacher
+        //var result = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+
+        _ = Dispatcher.BeginInvoke(async () =>
         {
-            //heavy work out of dispacher
-            var result = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId);
+            OpenOrderInList = await s_bl.Order.GetListOfOpenOrderToChoose(UserId, CourierId); ; //the actual work
 
-            _ = Dispatcher.BeginInvoke(async () =>
-            {
-                OpenOrderInList = result; //the actual work
-
-                //Check if a restart was requested while we were working
-                if (await _openOrderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
-                    _ = RefreshOpenOrderList();
-            });
+            //Check if a restart was requested while we were working
+            if (await _openOrderListmutex.UnsetLoadInProgressAndCheckRestartRequested())
+                RefreshOpenOrderList();
         });
+        //});
         #endregion Stage 7 (for multithreading)
     }
 
-    private async void OpenOrderListObserver()
-        => await RefreshOpenOrderList();
+
+
+    private void OpenOrderListObserver()
+    {
+        RefreshOpenOrderList();
+    }
     private void Window_Loaded(object sender, RoutedEventArgs e)
         => s_bl.Courier.AddObserver(OpenOrderListObserver);
     private void Window_Closed(object sender, EventArgs e)
@@ -95,26 +102,22 @@ public partial class SelectOrderWindow : Window
             new PropertyMetadata(null)
         );
 
-    //until result come isEnable=false so there will be no excess click
+
+    /// <summary>
+    /// "select" button - select an order to assign to the courier
+    /// until result come isEnable=false so there will be no excess click
+    /// </summary>
     private async void BtnSelectOrderRow_Click(object sender, RoutedEventArgs e)
     {
-
-        try
+        if (SelectedOrder != null)
         {
-            if (SelectedOrder != null)
-            {
 
-                await s_bl.Courier.AssignOrderToCourier(CourierId, SelectedOrder.OrderId);
-                MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
-                this.Close();
-                // Close the CourierWindow to refresh its data
-                Application.Current.Windows.OfType<CourierWindow>().FirstOrDefault()?.Close();
-            }
+            await s_bl.Courier.AssignOrderToCourier(CourierId, SelectedOrder.OrderId, SelectedOrder.DistanceInKm);
+            MessageBox.Show("Order assigned successfully!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            this.Close();
+            // Close the CourierWindow to refresh its data
+            Application.Current.Windows.OfType<CourierWindow>().FirstOrDefault()?.Close();
         }
-        catch (Exception ex) 
-        { 
-            MessageBox.Show($"Error assigning order: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-        }
-        
+
     }
 }

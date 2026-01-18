@@ -2,6 +2,7 @@
 using BO;
 //using BO;
 using DalApi;
+using DO;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -61,7 +62,7 @@ internal static class OrderManager
         ExpectedDeliveryTime = AdminManager.Now + CalculateExpectedDeliveryTime(doOrder.Id),
         MaxDeliveryTime = doOrder.OrderCreationTime + AdminManager.GetConfig().GetMaxDeliveryTime,
         OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
-        ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
+        ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder.OrderCreationTime),
         RemainingTime = GetRemainingTime(doOrder),
         OrderDelivHist = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id)
 
@@ -189,7 +190,7 @@ internal static class OrderManager
     }
 
     /// <summary>
-    /// helpers: converts a list of DO.Orders to a list of BO.OrderInList
+    /// helpers: converts a DO.Order to BO.OrderInList
     /// </summary>
     /// <param name="doOrders"></param>
     /// <returns></returns>
@@ -204,7 +205,7 @@ internal static class OrderManager
             OrderType = (BO.EnumOrderType)doOrder.OrderType,
             AerialDistance = Tools.CalculateAerialDistance(doOrder.Longitude, doOrder.Latitude),
             OrderStatus = DeliveryManager.CalculateOrderStatus(doOrder.Id),
-            ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder),
+            ScheduleStatus = DeliveryManager.GetScheduleStatus(doOrder.OrderCreationTime),
             RemainingTime = OrderManager.GetRemainingTime(doOrder),
             TotalDeliveryTime = DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Count() > 0 ?
                     DeliveryManager.GetListDeliveryPerOrderInList(doOrder.Id).Last().DelCreationTime - doOrder.OrderCreationTime :
@@ -302,11 +303,12 @@ internal static class OrderManager
 
     /// <summary>
     /// Selects an order for delivery by associating it with a specific courier.
+    /// To be used once the courier SELECTs an open order to deliver.
     /// </summary>
     /// <param name="id">The person asking the date - manager / courier</param>
     /// <param name="courierId">The courier id assigned to deliver the order.</param>
     /// <param name="orderId">The order id to be delivered.</param>
-    internal static async Task CreateDeliveryForOrder(int id, int courierId, int orderId)
+    internal static async Task CreateDeliveryForOrder(int id, int courierId, int orderId, double? distanceInKm)
     {
         //check if the person asking is a manager or the courier assigned to the delivery
         Tools.IsManagerOrCourier(id, courierId);
@@ -328,11 +330,10 @@ internal static class OrderManager
         }
 
         BO.Order boOrder = DoOrderToBoOrder(doOrder);
-        double distance = await Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude);
+        //double distance = await Tools.CalculateDistanceInKm(doOrder.Longitude, doOrder.Latitude);
 
         lock (AdminManager.BlMutex) //stage 7
         {
-
             if (boOrder.OrderStatus == BO.EnumOrderStatus.Open)
             {
                 //create a new delivery for this order and courier
@@ -343,7 +344,7 @@ internal static class OrderManager
                     CourierId = courierId,
                     DeliveryMethod = doCourier.DeliveryMethod,
                     DeliveryStartTime = AdminManager.Now,
-                    DistanceInKm = distance,
+                    DistanceInKm = distanceInKm,
                     EndDeliveryStatus = null,
                     EndDeliveryTime = null
                 };
@@ -352,67 +353,103 @@ internal static class OrderManager
             else
                 throw new BO.BlInvalidOperationException($"Order with ID={orderId} cannot be assigned to delivery as its status is {boOrder.OrderStatus}.");
         }
+
         Observers.NotifyListUpdated();  //stage 5
         Observers.NotifyItemUpdated(orderId);
     }
 
+    /// <summary>
+    /// helping method to convert BO.Order to BO.OpenOrderInList
+    /// </summary>
+    internal static async Task<BO.OpenOrderInList> BoOrderToBoOpenOrderInList(BO.Order boOrder, DO.Courier doCourier)
+    {
+        double distance = await Tools.CalculateDistanceInKm(boOrder.Longitude, boOrder.Latitude);
+
+        var maxDeliveryTime = boOrder.CreationTime + AdminManager.GetConfig().GetMaxDeliveryTime;
+
+        return new BO.OpenOrderInList
+        {
+            CourierId = doCourier.Id,
+            OrderId = boOrder.Id,
+            OrderType = boOrder.OrderType,
+            Weight = boOrder.Weight,
+            Fragile = boOrder.Fragile,
+            Address = boOrder.Address,
+            AerialDistance = boOrder.AerialDistance,
+            DistanceInKm = distance,
+            EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(doCourier.DeliveryMethod, distance),
+            ScheduleStatus = DeliveryManager.GetScheduleStatus(boOrder.CreationTime),
+            RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
+            MaxDeliveryTime = maxDeliveryTime,
+        };
+    }
 
     /// <summary>
-    /// gets list of open orders that a courier can chose from, with optional filtering and sorting
+    /// gets list of open orders that a courier can choose from, with optional filtering and sorting
     /// </summary>
     internal static async Task<IEnumerable<BO.OpenOrderInList>> GetListOfOpenOrderToChoose(int id, int courierId, BO.EnumOrderType? typeFilter = null, BO.EnumOpenOrderInListField? sortBy = null)
     {
         Tools.IsManagerOrCourier(id, courierId);
 
         DO.Courier courier;
-        IEnumerable<DO.Order> orders;
+        //IEnumerable<DO.Order> orders;
+        IEnumerable<Task<BO.OpenOrderInList>> openOrders;
 
         lock (AdminManager.BlMutex) //stage 7
         {
             courier = s_dal.Courier.Read(courierId) ?? throw new BO.BlDoesNotExistException($"Courier with ID={courierId} not found");
             if (!courier.Active)
                 throw new BO.BlInvalidInputException($"Courier with ID={courierId} is not active");
-            orders = s_dal.Order.ReadAll(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) <= courier.MaxPersonalDistance);
+            //orders = s_dal.Order.ReadAll();
+            //        .Select(DoOrderToBoOrder)
+            //        .Where(or => Tools.CalculateAerialDistance(or.Longitude, or.Latitude) < courier.MaxPersonalDistance);
+
+            openOrders = s_dal.Order.ReadAll().Select(DoOrderToBoOrder)
+                .Where(or => (or.OrderStatus == BO.EnumOrderStatus.Open) &&
+                (typeFilter == null || or.OrderType == (BO.EnumOrderType)typeFilter)
+                && or.AerialDistance < courier.MaxPersonalDistance)
+                .Select(async or => await BoOrderToBoOpenOrderInList(or, courier));
         }
 
-        var openOrder = from o in orders
-                        let BoOrder = DoOrderToBoOrder(o)
-                        where BoOrder.OrderStatus == BO.EnumOrderStatus.Open
-                        select o;
 
-        if (typeFilter != null)
-        {
-            openOrder = openOrder.Where(or => or.OrderType == (DO.EnumOrderType)typeFilter);
-        }
 
-        var tasksOpenOIL= openOrder.Select(async o =>
-        {
-            double distance = await Tools.CalculateDistanceInKm(o.Longitude, o.Latitude);
+        //var openOrder = from o in orders
+        //                where o.OrderStatus == BO.EnumOrderStatus.Open
+        //                select o;
 
-            var maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime;
+        //if (typeFilter != null)
+        //{
+        //    openOrder = openOrder.Where(or => or.OrderType == (DO.EnumOrderType)typeFilter);
+        //}
 
-            return new BO.OpenOrderInList
-            {
-                CourierId = 0,
-                OrderId = o.Id,
-                OrderType = (BO.EnumOrderType)o.OrderType,
-                Weight = o.Weight,
-                Fragile = o.Fragile,
-                Address = o.Address,
-                AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
-                DistanceInKm = distance,
-                EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
-                ScheduleStatus = DeliveryManager.GetScheduleStatus(o),
-                RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
-                MaxDeliveryTime = maxDeliveryTime,
-            };
-        });
+        //var tasksOpenOIL= openOrder.Select(async o =>
+        //{
+        //    double distance = await Tools.CalculateDistanceInKm(o.Longitude, o.Latitude);
+
+        //    var maxDeliveryTime = AdminManager.Now + AdminManager.GetConfig().GetMaxDeliveryTime;
+
+        //    return new BO.OpenOrderInList
+        //    {
+        //        CourierId = 0,
+        //        OrderId = o.Id,
+        //        OrderType = (BO.EnumOrderType)o.OrderType,
+        //        Weight = o.Weight,
+        //        Fragile = o.Fragile,
+        //        Address = o.Address,
+        //        AerialDistance = Tools.CalculateAerialDistance(o.Longitude, o.Latitude),
+        //        DistanceInKm = distance,
+        //        EstimatedArrivalTime = DeliveryManager.CalculateEstimatedDeliveryTime(courier.DeliveryMethod, distance),
+        //        ScheduleStatus = DeliveryManager.GetScheduleStatus(o.ordercreationtime),
+        //        RemainingTime = Tools.CalculateTimeDifference(AdminManager.Now, maxDeliveryTime),
+        //        MaxDeliveryTime = maxDeliveryTime,
+        //    };
+        //});
 
         // במקום List, נשתמש ב-IEnumerable
         IEnumerable<BO.OpenOrderInList> result = new List<BO.OpenOrderInList>();
 
-        // הלופ שלך נשאר אותו דבר
-        foreach (var openTask in tasksOpenOIL)
+        //make tasks to await
+        foreach (var openTask in openOrders)
         {
             BO.OpenOrderInList openO = await openTask;
             ((List<BO.OpenOrderInList>)result).Add(openO);

@@ -93,7 +93,7 @@ public partial class CourierWindow : Window
             }
             catch (Exception)
             {
-                this.Close();
+                Close();
             }
 
             // Check if a restart was requested while we were working

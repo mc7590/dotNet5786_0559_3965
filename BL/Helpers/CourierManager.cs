@@ -364,7 +364,7 @@ internal static class CourierManager
                     {
                         var selectedOrder = openOrders.ElementAt(s_rand.Next(openOrders.Count()));
 
-                        await OrderManager.CreateDeliveryForOrder(courier.Id, courier.Id, selectedOrder.OrderId);
+                        await OrderManager.CreateDeliveryForOrder(courier.Id, courier.Id, selectedOrder.OrderId, selectedOrder.DistanceInKm);
                     }
                 }
             }

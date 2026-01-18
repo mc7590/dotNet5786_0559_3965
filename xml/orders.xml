@@ -3,664 +3,651 @@
   <Order>
     <Id>1000</Id>
     <OrderType>Overnight</OrderType>
-    <Description>Online order through Burgeranch app</Description>
-    <Address>Haroe 3, Ramat Gan</Address>
-    <Latitude>32.08405363711667</Latitude>
-    <Longitude>34.815957204964114</Longitude>
-    <CustomerName>Noam Hadad</CustomerName>
-    <CustomerPhone>0557778888</CustomerPhone>
-    <OrderCreationTime>2026-01-18T10:05:41</OrderCreationTime>
-    <Weight>4.2</Weight>
+    <Description>Quick lunch order for employee</Description>
+    <Address>Rabbi Akiva 90, Bnei Brak</Address>
+    <Latitude>32.08611587414736</Latitude>
+    <Longitude>34.831141189618805</Longitude>
+    <CustomerName>Hadas Haim</CustomerName>
+    <CustomerPhone>0527891234</CustomerPhone>
+    <OrderCreationTime>2026-01-18T17:47:32</OrderCreationTime>
+    <Weight>0.54</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1001</Id>
     <OrderType>Express</OrderType>
-    <Description>Online order through Burgeranch app</Description>
-    <Address>Rabbi Akiva 90, Bnei Brak</Address>
-    <Latitude>32.08611587414736</Latitude>
-    <Longitude>34.831141189618805</Longitude>
-    <CustomerName>Gili Wert</CustomerName>
-    <CustomerPhone>0505556667</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>5.2</Weight>
+    <Description>Customer asked to add utensils</Description>
+    <Address>Rabbi Akiva 102, Bnei Brak</Address>
+    <Latitude>32.08595061456101</Latitude>
+    <Longitude>34.83275906263643</Longitude>
+    <CustomerName>Orly Tal</CustomerName>
+    <CustomerPhone>0531112233</CustomerPhone>
+    <OrderCreationTime>2025-12-05T20:47:32</OrderCreationTime>
+    <Weight>1.12</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1002</Id>
     <OrderType>Overnight</OrderType>
-    <Description>Gift meal for a friend</Description>
-    <Address>HaRav Desler 19, Bnei Brak</Address>
-    <Latitude>32.082221820496564</Latitude>
-    <Longitude>34.83390117798174</Longitude>
-    <CustomerName>Noa Friedman</CustomerName>
-    <CustomerPhone>0559090807</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>2.34</Weight>
+    <Description>Takeaway order from the counter</Description>
+    <Address>Jabotinsky 45, Ramat Gan</Address>
+    <Latitude>32.08462812649096</Latitude>
+    <Longitude>34.80891584729142</Longitude>
+    <CustomerName>Hadas Haim</CustomerName>
+    <CustomerPhone>0545670987</CustomerPhone>
+    <OrderCreationTime>2025-11-23T20:47:32</OrderCreationTime>
+    <Weight>2.63</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1003</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Customer ordered using loyalty points</Description>
-    <Address>Truman 30, Ramat Gan</Address>
-    <Latitude>32.06820334280617</Latitude>
-    <Longitude>34.82599864729232</Longitude>
-    <CustomerName>Lior Ben Ami</CustomerName>
-    <CustomerPhone>0507654321</CustomerPhone>
-    <OrderCreationTime>2025-12-01T10:07:41</OrderCreationTime>
-    <Weight>2.79</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Extra napkins requested</Description>
+    <Address>Rabbi Akiva 102, Bnei Brak</Address>
+    <Latitude>32.08595061456101</Latitude>
+    <Longitude>34.83275906263643</Longitude>
+    <CustomerName>Maya Green</CustomerName>
+    <CustomerPhone>0545670987</CustomerPhone>
+    <OrderCreationTime>2026-01-03T20:47:32</OrderCreationTime>
+    <Weight>2.97</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1004</Id>
     <OrderType>Express</OrderType>
-    <Description>Meal ordered via phone call</Description>
-    <Address>Etsel 50, Ramat Gan</Address>
-    <Latitude>32.06904704146371</Latitude>
-    <Longitude>34.83745017798244</Longitude>
-    <CustomerName>Rafi Malka</CustomerName>
-    <CustomerPhone>0505556667</CustomerPhone>
-    <OrderCreationTime>2026-01-18T06:07:41</OrderCreationTime>
-    <Weight>4.72</Weight>
+    <Description>Corporate lunch catering</Description>
+    <Address>Daniel 13, Bnei Brak</Address>
+    <Latitude>32.081340040896386</Latitude>
+    <Longitude>34.82687240496421</Longitude>
+    <CustomerName>Rina Katz</CustomerName>
+    <CustomerPhone>0551122334</CustomerPhone>
+    <OrderCreationTime>2025-11-23T20:47:32</OrderCreationTime>
+    <Weight>5.34</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1005</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Customer requested extra ketchup</Description>
-    <Address>Struma 9, Ramat Gan</Address>
-    <Latitude>32.09082351991918</Latitude>
-    <Longitude>34.81605910295885</Longitude>
-    <CustomerName>Eitan Gold</CustomerName>
+    <OrderType>Regular</OrderType>
+    <Description>Online order through Burgeranch app</Description>
+    <Address>Tel Hai 90, Ramat Gan</Address>
+    <Latitude>32.063884680730965</Latitude>
+    <Longitude>34.82634966078368</Longitude>
+    <CustomerName>Noam Hadad</CustomerName>
     <CustomerPhone>0523456789</CustomerPhone>
-    <OrderCreationTime>2025-12-25T10:07:41</OrderCreationTime>
-    <Weight>3.04</Weight>
+    <OrderCreationTime>2025-11-25T20:47:32</OrderCreationTime>
+    <Weight>2.97</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1006</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Customer requested extra ketchup</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Dana Levi</CustomerName>
+    <OrderType>Overnight</OrderType>
+    <Description>VIP customer – monthly order</Description>
+    <Address>Struma 9, Ramat Gan</Address>
+    <Latitude>32.09082351991918</Latitude>
+    <Longitude>34.81605910295885</Longitude>
+    <CustomerName>Orly Tal</CustomerName>
     <CustomerPhone>0531110099</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:55:41</OrderCreationTime>
-    <Weight>0.94</Weight>
+    <OrderCreationTime>2025-12-07T20:47:32</OrderCreationTime>
+    <Weight>1.94</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1007</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Pickup order – ready in 15 minutes</Description>
-    <Address>Arlozorov 28, Ramat Gan</Address>
-    <Latitude>32.08058627022238</Latitude>
-    <Longitude>34.81255700496421</Longitude>
-    <CustomerName>Itay Mor</CustomerName>
-    <CustomerPhone>0553456780</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:51:41</OrderCreationTime>
-    <Weight>0.99</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Late evening order – high priority</Description>
+    <Address>HaYarden 14, Ramat Gan</Address>
+    <Latitude>32.06880762534448</Latitude>
+    <Longitude>34.82837354729227</Longitude>
+    <CustomerName>Lior Ben Ami</CustomerName>
+    <CustomerPhone>0545566778</CustomerPhone>
+    <OrderCreationTime>2025-12-31T20:47:32</OrderCreationTime>
+    <Weight>4.31</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1008</Id>
     <OrderType>Express</OrderType>
-    <Description>No-contact delivery requested</Description>
-    <Address>Etsel 50, Ramat Gan</Address>
-    <Latitude>32.06904704146371</Latitude>
-    <Longitude>34.83745017798244</Longitude>
-    <CustomerName>Avichai Shay</CustomerName>
-    <CustomerPhone>0534455667</CustomerPhone>
-    <OrderCreationTime>2025-12-04T10:07:41</OrderCreationTime>
-    <Weight>1.45</Weight>
-    <Fragile>false</Fragile>
-  </Order>
-  <Order>
-    <Id>1009</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Order confirmed via SMS</Description>
+    <Description>Office team order – 4 meals</Description>
     <Address>Avnei Nezer 7, Bnei Brak</Address>
     <Latitude>32.08369969868215</Latitude>
     <Longitude>34.841965933800296</Longitude>
-    <CustomerName>Sharon Azulai</CustomerName>
-    <CustomerPhone>0531110099</CustomerPhone>
-    <OrderCreationTime>2025-12-05T10:07:41</OrderCreationTime>
-    <Weight>4.72</Weight>
+    <CustomerName>Nadav Peretz</CustomerName>
+    <CustomerPhone>0503216549</CustomerPhone>
+    <OrderCreationTime>2025-11-22T20:47:32</OrderCreationTime>
+    <Weight>3.32</Weight>
+    <Fragile>true</Fragile>
+  </Order>
+  <Order>
+    <Id>1009</Id>
+    <OrderType>Overnight</OrderType>
+    <Description>Delivery for office meeting</Description>
+    <Address>David Hamelech 2, Bnei Brak</Address>
+    <Latitude>32.08356507949177</Latitude>
+    <Longitude>34.82652508961899</Longitude>
+    <CustomerName>Noam Hadad</CustomerName>
+    <CustomerPhone>0548080706</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:07:32</OrderCreationTime>
+    <Weight>4.07</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1010</Id>
     <OrderType>Regular</OrderType>
-    <Description>Takeaway order from the counter</Description>
-    <Address>Hazon Ish 47, Bnei Brak</Address>
-    <Latitude>32.080594241935124</Latitude>
-    <Longitude>34.8347143779818</Longitude>
-    <CustomerName>Orly Tal</CustomerName>
-    <CustomerPhone>0523456789</CustomerPhone>
-    <OrderCreationTime>2025-11-30T10:07:41</OrderCreationTime>
-    <Weight>3.29</Weight>
+    <Description>Special order with side salad</Description>
+    <Address>Bialik 7, Ramat Gan</Address>
+    <Latitude>32.079904161610465</Latitude>
+    <Longitude>34.814772647291655</Longitude>
+    <CustomerName>Avichai Shay</CustomerName>
+    <CustomerPhone>0532223344</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:17:32</OrderCreationTime>
+    <Weight>2.65</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1011</Id>
-    <OrderType>Express</OrderType>
-    <Description>Repeat customer – weekly order</Description>
-    <Address>Haroe 3, Ramat Gan</Address>
-    <Latitude>32.08405363711667</Latitude>
-    <Longitude>34.815957204964114</Longitude>
-    <CustomerName>Noa Friedman</CustomerName>
-    <CustomerPhone>0526677889</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:52:41</OrderCreationTime>
-    <Weight>1.32</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Special order for birthday event</Description>
+    <Address>Zabotinsky 101, Ramat Gan</Address>
+    <Latitude>32.08941279874944</Latitude>
+    <Longitude>34.81519096263632</Longitude>
+    <CustomerName>Itay Mor</CustomerName>
+    <CustomerPhone>0509988776</CustomerPhone>
+    <OrderCreationTime>2026-01-01T20:47:32</OrderCreationTime>
+    <Weight>1.45</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1012</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Online order through Burgeranch app</Description>
-    <Address>Avnei Nezer 7, Bnei Brak</Address>
-    <Latitude>32.08369969868215</Latitude>
-    <Longitude>34.841965933800296</Longitude>
-    <CustomerName>Lior Ben Ami</CustomerName>
-    <CustomerPhone>0554321098</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:10:41</OrderCreationTime>
-    <Weight>3.67</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Pickup order – ready in 15 minutes</Description>
+    <Address>Avishai 3, Ramat Gan</Address>
+    <Latitude>32.07185417121981</Latitude>
+    <Longitude>34.823270562637234</Longitude>
+    <CustomerName>Noam Hadad</CustomerName>
+    <CustomerPhone>0549998887</CustomerPhone>
+    <OrderCreationTime>2026-01-18T17:47:32</OrderCreationTime>
+    <Weight>5</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1013</Id>
-    <OrderType>Express</OrderType>
-    <Description>Express delivery before closing time</Description>
-    <Address>Hazon Ish 47, Bnei Brak</Address>
-    <Latitude>32.080594241935124</Latitude>
-    <Longitude>34.8347143779818</Longitude>
-    <CustomerName>Orly Tal</CustomerName>
-    <CustomerPhone>0503216549</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:33:41</OrderCreationTime>
-    <Weight>1.66</Weight>
-    <Fragile>true</Fragile>
+    <OrderType>Regular</OrderType>
+    <Description>Slippery road at the address</Description>
+    <Address>Yerushalayim 8, Bnei Brak</Address>
+    <Latitude>32.08689017337688</Latitude>
+    <Longitude>34.829995418455134</Longitude>
+    <CustomerName>Noa Friedman</CustomerName>
+    <CustomerPhone>0538904567</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:20:32</OrderCreationTime>
+    <Weight>4.04</Weight>
+    <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1014</Id>
     <OrderType>Express</OrderType>
-    <Description>Express delivery to nearby office</Description>
-    <Address>HaYarden 14, Ramat Gan</Address>
-    <Latitude>32.06880762534448</Latitude>
-    <Longitude>34.82837354729227</Longitude>
-    <CustomerName>Miri Shaked</CustomerName>
-    <CustomerPhone>0527891234</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>4.97</Weight>
+    <Description>Customer asked for extra sauces</Description>
+    <Address>Jabotinsky 45, Ramat Gan</Address>
+    <Latitude>32.08462812649096</Latitude>
+    <Longitude>34.80891584729142</Longitude>
+    <CustomerName>Noa Friedman</CustomerName>
+    <CustomerPhone>0537654321</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:09:32</OrderCreationTime>
+    <Weight>3.57</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1015</Id>
     <OrderType>Express</OrderType>
-    <Description>Order confirmed via SMS</Description>
-    <Address>Avnei Nezer 7, Bnei Brak</Address>
-    <Latitude>32.08369969868215</Latitude>
-    <Longitude>34.841965933800296</Longitude>
-    <CustomerName>Yoni Levi</CustomerName>
-    <CustomerPhone>0548080706</CustomerPhone>
-    <OrderCreationTime>2025-12-31T10:07:41</OrderCreationTime>
-    <Weight>3.46</Weight>
-    <Fragile>false</Fragile>
+    <Description>Repeat Friday lunch order</Description>
+    <Address>HaShomer 12, Bnei Brak</Address>
+    <Latitude>32.081261659989735</Latitude>
+    <Longitude>34.822311847291665</Longitude>
+    <CustomerName>Gil Berger</CustomerName>
+    <CustomerPhone>0521011121</CustomerPhone>
+    <OrderCreationTime>2026-01-18T15:47:32</OrderCreationTime>
+    <Weight>0.9</Weight>
+    <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1016</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Customer requested no onions</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Hadas Haim</CustomerName>
-    <CustomerPhone>0529876543</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:58:41</OrderCreationTime>
-    <Weight>3.19</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Delivery to school event</Description>
+    <Address>HaShomer 12, Bnei Brak</Address>
+    <Latitude>32.081261659989735</Latitude>
+    <Longitude>34.822311847291665</Longitude>
+    <CustomerName>Tzila Haimov</CustomerName>
+    <CustomerPhone>0548080706</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:46:32</OrderCreationTime>
+    <Weight>5.3</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1017</Id>
-    <OrderType>Express</OrderType>
-    <Description>Delivery to coworking space</Description>
-    <Address>David Ben Gurion 65, Bnei Brak</Address>
-    <Latitude>32.08691883312563</Latitude>
-    <Longitude>34.82261950496387</Longitude>
-    <CustomerName>Itay Mor</CustomerName>
-    <CustomerPhone>0531110099</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:46:41</OrderCreationTime>
-    <Weight>4.87</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Delivery with contactless option</Description>
+    <Address>Jabotinsky 45, Ramat Gan</Address>
+    <Latitude>32.08462812649096</Latitude>
+    <Longitude>34.80891584729142</Longitude>
+    <CustomerName>Eitan Gold</CustomerName>
+    <CustomerPhone>0524443332</CustomerPhone>
+    <OrderCreationTime>2026-01-18T18:59:32</OrderCreationTime>
+    <Weight>1.52</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1018</Id>
     <OrderType>Regular</OrderType>
-    <Description>Regular customer – same address</Description>
-    <Address>David Hamelech 2, Bnei Brak</Address>
-    <Latitude>32.08356507949177</Latitude>
-    <Longitude>34.82652508961899</Longitude>
+    <Description>Gift meal for a friend</Description>
+    <Address>Avnei Nezer 7, Bnei Brak</Address>
+    <Latitude>32.08369969868215</Latitude>
+    <Longitude>34.841965933800296</Longitude>
     <CustomerName>Nadav Peretz</CustomerName>
-    <CustomerPhone>0559090807</CustomerPhone>
-    <OrderCreationTime>2025-12-28T10:07:41</OrderCreationTime>
-    <Weight>1.14</Weight>
-    <Fragile>false</Fragile>
+    <CustomerPhone>0545566778</CustomerPhone>
+    <OrderCreationTime>2026-01-18T18:47:32</OrderCreationTime>
+    <Weight>1.58</Weight>
+    <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1019</Id>
-    <OrderType>Express</OrderType>
-    <Description>Customer ordered using loyalty points</Description>
-    <Address>Herzl 12, Ramat Gan</Address>
-    <Latitude>32.08140468378999</Latitude>
-    <Longitude>34.81846994729164</Longitude>
-    <CustomerName>Tzila Haimov</CustomerName>
-    <CustomerPhone>0532223344</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>2.41</Weight>
-    <Fragile>true</Fragile>
+    <OrderType>Overnight</OrderType>
+    <Description>Gift meal for a friend</Description>
+    <Address>Ben Ya'akov 31, Bnei Brak</Address>
+    <Latitude>32.07717658312238</Latitude>
+    <Longitude>34.84103852030936</Longitude>
+    <CustomerName>Hadas Haim</CustomerName>
+    <CustomerPhone>0524443332</CustomerPhone>
+    <OrderCreationTime>2025-12-08T20:47:32</OrderCreationTime>
+    <Weight>5.46</Weight>
+    <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1020</Id>
     <OrderType>Regular</OrderType>
-    <Description>Order confirmed via SMS</Description>
-    <Address>Bialik 7, Ramat Gan</Address>
-    <Latitude>32.079904161610465</Latitude>
-    <Longitude>34.814772647291655</Longitude>
-    <CustomerName>Meni Chazan</CustomerName>
-    <CustomerPhone>0509988776</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:15:41</OrderCreationTime>
-    <Weight>2.33</Weight>
+    <Description>Pickup by courier service</Description>
+    <Address>Mivtza Kadesh 64, Bnei Brak</Address>
+    <Latitude>32.10103608222269</Latitude>
+    <Longitude>34.83050512030826</Longitude>
+    <CustomerName>Yael Nissim</CustomerName>
+    <CustomerPhone>0531110099</CustomerPhone>
+    <OrderCreationTime>2026-01-10T20:47:32</OrderCreationTime>
+    <Weight>1.46</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1021</Id>
     <OrderType>Express</OrderType>
-    <Description>Delivery to coworking space</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Rina Katz</CustomerName>
+    <Description>Customer asked to add utensils</Description>
+    <Address>Mivtza Kadesh 64, Bnei Brak</Address>
+    <Latitude>32.10103608222269</Latitude>
+    <Longitude>34.83050512030826</Longitude>
+    <CustomerName>Meni Chazan</CustomerName>
     <CustomerPhone>0521011121</CustomerPhone>
-    <OrderCreationTime>2026-01-18T07:07:41</OrderCreationTime>
-    <Weight>3.01</Weight>
+    <OrderCreationTime>2026-01-18T16:47:32</OrderCreationTime>
+    <Weight>2.13</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1022</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Meal ordered via phone call</Description>
-    <Address>HaYarden 14, Ramat Gan</Address>
-    <Latitude>32.06880762534448</Latitude>
-    <Longitude>34.82837354729227</Longitude>
-    <CustomerName>Noa Friedman</CustomerName>
-    <CustomerPhone>0548080706</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:49:41</OrderCreationTime>
-    <Weight>1.91</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Pickup order – ready in 15 minutes</Description>
+    <Address>Yerushalayim 8, Bnei Brak</Address>
+    <Latitude>32.08689017337688</Latitude>
+    <Longitude>34.829995418455134</Longitude>
+    <CustomerName>Sharon Azulai</CustomerName>
+    <CustomerPhone>0559090807</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:03:32</OrderCreationTime>
+    <Weight>1.11</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1023</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Delivery to coworking space</Description>
-    <Address>Rashi 5, Bnei Brak</Address>
-    <Latitude>32.085374145178065</Latitude>
-    <Longitude>34.835374647291395</Longitude>
-    <CustomerName>Avichai Shay</CustomerName>
-    <CustomerPhone>0549998887</CustomerPhone>
-    <OrderCreationTime>2026-01-18T05:07:41</OrderCreationTime>
-    <Weight>1.7</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Burgeranch club member order</Description>
+    <Address>Tel Hai 90, Ramat Gan</Address>
+    <Latitude>32.063884680730965</Latitude>
+    <Longitude>34.82634966078368</Longitude>
+    <CustomerName>Tzila Haimov</CustomerName>
+    <CustomerPhone>0509988776</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:08:32</OrderCreationTime>
+    <Weight>1.32</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1024</Id>
     <OrderType>Regular</OrderType>
-    <Description>Delivery for office meeting</Description>
-    <Address>Herzl 12, Ramat Gan</Address>
-    <Latitude>32.08140468378999</Latitude>
-    <Longitude>34.81846994729164</Longitude>
-    <CustomerName>Galit Cohen</CustomerName>
-    <CustomerPhone>0501234567</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:58:41</OrderCreationTime>
-    <Weight>5.4</Weight>
+    <Description>Customer added a special note</Description>
+    <Address>Avnei Nezer 7, Bnei Brak</Address>
+    <Latitude>32.08369969868215</Latitude>
+    <Longitude>34.841965933800296</Longitude>
+    <CustomerName>Lior Ben Ami</CustomerName>
+    <CustomerPhone>0531112233</CustomerPhone>
+    <OrderCreationTime>2025-12-19T20:47:32</OrderCreationTime>
+    <Weight>2.5</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1025</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Slippery road at the address</Description>
-    <Address>Avishai 3, Ramat Gan</Address>
-    <Latitude>32.07185417121981</Latitude>
-    <Longitude>34.823270562637234</Longitude>
-    <CustomerName>Itay Mor</CustomerName>
-    <CustomerPhone>0524443332</CustomerPhone>
-    <OrderCreationTime>2025-11-20T10:07:41</OrderCreationTime>
-    <Weight>3.94</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Lunch break order for two</Description>
+    <Address>Shma'aya 4, Bnei Brak</Address>
+    <Latitude>32.088972920006405</Latitude>
+    <Longitude>34.832547504963806</Longitude>
+    <CustomerName>Gil Berger</CustomerName>
+    <CustomerPhone>0549998887</CustomerPhone>
+    <OrderCreationTime>2026-01-11T20:47:32</OrderCreationTime>
+    <Weight>4.82</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1026</Id>
     <OrderType>Regular</OrderType>
-    <Description>Evening order for three friends</Description>
-    <Address>Shma'aya 4, Bnei Brak</Address>
-    <Latitude>32.088972920006405</Latitude>
-    <Longitude>34.832547504963806</Longitude>
-    <CustomerName>Eitan Gold</CustomerName>
-    <CustomerPhone>0553456780</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:12:41</OrderCreationTime>
-    <Weight>4</Weight>
+    <Description>Customer requested extra ketchup</Description>
+    <Address>Struma 9, Ramat Gan</Address>
+    <Latitude>32.09082351991918</Latitude>
+    <Longitude>34.81605910295885</Longitude>
+    <CustomerName>Noa Friedman</CustomerName>
+    <CustomerPhone>0529876543</CustomerPhone>
+    <OrderCreationTime>2025-12-03T20:47:32</OrderCreationTime>
+    <Weight>1.4</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1027</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Customer added a special note</Description>
-    <Address>Shma'aya 4, Bnei Brak</Address>
-    <Latitude>32.088972920006405</Latitude>
-    <Longitude>34.832547504963806</Longitude>
-    <CustomerName>Rina Katz</CustomerName>
-    <CustomerPhone>0537654321</CustomerPhone>
-    <OrderCreationTime>2025-12-11T10:07:41</OrderCreationTime>
-    <Weight>2.14</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Delivery to 3rd floor apartment</Description>
+    <Address>Truman 30, Ramat Gan</Address>
+    <Latitude>32.06820334280617</Latitude>
+    <Longitude>34.82599864729232</Longitude>
+    <CustomerName>Noam Hadad</CustomerName>
+    <CustomerPhone>0526677889</CustomerPhone>
+    <OrderCreationTime>2025-11-30T20:47:32</OrderCreationTime>
+    <Weight>3.77</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1028</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Prepaid order via credit card</Description>
-    <Address>Arlozorov 28, Ramat Gan</Address>
-    <Latitude>32.08058627022238</Latitude>
-    <Longitude>34.81255700496421</Longitude>
-    <CustomerName>Maya Green</CustomerName>
-    <CustomerPhone>0532223344</CustomerPhone>
-    <OrderCreationTime>2025-12-08T10:07:41</OrderCreationTime>
-    <Weight>1.64</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Special order for birthday event</Description>
+    <Address>Daniel 13, Bnei Brak</Address>
+    <Latitude>32.081340040896386</Latitude>
+    <Longitude>34.82687240496421</Longitude>
+    <CustomerName>Nadav Peretz</CustomerName>
+    <CustomerPhone>0542233445</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:43:32</OrderCreationTime>
+    <Weight>1.15</Weight>
     <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1029</Id>
-    <OrderType>Express</OrderType>
-    <Description>Burgeranch club member order</Description>
-    <Address>Mivtza Kadesh 64, Bnei Brak</Address>
-    <Latitude>32.10103608222269</Latitude>
-    <Longitude>34.83050512030826</Longitude>
-    <CustomerName>Noa Friedman</CustomerName>
-    <CustomerPhone>0531110099</CustomerPhone>
-    <OrderCreationTime>2026-01-18T10:06:41</OrderCreationTime>
-    <Weight>2.68</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Corporate lunch catering</Description>
+    <Address>Hazon Ish 47, Bnei Brak</Address>
+    <Latitude>32.080594241935124</Latitude>
+    <Longitude>34.8347143779818</Longitude>
+    <CustomerName>Sharon Azulai</CustomerName>
+    <CustomerPhone>0505556667</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:45:32</OrderCreationTime>
+    <Weight>2.8</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1030</Id>
     <OrderType>Overnight</OrderType>
-    <Description>New customer – first time order</Description>
-    <Address>HaRav Desler 19, Bnei Brak</Address>
-    <Latitude>32.082221820496564</Latitude>
-    <Longitude>34.83390117798174</Longitude>
-    <CustomerName>Avichai Shay</CustomerName>
-    <CustomerPhone>0545566778</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>2.35</Weight>
+    <Description>Quick lunch order for employee</Description>
+    <Address>Chazon Ish 23, Bnei Brak</Address>
+    <Latitude>32.08289859666585</Latitude>
+    <Longitude>34.83566446263663</Longitude>
+    <CustomerName>Lior Ben Ami</CustomerName>
+    <CustomerPhone>0551122334</CustomerPhone>
+    <OrderCreationTime>2026-01-18T18:47:32</OrderCreationTime>
+    <Weight>4.99</Weight>
     <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1031</Id>
     <OrderType>Express</OrderType>
-    <Description>Small lunch order – single meal</Description>
-    <Address>Mivtza Kadesh 64, Bnei Brak</Address>
-    <Latitude>32.10103608222269</Latitude>
-    <Longitude>34.83050512030826</Longitude>
-    <CustomerName>Nadav Peretz</CustomerName>
-    <CustomerPhone>0545566778</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:30:41</OrderCreationTime>
-    <Weight>3.09</Weight>
-    <Fragile>true</Fragile>
+    <Description>Customer requested extra ketchup</Description>
+    <Address>HaRav Desler 19, Bnei Brak</Address>
+    <Latitude>32.082221820496564</Latitude>
+    <Longitude>34.83390117798174</Longitude>
+    <CustomerName>Yoni Levi</CustomerName>
+    <CustomerPhone>0544445555</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:27:32</OrderCreationTime>
+    <Weight>5.37</Weight>
+    <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1032</Id>
-    <OrderType>Express</OrderType>
-    <Description>Delivery for office meeting</Description>
-    <Address>Yerushalayim 8, Bnei Brak</Address>
-    <Latitude>32.08689017337688</Latitude>
-    <Longitude>34.829995418455134</Longitude>
-    <CustomerName>Nadav Peretz</CustomerName>
-    <CustomerPhone>0534455667</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:52:41</OrderCreationTime>
-    <Weight>3.91</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Delivery to coworking space</Description>
+    <Address>HaRav Desler 19, Bnei Brak</Address>
+    <Latitude>32.082221820496564</Latitude>
+    <Longitude>34.83390117798174</Longitude>
+    <CustomerName>Eitan Gold</CustomerName>
+    <CustomerPhone>0559090807</CustomerPhone>
+    <OrderCreationTime>2026-01-18T17:47:32</OrderCreationTime>
+    <Weight>2.04</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1033</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Requested gluten-free bun</Description>
-    <Address>Haroe 3, Ramat Gan</Address>
-    <Latitude>32.08405363711667</Latitude>
-    <Longitude>34.815957204964114</Longitude>
-    <CustomerName>Gadi Azulay</CustomerName>
-    <CustomerPhone>0544445555</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:29:41</OrderCreationTime>
-    <Weight>3</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Customer asked for extra sauces</Description>
+    <Address>Avnei Nezer 7, Bnei Brak</Address>
+    <Latitude>32.08369969868215</Latitude>
+    <Longitude>34.841965933800296</Longitude>
+    <CustomerName>Rafi Malka</CustomerName>
+    <CustomerPhone>0548080706</CustomerPhone>
+    <OrderCreationTime>2026-01-18T16:47:32</OrderCreationTime>
+    <Weight>0.94</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1034</Id>
-    <OrderType>Express</OrderType>
-    <Description>Pickup order for two burgers and fries</Description>
+    <OrderType>Regular</OrderType>
+    <Description>VIP customer – monthly order</Description>
     <Address>Shma'aya 4, Bnei Brak</Address>
     <Latitude>32.088972920006405</Latitude>
     <Longitude>34.832547504963806</Longitude>
-    <CustomerName>Gili Wert</CustomerName>
-    <CustomerPhone>0537654321</CustomerPhone>
-    <OrderCreationTime>2026-01-18T05:07:41</OrderCreationTime>
-    <Weight>2.82</Weight>
-    <Fragile>false</Fragile>
+    <CustomerName>Avichai Shay</CustomerName>
+    <CustomerPhone>0524443332</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:29:32</OrderCreationTime>
+    <Weight>0.55</Weight>
+    <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1035</Id>
-    <OrderType>Express</OrderType>
-    <Description>Family meal ordered for dinner</Description>
-    <Address>Hashomer 13, Bnei Brak</Address>
-    <Latitude>32.08150664066434</Latitude>
-    <Longitude>34.82259351845536</Longitude>
-    <CustomerName>Yoni Levi</CustomerName>
+    <OrderType>Overnight</OrderType>
+    <Description>Small lunch order – single meal</Description>
+    <Address>Avnei Nezer 7, Bnei Brak</Address>
+    <Latitude>32.08369969868215</Latitude>
+    <Longitude>34.841965933800296</Longitude>
+    <CustomerName>Batya David</CustomerName>
     <CustomerPhone>0523456789</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:39:41</OrderCreationTime>
-    <Weight>4.52</Weight>
+    <OrderCreationTime>2026-01-18T19:38:32</OrderCreationTime>
+    <Weight>1.24</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1036</Id>
-    <OrderType>Express</OrderType>
-    <Description>Phone order confirmed by manager</Description>
-    <Address>Truman 30, Ramat Gan</Address>
-    <Latitude>32.06820334280617</Latitude>
-    <Longitude>34.82599864729232</Longitude>
-    <CustomerName>Meni Chazan</CustomerName>
-    <CustomerPhone>0553456780</CustomerPhone>
-    <OrderCreationTime>2025-12-04T10:07:41</OrderCreationTime>
-    <Weight>4.58</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Customer asked for extra sauces</Description>
+    <Address>Zabotinsky 101, Ramat Gan</Address>
+    <Latitude>32.08941279874944</Latitude>
+    <Longitude>34.81519096263632</Longitude>
+    <CustomerName>Avichai Shay</CustomerName>
+    <CustomerPhone>0532223344</CustomerPhone>
+    <OrderCreationTime>2026-01-18T18:55:32</OrderCreationTime>
+    <Weight>2.89</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1037</Id>
     <OrderType>Regular</OrderType>
-    <Description>Repeat Friday lunch order</Description>
-    <Address>Tel Hai 90, Ramat Gan</Address>
-    <Latitude>32.063884680730965</Latitude>
-    <Longitude>34.82634966078368</Longitude>
-    <CustomerName>Sharon Azulai</CustomerName>
-    <CustomerPhone>0532223344</CustomerPhone>
-    <OrderCreationTime>2025-11-23T10:07:41</OrderCreationTime>
-    <Weight>1.78</Weight>
+    <Description>Takeaway order from the counter</Description>
+    <Address>Yerushalayim 8, Bnei Brak</Address>
+    <Latitude>32.08689017337688</Latitude>
+    <Longitude>34.829995418455134</Longitude>
+    <CustomerName>Maya Green</CustomerName>
+    <CustomerPhone>0529876543</CustomerPhone>
+    <OrderCreationTime>2025-12-26T20:47:32</OrderCreationTime>
+    <Weight>2.11</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1038</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Repeat Friday lunch order</Description>
-    <Address>Jabotinsky 45, Ramat Gan</Address>
-    <Latitude>32.08462812649096</Latitude>
-    <Longitude>34.80891584729142</Longitude>
-    <CustomerName>Avichai Shay</CustomerName>
-    <CustomerPhone>0531110099</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>2.88</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Delivery to office during lunch hours</Description>
+    <Address>Rabbi Akiva 90, Bnei Brak</Address>
+    <Latitude>32.08611587414736</Latitude>
+    <Longitude>34.831141189618805</Longitude>
+    <CustomerName>Tzila Haimov</CustomerName>
+    <CustomerPhone>0537654321</CustomerPhone>
+    <OrderCreationTime>2025-12-25T20:47:32</OrderCreationTime>
+    <Weight>3.58</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1039</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>New customer – first time order</Description>
-    <Address>Arlozorov 28, Ramat Gan</Address>
-    <Latitude>32.08058627022238</Latitude>
-    <Longitude>34.81255700496421</Longitude>
-    <CustomerName>Batya David</CustomerName>
-    <CustomerPhone>0521011121</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:49:41</OrderCreationTime>
-    <Weight>1.64</Weight>
+    <OrderType>Regular</OrderType>
+    <Description>Quick lunch order for employee</Description>
+    <Address>Ben Ya'akov 31, Bnei Brak</Address>
+    <Latitude>32.07717658312238</Latitude>
+    <Longitude>34.84103852030936</Longitude>
+    <CustomerName>Noam Hadad</CustomerName>
+    <CustomerPhone>0542233445</CustomerPhone>
+    <OrderCreationTime>2026-01-18T18:54:32</OrderCreationTime>
+    <Weight>3.35</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1040</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Delivery to school event</Description>
-    <Address>Avishai 3, Ramat Gan</Address>
-    <Latitude>32.07185417121981</Latitude>
-    <Longitude>34.823270562637234</Longitude>
-    <CustomerName>Gil Berger</CustomerName>
-    <CustomerPhone>0534455667</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:48:41</OrderCreationTime>
-    <Weight>1.96</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Evening order for three friends</Description>
+    <Address>Shma'aya 4, Bnei Brak</Address>
+    <Latitude>32.088972920006405</Latitude>
+    <Longitude>34.832547504963806</Longitude>
+    <CustomerName>Orly Tal</CustomerName>
+    <CustomerPhone>0523456789</CustomerPhone>
+    <OrderCreationTime>2026-01-18T19:10:32</OrderCreationTime>
+    <Weight>0.68</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1041</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Customer requested a call before delivery</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Yael Nissim</CustomerName>
-    <CustomerPhone>0531112233</CustomerPhone>
-    <OrderCreationTime>2025-12-19T10:07:41</OrderCreationTime>
-    <Weight>0.9</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Takeaway order from the counter</Description>
+    <Address>Ben Ya'akov 31, Bnei Brak</Address>
+    <Latitude>32.07717658312238</Latitude>
+    <Longitude>34.84103852030936</Longitude>
+    <CustomerName>Avichai Shay</CustomerName>
+    <CustomerPhone>0507654321</CustomerPhone>
+    <OrderCreationTime>2025-12-07T20:47:32</OrderCreationTime>
+    <Weight>4.33</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1042</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Late-night delivery request</Description>
-    <Address>Mivtza Kadesh 64, Bnei Brak</Address>
-    <Latitude>32.10103608222269</Latitude>
-    <Longitude>34.83050512030826</Longitude>
-    <CustomerName>Noam Hadad</CustomerName>
-    <CustomerPhone>0526677889</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>2.65</Weight>
+    <OrderType>Express</OrderType>
+    <Description>App order with discount coupon</Description>
+    <Address>Arlozorov 28, Ramat Gan</Address>
+    <Latitude>32.08058627022238</Latitude>
+    <Longitude>34.81255700496421</Longitude>
+    <CustomerName>Nadav Peretz</CustomerName>
+    <CustomerPhone>0542233445</CustomerPhone>
+    <OrderCreationTime>2025-11-28T20:47:32</OrderCreationTime>
+    <Weight>1.57</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1043</Id>
-    <OrderType>Express</OrderType>
-    <Description>Delivery with contactless option</Description>
-    <Address>Hashomer 13, Bnei Brak</Address>
-    <Latitude>32.08150664066434</Latitude>
-    <Longitude>34.82259351845536</Longitude>
-    <CustomerName>Gadi Azulay</CustomerName>
-    <CustomerPhone>0505556667</CustomerPhone>
-    <OrderCreationTime>2026-01-18T06:07:41</OrderCreationTime>
-    <Weight>1.23</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Customer requested a call before delivery</Description>
+    <Address>Rabbi Akiva 90, Bnei Brak</Address>
+    <Latitude>32.08611587414736</Latitude>
+    <Longitude>34.831141189618805</Longitude>
+    <CustomerName>Miri Shaked</CustomerName>
+    <CustomerPhone>0554321098</CustomerPhone>
+    <OrderCreationTime>2026-01-01T20:47:32</OrderCreationTime>
+    <Weight>4.21</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1044</Id>
-    <OrderType>Express</OrderType>
-    <Description>No-contact delivery requested</Description>
-    <Address>Herzl 12, Ramat Gan</Address>
-    <Latitude>32.08140468378999</Latitude>
-    <Longitude>34.81846994729164</Longitude>
-    <CustomerName>Orly Tal</CustomerName>
-    <CustomerPhone>0509988776</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:39:41</OrderCreationTime>
-    <Weight>3.74</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Should be quick</Description>
+    <Address>Tel Hai 90, Ramat Gan</Address>
+    <Latitude>32.063884680730965</Latitude>
+    <Longitude>34.82634966078368</Longitude>
+    <CustomerName>Maya Green</CustomerName>
+    <CustomerPhone>0553456780</CustomerPhone>
+    <OrderCreationTime>2025-12-06T20:47:32</OrderCreationTime>
+    <Weight>5.48</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1045</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>VIP customer – monthly order</Description>
-    <Address>Rabbi Akiva 102, Bnei Brak</Address>
-    <Latitude>32.08595061456101</Latitude>
-    <Longitude>34.83275906263643</Longitude>
-    <CustomerName>Gadi Azulay</CustomerName>
-    <CustomerPhone>0529876543</CustomerPhone>
-    <OrderCreationTime>2026-01-06T10:07:41</OrderCreationTime>
-    <Weight>3.17</Weight>
+    <OrderType>Express</OrderType>
+    <Description>Pickup by courier service</Description>
+    <Address>Hashomer 13, Bnei Brak</Address>
+    <Latitude>32.08150664066434</Latitude>
+    <Longitude>34.82259351845536</Longitude>
+    <CustomerName>Yael Nissim</CustomerName>
+    <CustomerPhone>0531112233</CustomerPhone>
+    <OrderCreationTime>2025-12-19T20:47:32</OrderCreationTime>
+    <Weight>0.77</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1046</Id>
-    <OrderType>Regular</OrderType>
-    <Description>Customer used birthday coupon</Description>
-    <Address>Hashomer 13, Bnei Brak</Address>
-    <Latitude>32.08150664066434</Latitude>
-    <Longitude>34.82259351845536</Longitude>
-    <CustomerName>Batya David</CustomerName>
-    <CustomerPhone>0526677889</CustomerPhone>
-    <OrderCreationTime>2025-11-27T10:07:41</OrderCreationTime>
-    <Weight>0.68</Weight>
+    <OrderType>Overnight</OrderType>
+    <Description>Customer asked to add utensils</Description>
+    <Address>Ben Ya'akov 31, Bnei Brak</Address>
+    <Latitude>32.07717658312238</Latitude>
+    <Longitude>34.84103852030936</Longitude>
+    <CustomerName>Avichai Shay</CustomerName>
+    <CustomerPhone>0559090807</CustomerPhone>
+    <OrderCreationTime>2025-11-27T20:47:32</OrderCreationTime>
+    <Weight>2.1</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1047</Id>
     <OrderType>Overnight</OrderType>
-    <Description>Express delivery to nearby office</Description>
-    <Address>David Ben Gurion 65, Bnei Brak</Address>
-    <Latitude>32.08691883312563</Latitude>
-    <Longitude>34.82261950496387</Longitude>
-    <CustomerName>Sharon Azulai</CustomerName>
-    <CustomerPhone>0548080706</CustomerPhone>
-    <OrderCreationTime>2026-01-18T08:07:41</OrderCreationTime>
-    <Weight>3.37</Weight>
+    <Description>Customer requested extra ketchup</Description>
+    <Address>Jabotinsky 45, Ramat Gan</Address>
+    <Latitude>32.08462812649096</Latitude>
+    <Longitude>34.80891584729142</Longitude>
+    <CustomerName>Gil Berger</CustomerName>
+    <CustomerPhone>0531112233</CustomerPhone>
+    <OrderCreationTime>2026-01-18T20:15:32</OrderCreationTime>
+    <Weight>1.68</Weight>
     <Fragile>false</Fragile>
   </Order>
   <Order>
     <Id>1048</Id>
     <OrderType>Regular</OrderType>
-    <Description>Regular customer – same address</Description>
-    <Address>HaShomer 12, Bnei Brak</Address>
-    <Latitude>32.081261659989735</Latitude>
-    <Longitude>34.822311847291665</Longitude>
-    <CustomerName>Meni Chazan</CustomerName>
-    <CustomerPhone>0507654321</CustomerPhone>
-    <OrderCreationTime>2026-01-18T07:07:41</OrderCreationTime>
-    <Weight>2.96</Weight>
-    <Fragile>false</Fragile>
+    <Description>Late-night delivery request</Description>
+    <Address>Bialik 7, Ramat Gan</Address>
+    <Latitude>32.079904161610465</Latitude>
+    <Longitude>34.814772647291655</Longitude>
+    <CustomerName>Eli Cohen</CustomerName>
+    <CustomerPhone>0557778888</CustomerPhone>
+    <OrderCreationTime>2025-12-22T20:47:32</OrderCreationTime>
+    <Weight>3.47</Weight>
+    <Fragile>true</Fragile>
   </Order>
   <Order>
     <Id>1049</Id>
-    <OrderType>Overnight</OrderType>
-    <Description>Customer asked to add utensils</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Rafi Malka</CustomerName>
-    <CustomerPhone>0524443332</CustomerPhone>
-    <OrderCreationTime>2026-01-18T09:33:41</OrderCreationTime>
-    <Weight>3.05</Weight>
-    <Fragile>false</Fragile>
-  </Order>
-  <Order>
-    <Id>1019</Id>
     <OrderType>Regular</OrderType>
-    <Description>Pickup by courier service</Description>
-    <Address>Daniel 13, Bnei Brak</Address>
-    <Latitude>32.081340040896386</Latitude>
-    <Longitude>34.82687240496421</Longitude>
-    <CustomerName>Batya David</CustomerName>
-    <CustomerPhone>0526677889</CustomerPhone>
-    <OrderCreationTime>2026-01-15T15:56:32</OrderCreationTime>
-    <Weight>4.9</Weight>
+    <Description>Corporate lunch catering</Description>
+    <Address>Haroe 3, Ramat Gan</Address>
+    <Latitude>32.08405363711667</Latitude>
+    <Longitude>34.815957204964114</Longitude>
+    <CustomerName>Orly Tal</CustomerName>
+    <CustomerPhone>0553456780</CustomerPhone>
+    <OrderCreationTime>2026-01-06T20:47:32</OrderCreationTime>
+    <Weight>2.57</Weight>
     <Fragile>false</Fragile>
   </Order>
 </ArrayOfOrder>

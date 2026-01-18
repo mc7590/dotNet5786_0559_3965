@@ -58,7 +58,7 @@
 
                 <DataGridTextColumn Binding="{Binding DeliveryMethod}" Header="Delivery Method" Width="Auto"/>
 
-                <DataGridTextColumn Binding="{Binding DistanceInKm}" Header="Distance" Width="Auto"/>
+                <DataGridTextColumn Binding="{Binding DistanceInKm, StringFormat={}{0:F2} km}" Header="Distance" Width="Auto"/>
 
                 <DataGridTextColumn Binding="{Binding TotalDeliveryTime, StringFormat=hh\\:mm\\:ss}" Header="Total Time" Width="Auto"/>
 
