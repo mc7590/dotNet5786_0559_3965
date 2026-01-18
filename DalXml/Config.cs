@@ -10,9 +10,6 @@ internal static class Config
     internal const string s_orders_xml = "orders.xml";
     internal const string s_deliveries_xml = "deliveries.xml";
 
-    const double OriginalLat = 32.072059916717016;
-    const double OriginalLon = 34.82851580681851;
-
 
 
     internal static int NextOrderId

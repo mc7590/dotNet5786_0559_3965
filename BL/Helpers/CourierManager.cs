@@ -326,12 +326,6 @@ internal static class CourierManager
     }
 
 
-    internal static async Task SimulateCourierInactivity()
-    {
-
-    }
-
-
     /// <summary>
     /// Random number generator to simulation data
     /// </summary>

@@ -146,7 +146,8 @@
                      Margin="0"/>
                         </StackPanel>
 
-                        <Button Content="{Binding IsSimulationRunning, Converter={StaticResource SimulationBtnStatusConverter}}"
+                        <Button
+                            Content="{Binding IsSimulationRunning, Converter={StaticResource SimulationBtnStatusConverter}}"
                                 Background="{Binding IsSimulationRunning, Converter={StaticResource SimulationBtnColorConverter}}"
                                 Foreground="White"
                                 Click="BtnSimulation_Click"

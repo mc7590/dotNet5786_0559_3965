@@ -184,27 +184,27 @@ public class CourierEnableConverter : IMultiValueConverter
     public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
             => throw new NotImplementedException();
 
-    /// <summary>
-    /// simulation button content converter from bool to "Start"/"Stop"
-    /// </summary>
-    public class BoolToSimStatusConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => (bool)value ? "⏹ Stop" : "▶ Start";
+}
+/// <summary>
+/// simulation button content converter from bool to "Start"/"Stop"
+/// </summary>
+public class BoolToSimStatusConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        => (bool)value ? "⏹ Stop" : "▶ Start";
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => throw new NotImplementedException();
+}
 
-    /// <summary>
-    /// simulation button color converter from bool to Red/Green
-    /// </summary>
-    public class BoolToSimColorConverter : IValueConverter
-    {
-        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
-            => (bool)value ? Brushes.Red : Brushes.Green;
+/// <summary>
+/// simulation button color converter from bool to Red/Green
+/// </summary>
+public class BoolToSimColorConverter : IValueConverter
+{
+    public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
+        => (bool)value ? Brushes.Red : Brushes.Green;
 
-        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
-            => throw new NotImplementedException();
-    }
+    public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        => throw new NotImplementedException();
 }
