@@ -650,4 +650,17 @@
     <Weight>3.05</Weight>
     <Fragile>false</Fragile>
   </Order>
+  <Order>
+    <Id>1019</Id>
+    <OrderType>Regular</OrderType>
+    <Description>Pickup by courier service</Description>
+    <Address>Daniel 13, Bnei Brak</Address>
+    <Latitude>32.081340040896386</Latitude>
+    <Longitude>34.82687240496421</Longitude>
+    <CustomerName>Batya David</CustomerName>
+    <CustomerPhone>0526677889</CustomerPhone>
+    <OrderCreationTime>2026-01-15T15:56:32</OrderCreationTime>
+    <Weight>4.9</Weight>
+    <Fragile>false</Fragile>
+  </Order>
 </ArrayOfOrder>
