@@ -127,7 +127,9 @@ public class ConvertOrderTypeToBrush : IValueConverter
         throw new NotImplementedException();
     }
 }
-
+/// <summary>
+/// Converts a boolean IsActive to a specific SolidColorBrush.
+/// </summary>
 public class ConvertIsActiveToBrush : IValueConverter
 {
     public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
@@ -167,7 +169,9 @@ public class InverseBooleanConverter : IValueConverter
         return true;
     }
 }
-
+/// <summary>
+/// Courier enable button converter from IsActive and ActiveOrder to boolean
+/// </summary>
 public class CourierEnableConverter : IMultiValueConverter
 {
     public object Convert(object[] values, Type targetType, object parameter, CultureInfo culture)
@@ -196,6 +200,7 @@ public class BoolToSimStatusConverter : IValueConverter
     public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         => throw new NotImplementedException();
 }
+
 
 /// <summary>
 /// simulation button color converter from bool to Red/Green
