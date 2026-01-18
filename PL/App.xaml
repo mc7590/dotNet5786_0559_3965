@@ -20,7 +20,7 @@
         <local:InverseBooleanConverter x:Key="InverseBooleanConverter" />
         <local:CourierEnableConverter x:Key="CourierEnableConverterKey" />
 
-
+        
         <Style TargetType="Label">
             <Setter Property="Margin" Value="5"/>
             <Setter Property="VerticalAlignment" Value="Center"/>

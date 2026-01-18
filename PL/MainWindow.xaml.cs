@@ -3,6 +3,7 @@ using PL.Courier;
 using PL.Helpers;
 using PL.Login;
 using PL.Order;
+using System.Data.Common;
 using System.Text;
 using System.Windows;
 using System.Windows.Controls;
@@ -288,4 +289,41 @@ public partial class MainWindow : Window
         }
     }
 
+
+
+    public int Interval
+    {
+        get { return (int)GetValue(IntervalProperty); }
+        set { SetValue(IntervalProperty, value); }
+    }
+
+    // Using a DependencyProperty as the backing store for Interval.  This enables animation, styling, binding, etc...
+    public static readonly DependencyProperty IntervalProperty =
+        DependencyProperty.Register("Interval", typeof(int), typeof(MainWindow), new PropertyMetadata(1440));
+
+
+    public bool IsSimulationRunning
+    {
+        get { return (bool)GetValue(IsSimulationRunningProperty); }
+        set { SetValue(IsSimulationRunningProperty, value); }
+    }
+
+    public static readonly DependencyProperty IsSimulationRunningProperty =
+        DependencyProperty.Register("IsSimulationRunning", typeof(bool), typeof(MainWindow), new PropertyMetadata(false));
+
+    private void BtnSimulation_Click(object sender, RoutedEventArgs e)
+    {
+        if (!IsSimulationRunning)
+        {
+            IsSimulationRunning = true;
+
+            //Activate simulation
+            s_bl.Admin.StartSimulator(Interval); //stage 7
+        }
+        else // diactivate simulation
+        {
+            IsSimulationRunning = false;
+            s_bl.Admin.StopSimulator(); //stage 7
+        }
+    }
 }

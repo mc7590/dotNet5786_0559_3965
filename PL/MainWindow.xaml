@@ -3,6 +3,7 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:pl="clr-namespace:PL"
         mc:Ignorable="d"
         Title="MainWindow" Height="500" Width="850"
         DataContext="{Binding RelativeSource={RelativeSource Mode=Self}}"
@@ -31,6 +32,9 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="FontWeight" Value="SemiBold"/>
         </Style>
+
+        <pl:BoolToSimStatusConverter x:Key="SimulationBtnStatusConverter"/>
+        <pl:BoolToSimColorConverter x:Key="SimulationBtnColorConverter"/>
     </Window.Resources>
 
     <!--<Window.Background>
@@ -50,7 +54,7 @@
         </Grid.RowDefinitions>
 
                <!--1) System Clock Area-->
-        <Grid Grid.Row="0" Margin="0,0,0,20">
+        <!--<Grid Grid.Row="0" Margin="0,0,0,20">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition Height="Auto"/>
@@ -62,7 +66,7 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- System clock display -->
+            --><!-- System clock display --><!--
             <Border Grid.Column="1"
                     Background="#ED1C24"
                     Padding="10"
@@ -75,7 +79,7 @@
                        Background="#ED1C24"/>
             </Border>
 
-            <!-- Time adjustment buttons -->
+            --><!-- Time adjustment buttons --><!--
             <StackPanel Grid.Row="1"
             Grid.Column="1"
             Margin="0,10,0,0"
@@ -89,9 +93,70 @@
                 <Button Content="+1 Month" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneMonth_Click"/>
                 <Button Content="+1 Year" Margin="3" Height="28" MaxWidth="100" Click="BtnAddOneYear_Click"/>
             </StackPanel>
+        </Grid>-->
+
+        <Grid Grid.Row="0" Margin="0,0,0,20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="1"
+            Background="#ED1C24"
+            Padding="10"
+            CornerRadius="18"
+            HorizontalAlignment="Center">
+                <Label Content="{Binding CurrentTime}"
+               FontSize="25"
+               FontWeight="Bold"
+               Foreground="White"
+               Background="#ED1C24"/>
+            </Border>
+
+            <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" HorizontalAlignment="Center" Margin="0,10,0,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="50"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <Border Grid.Column="0" Background="#F3F3F3" CornerRadius="10" Padding="10,5">
+                <UniformGrid Grid.Column="0" Columns="3" HorizontalAlignment="Center">
+                    <Button Content="+1 Minute" Margin="3" Height="28" Width="90" Click="BtnAddOneMinute_Click"/>
+                    <Button Content="+1 Hour" Margin="3" Height="28" Width="90" Click="BtnAddOneHour_Click"/>
+                    <Button Content="+1 Day" Margin="3" Height="28" Width="90" Click="BtnAddOneDay_Click"/>
+                    <Button Content="+1 Month" Margin="3" Height="28" Width="90" Click="BtnAddOneMonth_Click"/>
+                    <Button Content="+1 Year" Margin="3" Height="28" Width="90" Click="BtnAddOneYear_Click"/>
+                </UniformGrid>
+                </Border>
+
+
+                <Border Grid.Column="2" Background="#F3F3F3" CornerRadius="10" Padding="10,5">
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Margin="0,0,10,0">
+                            <Label Content="Interval (min):" Background="Transparent" FontSize="10" Margin="0" Padding="0"/>
+                            <TextBox Width="70" Height="25" 
+                     Text="{Binding Interval, UpdateSourceTrigger=PropertyChanged}" 
+                     Margin="0"/>
+                        </StackPanel>
+
+                        <Button Content="{Binding IsSimulationRunning, Converter={StaticResource SimulationBtnStatusConverter}}"
+                                Background="{Binding IsSimulationRunning, Converter={StaticResource SimulationBtnColorConverter}}"
+                                Foreground="White"
+                                Click="BtnSimulation_Click"
+                                Width="100" Height="35" Margin="5,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
         </Grid>
 
-               <!--2) Configuration Area (SCROLLABLE)-->
+        <!--2) Configuration Area (SCROLLABLE)-->
         <Grid Grid.Row="1" Margin="0,10,0,10" Background="Transparent">
 
             <Image Source="Resources/logo.jpg" 
