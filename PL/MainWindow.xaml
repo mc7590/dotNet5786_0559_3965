@@ -163,7 +163,7 @@
                     <TextBox Grid.Row="4" Grid.Column="1" Text="{Binding Configuration.GetMaxDeliveryTime, UpdateSourceTrigger=PropertyChanged}"/>
 
                     <Label Grid.Row="5" Grid.Column="0" Content="Risk Range:" />
-                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Configuration.RiskRange, UpdateSourceTrigger=PropertyChanged}"/>
+                    <TextBox Grid.Row="5" Grid.Column="1" Text="{Binding Configuration.RiskRange, UpdateSourceTrigger=PropertyChanged}" Height="28" Margin="5,5,0,0" VerticalAlignment="Top"/>
 
                     <Label Grid.Row="6" Grid.Column="0" Content="Inactivity Threshold:" />
                     <TextBox Grid.Row="6" Grid.Column="1" Text="{Binding Configuration.InactivityThreshold, UpdateSourceTrigger=PropertyChanged}"/>

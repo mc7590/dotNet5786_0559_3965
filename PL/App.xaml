@@ -49,6 +49,8 @@
             <Setter Property="VerticalContentAlignment" Value="Center"/>
             <Setter Property="Padding" Value="5,0"/>
 
+            <!--build textbox with round corners by controlTemplate
+            use saved PART_ContentHost for text display, to enable actual writing-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="TextBox">
@@ -112,6 +114,9 @@
             <Setter Property="Height" Value="40"/>
 
             <!--round corners-->
+            <!--remake button by controlTemplate:
+            make border with cornerRadius and drop shadow effect
+            bind background and padding to specified button properties-->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -199,6 +204,7 @@
 
             <Setter Property="Template">
                 <Setter.Value>
+                    <!--remake password box to allow designed border by controlTemplate-->
                     <ControlTemplate TargetType="PasswordBox">
                         <Border BorderBrush="{TemplateBinding BorderBrush}"
                                 BorderThickness="{TemplateBinding BorderThickness}"
